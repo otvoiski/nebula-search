@@ -46,7 +46,7 @@ public class UIManager : MonoBehaviour, IUIManager
             interfaceMenu
                 .GetChild(0)
                 .GetComponentInChildren<Text>()
-                .text = Locate.Translate["Machine"][Machine.TITLE].ToString();
+                .text = Locate.Translate["Machine"][machine.Title].ToString();
 
             var body = interfaceMenu.GetChild(1);
             if (body.childCount < 3)
@@ -67,7 +67,7 @@ public class UIManager : MonoBehaviour, IUIManager
             {
                 ChangeUIItem(body.GetChild(0), Locate.Translate["Machine"]["MachineUse"].ToString(), $"{ machine.machineUse } μ");
                 ChangeUIItem(body.GetChild(1), Locate.Translate["Machine"]["Buffer"].ToString(), $"{ machine.buffer }/{Machine.BUFFER_LIMIT}");
-                ChangeUIItem(body.GetChild(2), Locate.Translate["Machine"]["Timer"].ToString(), $"{Mathf.RoundToInt(machine.processorTimer.timer)}/{Machine.TIME_PROCESS}");
+                ChangeUIItem(body.GetChild(2), Locate.Translate["Machine"]["Timer"].ToString(), $"{Mathf.RoundToInt(machine.processorTimer.timer)}/{machine.TimeProcess}");
             }
 
             interfaceMenu.gameObject.SetActive(IsOpen);

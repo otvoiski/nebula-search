@@ -1,9 +1,8 @@
-﻿using Assets.Script.Enumerator;
-using Assets.Script.Util;
+﻿using Assets.Script.Util;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Wire : MonoBehaviour
+public class Gas : MonoBehaviour
 {
     private const float DISTANCE_HIT_COLLIDER = 1.0f;
     private SpriteRenderer sprite;
@@ -15,14 +14,13 @@ public class Wire : MonoBehaviour
 
     public void SpriteColor(bool active)
     {
-        if (sprite != null)
-            sprite.color = active ? new Color(0, 1, 0, .200f) : new Color(1, 0, 0, .200f);
+        sprite.color = active ? new Color(0, 1, 0, .200f) : new Color(1, 0, 0, .200f);
     }
 
-    public Wire Next(List<string> last)
+    public Gas Next(List<string> last)
     {
-        var wires = Utilities.GetItemsFromRayCast<Wire>(transform, DISTANCE_HIT_COLLIDER);
-        foreach (var wire in wires)
+        var gasPipe = Utilities.GetItemsFromRayCast<Gas>(transform, DISTANCE_HIT_COLLIDER);
+        foreach (var wire in gasPipe)
         {
             if (last.Contains(wire.name)) continue;
             else
