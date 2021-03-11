@@ -52,7 +52,7 @@ public class GameHandler : MonoBehaviour
         {
             generator
                 .GetComponent<Generator>()
-                .Setup(() => uiManager);
+                .Setup(uiManager);
         }
     }
 

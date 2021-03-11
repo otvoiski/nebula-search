@@ -5,28 +5,40 @@ using UnityEngine;
 
 public class Generator : MonoBehaviour
 {
-    public const string TITLE = "Generator";
-    public const int BUFFER_LIMIT = 1200;
+    public GeneratorType type;
 
-    public Material material;
-    public int amount;
-    public int power;
-    public int buffer;
-    public int combustionTime;
+    #region type
+
+    public string Title { get; private set; }
+    public int MaxBuffer { get; private set; }
+    public int Amount { get; private set; }
+    public int PowerGenerator { get; private set; }
+    public int Buffer { get; private set; }
+    public int CombustionTime { get; private set; }
+    public int ProcessTime { get; private set; }
+    public Material[] Inputs { get; private set; }
+    public Material Output { get; private set; }
+
+    #endregion type
 
     private TimerRun timer;
     private SpriteRenderer sprite;
     private IUIManager ui;
     private bool isOpen;
 
-    public void Setup(Func<IUIManager> ui)
+    public void Setup(IUIManager ui)
     {
-        this.ui = ui();
+        this.ui = ui;
         timer = new TimerRun();
         sprite = GetComponentInChildren<SpriteRenderer>();
-        power = Utilities.GetEnergyByMaterial(material);
-        amount = 1;
-        buffer = 0;
+
+        Title = type.title;
+        MaxBuffer = type.maxBuffer;
+        PowerGenerator = type.powerGenerator;
+        Title = type.title;
+        ProcessTime = type.processTime;
+        Inputs = type.inputs;
+        Output = type.output;
     }
 
     public void Update()
@@ -46,8 +58,8 @@ public class Generator : MonoBehaviour
             timer.Reset();
         }
 
-        if (buffer < 0) buffer = 0;
-        if (buffer > BUFFER_LIMIT) buffer = BUFFER_LIMIT;
+        if (Buffer < 0) Buffer = 0;
+        if (Buffer > MaxBuffer) Buffer = MaxBuffer;
     }
 
     private void GeneratorInterface()
@@ -57,7 +69,7 @@ public class Generator : MonoBehaviour
             var ray = Utilities.GetRaycastHitFromScreenPoint();
             if (ray.HasValue)
             {
-                if (ray.GetValueOrDefault().collider.name == name)
+                if (ray.GetValueOrDefault().collider.name == Title)
                 {
                     if (Input.GetKeyDown(KeyCode.Mouse0) && !ui.IsOpen)
                     {
@@ -83,10 +95,10 @@ public class Generator : MonoBehaviour
 
     public int GetEnergy(int energy)
     {
-        if (buffer > 0)
+        if (Buffer > 0)
         {
-            buffer -= energy;
-            if (energy > buffer) return buffer;
+            Buffer -= energy;
+            if (energy > Buffer) return Buffer;
             else return energy;
         }
         else
@@ -97,29 +109,29 @@ public class Generator : MonoBehaviour
 
     private void BateryLight()
     {
-        sprite.color = buffer > 0
+        sprite.color = Buffer > 0
             ? new Color(0, 1, 0, .200f)
             : new Color(1, 0, 0, .200f);
     }
 
     private void Powered()
     {
-        if (combustionTime > 0 && buffer < BUFFER_LIMIT)
+        if (CombustionTime > 0 && Buffer < MaxBuffer)
         {
-            combustionTime--;
+            CombustionTime--;
 
-            buffer += power;
-            if (buffer >= BUFFER_LIMIT)
-                buffer = BUFFER_LIMIT;
+            Buffer += PowerGenerator;
+            if (Buffer >= MaxBuffer)
+                Buffer = MaxBuffer;
         }
     }
 
     private void Consume()
     {
-        if (combustionTime == 0 && amount != 0)
+        if (CombustionTime == 0 && Amount != 0)
         {
-            amount--;
-            combustionTime = 1 * 60;
+            Amount--;
+            CombustionTime = 1 * ProcessTime;
         }
     }
 }
