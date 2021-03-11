@@ -919,7 +919,7 @@ PrefabInstance:
     - target: {fileID: 4397556369544318566, guid: bd6d5af267d018c499caa2509de18630,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -8.111188
+      value: -8.24
       objectReference: {fileID: 0}
     - target: {fileID: 4397556369544318566, guid: bd6d5af267d018c499caa2509de18630,
         type: 3}
@@ -2139,7 +2139,7 @@ PrefabInstance:
     - target: {fileID: 3802797393619841203, guid: 35c9699cac3fd734ea3650c09691098f,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -6.67
+      value: -6.75
       objectReference: {fileID: 0}
     - target: {fileID: 3802797393619841203, guid: 35c9699cac3fd734ea3650c09691098f,
         type: 3}
@@ -2149,7 +2149,7 @@ PrefabInstance:
     - target: {fileID: 3802797393619841203, guid: 35c9699cac3fd734ea3650c09691098f,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -4.1571302
+      value: -4.24
       objectReference: {fileID: 0}
     - target: {fileID: 3802797393619841203, guid: 35c9699cac3fd734ea3650c09691098f,
         type: 3}
@@ -2195,6 +2195,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: GasStation
+      objectReference: {fileID: 0}
+    - target: {fileID: 6424390670234122677, guid: 35c9699cac3fd734ea3650c09691098f,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 35c9699cac3fd734ea3650c09691098f, type: 3}
