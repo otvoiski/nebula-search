@@ -7,9 +7,10 @@ using UnityEngine;
 public class Machine : MonoBehaviour
 {
     public const int BUFFER_LIMIT = 250;
-    public const float TIME_PROCESS = 10f;
     public const float WIRE_CONNECT = 1f;
-    public const string TITLE = "Machine";
+
+    public float TimeProcess = 10f;
+    public string Title = "Machine";
     public int buffer;
     public int machineUse;
     public TimerRun processorTimer;
@@ -38,6 +39,24 @@ public class Machine : MonoBehaviour
         MachineInterface();
     }
 
+    private void FixedUpdate()
+    {
+        if (buffer < 0) buffer = 0;
+        if (buffer > BUFFER_LIMIT) buffer = BUFFER_LIMIT;
+
+        if (processorTimer.Run() >= TimeProcess)
+        {
+            MachineConsume();
+            processorTimer.Reset();
+        }
+
+        if (connectionTimer.Run() >= 1f)
+        {
+            ConnectionToWire();
+            connectionTimer.Reset();
+        }
+    }
+
     private void MachineInterface()
     {
         var ray = Utilities.GetRaycastHitFromScreenPoint();
@@ -61,33 +80,14 @@ public class Machine : MonoBehaviour
         if (isOpen) ui.ShowInventory(this);
     }
 
-    private void FixedUpdate()
-    {
-        if (buffer < 0) buffer = 0;
-        if (buffer > BUFFER_LIMIT) buffer = BUFFER_LIMIT;
-
-        if (processorTimer.Run() >= TIME_PROCESS)
-        {
-            MachineConsume();
-
-            processorTimer.Reset();
-        }
-
-        if (connectionTimer.Run() >= 1f)
-        {
-            Connection();
-            connectionTimer.Reset();
-        }
-    }
-
-    private bool VerifyPathToGenerator(Wire wire, List<string> list)
+    private bool VerifyPathToEnergyGenerator(Wire wire, List<string> list)
     {
         var nextWire = wire.Next(last: list);
         if (nextWire != null)
         {
             //Debug.Log(nextWire);
 
-            var resultado = VerifyPathToGenerator(nextWire, list);
+            var resultado = VerifyPathToEnergyGenerator(nextWire, list);
             nextWire.SpriteColor(resultado);
             return resultado;
         }
@@ -106,14 +106,17 @@ public class Machine : MonoBehaviour
         }
     }
 
-    private void Connection()
+    private void ConnectionToWire()
     {
         wires = Utilities.GetItemsFromRayCast<Wire>(transform, WIRE_CONNECT);
-        var list = new List<string>();
-        foreach (var wire in wires)
+        if (wires.Count > 0)
         {
-            list.Add(wire.name);
-            wire.SpriteColor(VerifyPathToGenerator(wire, list));
+            var list = new List<string>();
+            foreach (var wire in wires)
+            {
+                list.Add(wire.name);
+                wire.SpriteColor(VerifyPathToEnergyGenerator(wire, list));
+            }
         }
     }
 
@@ -123,7 +126,6 @@ public class Machine : MonoBehaviour
         {
             if (debug) Debug.Log($"The {name} executed process ===> {machineUse}/{buffer}");
             buffer -= machineUse;
-            //StartCoroutine(waiter(Mathf.RoundToInt(TIME_PROCESS)));
         }
 
         SpritColor();
@@ -132,10 +134,5 @@ public class Machine : MonoBehaviour
     private void SpritColor()
     {
         sprite.color = buffer > 0 ? new Color(0, 1, 0, .200f) : new Color(1, 0, 0, .200f);
-    }
-
-    private IEnumerator waiter(int seconds)
-    {
-        yield return new WaitForSeconds(seconds);
     }
 }
