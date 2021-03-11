@@ -26,19 +26,29 @@ public class Generator : MonoBehaviour
     private IUIManager ui;
     private bool isOpen;
 
+    public void Start()
+    {
+        if (type != null)
+        {
+            name = type.title;
+
+            Title = type.title;
+            MaxBuffer = type.maxBuffer;
+            PowerGenerator = type.powerGenerator;
+            Title = type.title;
+            ProcessTime = type.processTime;
+            Inputs = type.inputs;
+            Output = type.output;
+        }
+    }
+
     public void Setup(IUIManager ui)
     {
         this.ui = ui;
         timer = new TimerRun();
         sprite = GetComponentInChildren<SpriteRenderer>();
 
-        Title = type.title;
-        MaxBuffer = type.maxBuffer;
-        PowerGenerator = type.powerGenerator;
-        Title = type.title;
-        ProcessTime = type.processTime;
-        Inputs = type.inputs;
-        Output = type.output;
+        Amount = 1;
     }
 
     public void Update()
@@ -69,7 +79,8 @@ public class Generator : MonoBehaviour
             var ray = Utilities.GetRaycastHitFromScreenPoint();
             if (ray.HasValue)
             {
-                if (ray.GetValueOrDefault().collider.name == Title)
+                // TODO: A instancia do item deve ter o nome mudado
+                if (ray.GetValueOrDefault().collider.name.Contains(Title))
                 {
                     if (Input.GetKeyDown(KeyCode.Mouse0) && !ui.IsOpen)
                     {
