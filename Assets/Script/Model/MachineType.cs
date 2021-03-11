@@ -7,6 +7,6 @@ public class MachineType : ScriptableObject
     public int maxBuffer;
     public int powerConsume;
     public int timerProcess;
-    public Material[] output;
-    public Material[] input;
+    public Material[] inputs;
+    public Material[] outputs;
 }

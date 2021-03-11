@@ -65,8 +65,8 @@ public class UIManager : MonoBehaviour, IUIManager
             }
             else
             {
-                ChangeUIItem(body.GetChild(0), Locate.Translate["Machine"]["MachineUse"].ToString(), $"{ machine.machineUse } μ");
-                ChangeUIItem(body.GetChild(1), Locate.Translate["Machine"]["Buffer"].ToString(), $"{ machine.buffer }/{Machine.BUFFER_LIMIT}");
+                ChangeUIItem(body.GetChild(0), Locate.Translate["Machine"]["MachineUse"].ToString(), $"{ machine.PowerConsume } μ");
+                ChangeUIItem(body.GetChild(1), Locate.Translate["Machine"]["Buffer"].ToString(), $"{ machine.Buffer }/{machine.MaxBuffer}");
                 ChangeUIItem(body.GetChild(2), Locate.Translate["Machine"]["Timer"].ToString(), $"{Mathf.RoundToInt(machine.processorTimer.timer)}/{machine.TimeProcess}");
             }
 

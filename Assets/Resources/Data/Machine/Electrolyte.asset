@@ -9,12 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0d6d4e319515a3f40b73b2c55b3a8c8f, type: 3}
-  m_Name: Oxygen Generator
+  m_Script: {fileID: 11500000, guid: d95f19ef47b4743409e5890d178e38be, type: 3}
+  m_Name: Electrolyte
   m_EditorClassIdentifier: 
-  title: Oxygen Generator
-  powerGenerator: 32
-  maxBuffer: 250
-  processTime: 60
-  input: 0200000000000000
-  output: 3
+  title: Electrolyte
+  maxBuffer: 500
+  powerConsume: 45
+  timerProcess: 60
+  inputs: 0100000000000000
+  outputs: 0300000004000000

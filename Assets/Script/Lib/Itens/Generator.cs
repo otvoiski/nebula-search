@@ -23,7 +23,6 @@ public class Generator : MonoBehaviour
 
     private TimerRun timer;
     private SpriteRenderer sprite;
-    private IUIManager ui;
     private bool isOpen;
 
     public void Start()
@@ -40,20 +39,20 @@ public class Generator : MonoBehaviour
             Inputs = type.inputs;
             Output = type.output;
         }
-    }
 
-    public void Setup(IUIManager ui)
-    {
-        this.ui = ui;
         timer = new TimerRun();
         sprite = GetComponentInChildren<SpriteRenderer>();
 
         Amount = 1;
     }
 
+    public void Setup(IUIManager ui)
+    {
+    }
+
     public void Update()
     {
-        GeneratorInterface();
+        //GeneratorInterface();
     }
 
     private void FixedUpdate()
@@ -74,43 +73,43 @@ public class Generator : MonoBehaviour
 
     private void GeneratorInterface()
     {
-        try
-        {
-            var ray = Utilities.GetRaycastHitFromScreenPoint();
-            if (ray.HasValue)
-            {
-                // TODO: A instancia do item deve ter o nome mudado
-                if (ray.GetValueOrDefault().collider.name.Contains(Title))
-                {
-                    if (Input.GetKeyDown(KeyCode.Mouse0) && !ui.IsOpen)
-                    {
-                        isOpen = true;
-                    }
-                }
-            }
+        //try
+        //{
+        //    var ray = Utilities.GetRaycastHitFromScreenPoint();
+        //    if (ray.HasValue)
+        //    {
+        //        // TODO: A instancia do item deve ter o nome mudado
+        //        if (ray.GetValueOrDefault().collider.name.Contains(Title))
+        //        {
+        //            if (Input.GetKeyDown(KeyCode.Mouse0) && !ui.IsOpen)
+        //            {
+        //                isOpen = true;
+        //            }
+        //        }
+        //    }
 
-            if (Input.GetKeyDown(KeyCode.Escape) && ui.IsOpen && isOpen)
-            {
-                isOpen = false;
-                ui.CloseInventory(this);
-            }
+        //    if (Input.GetKeyDown(KeyCode.Escape) && ui.IsOpen && isOpen)
+        //    {
+        //        isOpen = false;
+        //        ui.CloseInventory(this);
+        //    }
 
-            if (isOpen) ui.ShowInventory(this);
-        }
-        catch (Exception ex)
-        {
-            Toast.Message(ToastType.Error, "Exception", ex.Message);
-            Debug.LogException(ex);
-        }
+        //    if (isOpen) ui.ShowInventory(this);
+        //}
+        //catch (Exception ex)
+        //{
+        //    Toast.Message(ToastType.Error, "Exception", ex.Message);
+        //    Debug.LogException(ex);
+        //}
     }
 
-    public int GetEnergy(int energy)
+    public int GetBufferFromRate(int rate)
     {
         if (Buffer > 0)
         {
-            Buffer -= energy;
-            if (energy > Buffer) return Buffer;
-            else return energy;
+            Buffer -= rate;
+            if (rate > Buffer) return Buffer;
+            else return rate;
         }
         else
         {

@@ -19,8 +19,8 @@ public class Gas : MonoBehaviour
 
     public Gas Next(List<string> last)
     {
-        var gasPipe = Utilities.GetItemsFromRayCast<Gas>(transform, DISTANCE_HIT_COLLIDER);
-        foreach (var gas in gasPipe)
+        var gases = Utilities.GetItemsFromRayCast<Gas>(transform, DISTANCE_HIT_COLLIDER);
+        foreach (var gas in gases)
         {
             if (last.Contains(gas.name)) continue;
             else
