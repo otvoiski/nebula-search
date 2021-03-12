@@ -19,14 +19,14 @@ public class Gas : MonoBehaviour
 
     public Gas Next(List<string> last)
     {
-        var gasPipe = Utilities.GetItemsFromRayCast<Gas>(transform, DISTANCE_HIT_COLLIDER);
-        foreach (var wire in gasPipe)
+        var gases = Utilities.GetItemsFromRayCast<Gas>(transform, DISTANCE_HIT_COLLIDER);
+        foreach (var gas in gases)
         {
-            if (last.Contains(wire.name)) continue;
+            if (last.Contains(gas.name)) continue;
             else
             {
-                last.Add(wire.name);
-                return wire;
+                last.Add(gas.name);
+                return gas;
             }
         }
 

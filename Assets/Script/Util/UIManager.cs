@@ -65,8 +65,8 @@ public class UIManager : MonoBehaviour, IUIManager
             }
             else
             {
-                ChangeUIItem(body.GetChild(0), Locate.Translate["Machine"]["MachineUse"].ToString(), $"{ machine.machineUse } μ");
-                ChangeUIItem(body.GetChild(1), Locate.Translate["Machine"]["Buffer"].ToString(), $"{ machine.buffer }/{Machine.BUFFER_LIMIT}");
+                ChangeUIItem(body.GetChild(0), Locate.Translate["Machine"]["MachineUse"].ToString(), $"{ machine.PowerConsume } μ");
+                ChangeUIItem(body.GetChild(1), Locate.Translate["Machine"]["Buffer"].ToString(), $"{ machine.Buffer }/{machine.MaxBuffer}");
                 ChangeUIItem(body.GetChild(2), Locate.Translate["Machine"]["Timer"].ToString(), $"{Mathf.RoundToInt(machine.processorTimer.timer)}/{machine.TimeProcess}");
             }
 
@@ -116,7 +116,7 @@ public class UIManager : MonoBehaviour, IUIManager
             #region Top
 
             var top = generatorInterface.GetChild(0);
-            top.GetComponentInChildren<Text>().text = Generator.TITLE;
+            top.GetComponentInChildren<Text>().text = generator.name;
 
             #endregion Top
 
@@ -125,11 +125,11 @@ public class UIManager : MonoBehaviour, IUIManager
             var body = generatorInterface.GetChild(1);
             var right = body.GetChild(1);
 
-            right.Find("Power Generator").GetChild(1).GetComponentInChildren<Text>().text = $"{ generator.power } μ";
-            right.Find("Buffer").GetChild(1).GetComponentInChildren<Text>().text = generator.buffer.ToString();
-            right.Find("Amount").GetChild(1).GetComponentInChildren<Text>().text = generator.amount.ToString();
-            right.Find("Combustion Timer").GetChild(1).GetComponentInChildren<Text>().text = generator.combustionTime.ToString();
-            right.Find("Material").GetChild(1).GetComponentInChildren<Text>().text = generator.material.ToString();
+            right.Find("Power Generator").GetChild(1).GetComponentInChildren<Text>().text = $"{ generator.PowerGenerator } μ";
+            right.Find("Buffer").GetChild(1).GetComponentInChildren<Text>().text = generator.Buffer.ToString();
+            right.Find("Amount").GetChild(1).GetComponentInChildren<Text>().text = generator.Amount.ToString();
+            right.Find("Combustion Timer").GetChild(1).GetComponentInChildren<Text>().text = generator.CombustionTime.ToString();
+            right.Find("Material").GetChild(1).GetComponentInChildren<Text>().text = generator.Output.ToString();
 
             #endregion Body
 

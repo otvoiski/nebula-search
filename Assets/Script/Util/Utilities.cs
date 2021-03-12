@@ -7,31 +7,6 @@ namespace Assets.Script.Util
 {
     public class Utilities : MonoBehaviour
     {
-        public static int GetEnergyByMaterial(Material material)
-        {
-            var info = 32;
-            switch (material)
-            {
-                case Material.Creative:
-                    return -1;
-
-                case Material.Coal:
-                    return info;
-
-                case Material.Solar:
-                    return info * 2;
-
-                case Material.DarkMatter:
-                    return info * 3;
-
-                case Material.Gravite:
-                    return info * 4;
-
-                default:
-                    return 0;
-            }
-        }
-
         public static Vector3 GetPositionGridFromScreenPoint(int height)
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);

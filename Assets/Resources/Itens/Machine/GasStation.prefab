@@ -689,7 +689,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3802797393619841203}
   - component: {fileID: 3802797393619841204}
-  - component: {fileID: 354590532064400749}
+  - component: {fileID: 1581563525}
   m_Layer: 0
   m_Name: GasStation
   m_TagString: Machine
@@ -726,7 +726,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 0.96521354, z: 1}
   m_Center: {x: 0, y: 0.51503885, z: 0}
---- !u!114 &354590532064400749
+--- !u!114 &1581563525
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -738,11 +738,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c03d270a1a785e4cb6379c4d352d3b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TimeProcess: 10
-  Title: Machine
+  Type: {fileID: 11400000, guid: 293d4367c69a4a94e8c032dc55566ae7, type: 2}
+  Debug: 0
   buffer: 0
-  machineUse: 0
-  debug: 0
+  timeProcess: 0
 --- !u!1 &5639259175701340724
 GameObject:
   m_ObjectHideFlags: 0

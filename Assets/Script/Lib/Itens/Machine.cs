@@ -1,48 +1,74 @@
 ﻿using Assets.Script.Util;
-using System;
-using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Machine : MonoBehaviour
 {
-    public const int BUFFER_LIMIT = 250;
-    public const float WIRE_CONNECT = 1f;
+    public const float CONNECTION = 1f;
 
-    public float TimeProcess = 10f;
-    public string Title = "Machine";
+    public MachineType Type;
+    public bool Debug;
+
+    public string Title { get; private set; }
+    public int MaxBuffer { get; private set; }
+    public int PowerConsume { get; private set; }
+    public int TimeProcess { get; private set; }
+    public int Buffer { get; private set; }
+    public int TimerProcess { get; private set; }
+    public IList<Material> Outputs { get; private set; }
+    public IList<Material> Inputs { get; private set; }
+
     public int buffer;
-    public int machineUse;
+    public int timeProcess;
+
     public TimerRun processorTimer;
-
-    public bool debug;
-
     private TimerRun connectionTimer;
     private bool isOpen;
     private SpriteRenderer sprite;
-    private List<Wire> wires;
+    private IList<Gas> gases;
+    private IList<Wire> wires;
+    private bool isNecessaryEnergy;
+    private bool isNecessaryOxigen;
+
     private IUIManager ui;
 
-    public void Setup(Func<IUIManager> ui)
+    public void Start()
     {
+        sprite = GetComponentInChildren<SpriteRenderer>();
+
+        if (Type != null)
+        {
+            name = Type.title;
+
+            MaxBuffer = Type.maxBuffer;
+            PowerConsume = Type.powerConsume;
+            TimerProcess = Type.timerProcess;
+            Outputs = Type.outputs;
+            Inputs = Type.inputs;
+
+            Buffer = 0;
+            isNecessaryEnergy = Inputs.Contains(Material.Energy);
+            isNecessaryOxigen = Inputs.Contains(Material.Oxygen);
+        }
+
         connectionTimer = new TimerRun();
         processorTimer = new TimerRun();
-        sprite = GetComponentInChildren<SpriteRenderer>();
-        buffer = 0;
-        machineUse = 120;
-        debug = false;
-        this.ui = ui();
+
+        Debug = false;
     }
 
     public void Update()
     {
-        MachineInterface();
+        buffer = Buffer;
+        timeProcess = TimeProcess;
+        //MachineInterface();
     }
 
     private void FixedUpdate()
     {
-        if (buffer < 0) buffer = 0;
-        if (buffer > BUFFER_LIMIT) buffer = BUFFER_LIMIT;
+        if (Buffer < 0) Buffer = 0;
+        if (Buffer > MaxBuffer) Buffer = MaxBuffer;
 
         if (processorTimer.Run() >= TimeProcess)
         {
@@ -52,7 +78,16 @@ public class Machine : MonoBehaviour
 
         if (connectionTimer.Run() >= 1f)
         {
-            ConnectionToWire();
+            if (isNecessaryEnergy)
+            {
+                ConnectionToWire();
+            }
+
+            if (isNecessaryOxigen)
+            {
+                ConnectionToGas();
+            }
+
             connectionTimer.Reset();
         }
     }
@@ -85,18 +120,40 @@ public class Machine : MonoBehaviour
         var nextWire = wire.Next(last: list);
         if (nextWire != null)
         {
-            //Debug.Log(nextWire);
-
             var resultado = VerifyPathToEnergyGenerator(nextWire, list);
             nextWire.SpriteColor(resultado);
             return resultado;
         }
-        else if (Utilities.GetItemsFromRayCast<Generator>(wire.transform, WIRE_CONNECT).Count != 0)
+        else if (Utilities.GetItemsFromRayCast<Generator>(wire.transform, CONNECTION).Count != 0)
         {
-            foreach (var generators in Utilities.GetItemsFromRayCast<Generator>(wire.transform, 1f))
+            foreach (var generator in Utilities.GetItemsFromRayCast<Generator>(wire.transform, CONNECTION))
             {
-                // melhorar isto
-                buffer += generators.GetEnergy(23);
+                if (Inputs.Contains(generator.Output))
+                    Buffer += generator.GetBufferFromRate(PowerConsume);
+            }
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    private bool VerifyPathToEnergyGenerator(Gas gas, List<string> list)
+    {
+        var nextGas = gas.Next(last: list);
+        if (nextGas != null)
+        {
+            var resultado = VerifyPathToEnergyGenerator(nextGas, list);
+            nextGas.SpriteColor(resultado);
+            return resultado;
+        }
+        else if (Utilities.GetItemsFromRayCast<Generator>(gas.transform, CONNECTION).Count != 0)
+        {
+            foreach (var generator in Utilities.GetItemsFromRayCast<Generator>(gas.transform, CONNECTION))
+            {
+                if (Inputs.Contains(generator.Output))
+                    Buffer += generator.GetBufferFromRate(PowerConsume);
             }
             return true;
         }
@@ -108,24 +165,35 @@ public class Machine : MonoBehaviour
 
     private void ConnectionToWire()
     {
-        wires = Utilities.GetItemsFromRayCast<Wire>(transform, WIRE_CONNECT);
-        if (wires.Count > 0)
+        wires = Utilities.GetItemsFromRayCast<Wire>(transform, CONNECTION);
+
+        var list = new List<string>();
+        foreach (var wire in wires)
+        {
+            list.Add(wire.name);
+            wire.SpriteColor(VerifyPathToEnergyGenerator(wire, list));
+        }
+    }
+
+    private void ConnectionToGas()
+    {
+        gases = Utilities.GetItemsFromRayCast<Gas>(transform, CONNECTION);
+        if (gases.Count > 0)
         {
             var list = new List<string>();
-            foreach (var wire in wires)
+            foreach (var gas in gases)
             {
-                list.Add(wire.name);
-                wire.SpriteColor(VerifyPathToEnergyGenerator(wire, list));
+                list.Add(gas.name);
+                gas.SpriteColor(VerifyPathToEnergyGenerator(gas, list));
             }
         }
     }
 
     private void MachineConsume()
     {
-        if (buffer > machineUse)
+        if (Buffer > PowerConsume)
         {
-            if (debug) Debug.Log($"The {name} executed process ===> {machineUse}/{buffer}");
-            buffer -= machineUse;
+            Buffer -= PowerConsume;
         }
 
         SpritColor();
@@ -133,6 +201,6 @@ public class Machine : MonoBehaviour
 
     private void SpritColor()
     {
-        sprite.color = buffer > 0 ? new Color(0, 1, 0, .200f) : new Color(1, 0, 0, .200f);
+        sprite.color = Buffer > 0 ? new Color(0, 1, 0, .200f) : new Color(1, 0, 0, .200f);
     }
 }

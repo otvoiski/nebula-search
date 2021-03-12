@@ -459,7 +459,7 @@ PrefabInstance:
     - target: {fileID: 6998537299779995341, guid: 82db0a7c4623b124bbfcf251965f5663,
         type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6998537299779995341, guid: 82db0a7c4623b124bbfcf251965f5663,
         type: 3}
@@ -620,9 +620,9 @@ Transform:
   m_LocalPosition: {x: 5.421188, y: 0, z: 2.6371305}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 1759722640}
   - {fileID: 3332068176530860868}
   - {fileID: 178647216}
+  - {fileID: 1759722640}
   m_Father: {fileID: 0}
   m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2110,7 +2110,7 @@ PrefabInstance:
     - target: {fileID: 6998537299779995341, guid: 82db0a7c4623b124bbfcf251965f5663,
         type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6998537299779995341, guid: 82db0a7c4623b124bbfcf251965f5663,
         type: 3}
@@ -2174,7 +2174,7 @@ PrefabInstance:
     - target: {fileID: 3802797393619841203, guid: 35c9699cac3fd734ea3650c09691098f,
         type: 3}
       propertyPath: m_RootOrder
-      value: 0
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 3802797393619841203, guid: 35c9699cac3fd734ea3650c09691098f,
         type: 3}
@@ -2194,12 +2194,7 @@ PrefabInstance:
     - target: {fileID: 3802797393619841205, guid: 35c9699cac3fd734ea3650c09691098f,
         type: 3}
       propertyPath: m_Name
-      value: GasStation
-      objectReference: {fileID: 0}
-    - target: {fileID: 6424390670234122677, guid: 35c9699cac3fd734ea3650c09691098f,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
+      value: Electrolyte
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 35c9699cac3fd734ea3650c09691098f, type: 3}

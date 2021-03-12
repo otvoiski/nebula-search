@@ -805,11 +805,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c03d270a1a785e4cb6379c4d352d3b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TimeProcess: 10
-  Title: Machine
+  Type: {fileID: 11400000, guid: 691ddf8316cf2684a835a48e17e84c3e, type: 2}
+  Debug: 0
   buffer: 0
-  machineUse: 0
-  debug: 0
+  timeProcess: 0
 --- !u!1 &6998537301185563500
 GameObject:
   m_ObjectHideFlags: 0

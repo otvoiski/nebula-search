@@ -24,36 +24,6 @@ public class GameHandler : MonoBehaviour
         uiManager.Setup();
         cameraFollow.Setup(() => playerTransform.position, () => zoom, alinhamento);
         playerData.Setup(() => playerTransform);
-
-        LoadGenerators(uiManager);
-        LoadMachines(uiManager);
-    }
-
-    private static void LoadMachines(UIManager uiManager)
-    {
-        List<GameObject> machines = GameObject
-            .FindGameObjectsWithTag("Machine")
-            .ToList();
-
-        foreach (var machine in machines)
-        {
-            machine
-                .GetComponent<Machine>()
-                .Setup(() => uiManager);
-        }
-    }
-
-    private static void LoadGenerators(UIManager uiManager)
-    {
-        List<GameObject> generators = GameObject
-            .FindGameObjectsWithTag("Generator")
-            .ToList();
-        foreach (var generator in generators)
-        {
-            generator
-                .GetComponent<Generator>()
-                .Setup(() => uiManager);
-        }
     }
 
     private void Update()

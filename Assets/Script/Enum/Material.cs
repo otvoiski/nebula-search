@@ -1,8 +1,12 @@
 ﻿public enum Material
 {
-    Creative,
+    Energy,
+    Water,
+    Ice,
+    Hydrogen,
+    Oxygen,
     Coal,
-    Solar,
-    DarkMatter,
-    Gravite
+    Iron,
+    Gold,
+    Diamond
 }
