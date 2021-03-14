@@ -10,7 +10,7 @@ public class GameHandler : MonoBehaviourExtended
     [Header("Player Info")] public Transform playerTransform;
     public PlayerData playerData;
 
-    public bool IsBuilding { get; set; }
+    public static bool IsBuilding { get; set; }
 
     [Component]
     private UIManager uiManager;
@@ -30,7 +30,11 @@ public class GameHandler : MonoBehaviourExtended
         if (Input.GetKeyDown(KeyCode.C)) Toast.Message(ToastType.Error, "Teste", "Menssage teste!");
         if (Input.GetKeyDown(KeyCode.V)) Toast.Message(ToastType.Info, "Teste", "Menssage teste!");
 
-        if (Input.GetKeyDown(KeyCode.B)) { IsBuilding = !IsBuilding; Toast.Message(ToastType.Info, "Building", $"Building {IsBuilding}"); }
+        if (Input.GetKeyDown(KeyCode.B) && !uiManager.IsOpen)
+        {
+            IsBuilding = !IsBuilding;
+            Toast.Message(ToastType.Info, "Building", $"Building {IsBuilding}");
+        }
 
         if (IsBuilding)
         {

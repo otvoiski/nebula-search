@@ -99,7 +99,7 @@ public class Machine : MonoBehaviourExtended
         {
             if (ray.GetValueOrDefault().collider.name == name)
             {
-                if (Input.GetKeyDown(KeyCode.Mouse0) && !ui.IsOpen)
+                if (Input.GetKeyDown(KeyCode.Mouse0) && !ui.IsOpen && !GameHandler.IsBuilding)
                 {
                     isOpen = true;
                 }
