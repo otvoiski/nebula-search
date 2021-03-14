@@ -1,6 +1,4 @@
-﻿using Assets.Script.Enumerator;
-using System;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
@@ -9,7 +7,8 @@ public class UIManager : MonoBehaviour
     {
         BottomBar,
         ToastBar,
-        InterfaceMenu
+        InterfaceMenu,
+        Build
     }
 
     private enum InterfaceMenu
@@ -50,12 +49,13 @@ public class UIManager : MonoBehaviour
         PowerConsume
     }
 
+    private Transform mainScreen;
     private Transform interfaceMenu;
     private Text title;
     private Transform inventory;
     private Slider energyPower;
     private Slider timeProcess;
-
+    private Transform buildScreen;
     public static InterfaceItem Item;
     private GameObject infoScreen;
 
@@ -63,9 +63,8 @@ public class UIManager : MonoBehaviour
 
     public void Start()
     {
-        interfaceMenu = GameObject.Find("UI")
-            .transform.Find("MainScreen")
-            .GetChild((int)MainScreen.InterfaceMenu);
+        mainScreen = GameObject.Find("UI").transform.Find("MainScreen");
+        interfaceMenu = mainScreen.GetChild((int)MainScreen.InterfaceMenu);
 
         title = interfaceMenu.GetChild((int)InterfaceMenu.Title).GetComponentInChildren<Text>();
         inventory = interfaceMenu.GetChild((int)InterfaceMenu.Inventory);
@@ -74,7 +73,14 @@ public class UIManager : MonoBehaviour
         energyPower = processMenu.GetChild((int)ProcessMenu.Energy).GetComponentInChildren<Slider>();
         timeProcess = processMenu.GetChild((int)ProcessMenu.TimeProcess).GetComponentInChildren<Slider>();
 
+        buildScreen = mainScreen.GetChild((int)MainScreen.Build);
+
         IsOpen = false;
+    }
+
+    public void ToggleWindowsBuild(bool isBuilding)
+    {
+        buildScreen.gameObject.SetActive(isBuilding);
     }
 
     public void ShowInterfaceItens()

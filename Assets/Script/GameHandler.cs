@@ -1,9 +1,8 @@
 ﻿using Assets.Script.Enumerator;
-using System.Collections.Generic;
-using System.Linq;
+using Assets.Script.Util;
 using UnityEngine;
 
-public class GameHandler : MonoBehaviour
+public class GameHandler : MonoBehaviourExtended
 {
     [Header("Camera Info")] public Vector3 alinhamento;
     public CameraFollow cameraFollow;
@@ -11,13 +10,15 @@ public class GameHandler : MonoBehaviour
     [Header("Player Info")] public Transform playerTransform;
     public PlayerData playerData;
 
-    private void Awake()
-    {
-        Locate.LoadLocate(Language.BR);
-    }
+    public bool IsBuilding { get; set; }
+
+    [Component]
+    private UIManager uiManager;
 
     private void Start()
     {
+        Locate.LoadLocate(Language.BR);
+
         cameraFollow.Setup(() => playerTransform.position, alinhamento);
         playerData.Setup(() => playerTransform);
     }
@@ -28,5 +29,22 @@ public class GameHandler : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.X)) Toast.Message(ToastType.Warning, "Teste", "Menssage teste!");
         if (Input.GetKeyDown(KeyCode.C)) Toast.Message(ToastType.Error, "Teste", "Menssage teste!");
         if (Input.GetKeyDown(KeyCode.V)) Toast.Message(ToastType.Info, "Teste", "Menssage teste!");
+
+        if (Input.GetKeyDown(KeyCode.B)) { IsBuilding = !IsBuilding; Toast.Message(ToastType.Info, "Building", $"Building {IsBuilding}"); }
+
+        if (IsBuilding)
+        {
+            uiManager.ToggleWindowsBuild(IsBuilding);
+
+            var ray = Utilities.GetRaycastHitFromScreenPoint();
+            if (ray != null && Input.GetKeyDown(KeyCode.Mouse0))
+            {
+                Debug.Log(ray.GetValueOrDefault().transform.name);
+            }
+        }
+        else
+        {
+            uiManager.ToggleWindowsBuild(IsBuilding);
+        }
     }
 }
