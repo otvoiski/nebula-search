@@ -24,9 +24,9 @@ public class Generator : MonoBehaviourExtended
     [Component]
     private readonly UIManager ui;
 
-    private TimerRun timer;
     private SpriteRenderer sprite;
     private bool isOpen;
+    private float timer;
 
     public void Start()
     {
@@ -43,7 +43,6 @@ public class Generator : MonoBehaviourExtended
             Output = type.output;
         }
 
-        timer = new TimerRun();
         sprite = GetComponentInChildren<SpriteRenderer>();
 
         Amount = 1;
@@ -57,14 +56,12 @@ public class Generator : MonoBehaviourExtended
 
     private void FixedUpdate()
     {
-        if (timer.Run() >= 1)
+        if (TimerRun.Run(1f, ref timer))
         {
             Consume();
             Powered();
 
             BateryLight();
-
-            timer.Reset();
         }
 
         if (Buffer < 0) Buffer = 0;

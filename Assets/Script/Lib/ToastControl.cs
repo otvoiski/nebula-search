@@ -17,7 +17,10 @@ public class ToastControl : MonoBehaviour
     private const float DEFAULT_TIME = 2f;
 
     private ToastType type;
-    private TimerRun timer;
+    private float warning;
+    private float success;
+    private float error;
+    private float info;
 
     private void Start()
     {
@@ -25,8 +28,6 @@ public class ToastControl : MonoBehaviour
         if (name.Contains($"{ ToastType.Success }")) type = ToastType.Success;
         if (name.Contains($"{ ToastType.Error }")) type = ToastType.Error;
         if (name.Contains($"{ ToastType.Info }")) type = ToastType.Info;
-
-        timer = new TimerRun();
     }
 
     private void Update()
@@ -34,23 +35,23 @@ public class ToastControl : MonoBehaviour
         switch (type)
         {
             case ToastType.Warning:
-                if (WaitForSecond(WARNING_TIME))
-                    Destroy(transform);
+                if (WaitForSecond(WARNING_TIME, ref warning))
+                    Destroy(gameObject);
                 break;
 
             case ToastType.Success:
-                if (WaitForSecond(SUCCESS_TIME))
-                    Destroy(this);
+                if (WaitForSecond(SUCCESS_TIME, ref success))
+                    Destroy(gameObject);
                 break;
 
             case ToastType.Error:
-                if (WaitForSecond(ERROR_TIME))
+                if (WaitForSecond(ERROR_TIME, ref error))
                     Destroy(gameObject);
                 break;
 
             case ToastType.Info:
-                if (WaitForSecond(INFO_TIME))
-                    Destroy(this);
+                if (WaitForSecond(INFO_TIME, ref info))
+                    Destroy(gameObject);
                 break;
 
             default:
@@ -59,14 +60,13 @@ public class ToastControl : MonoBehaviour
         }
     }
 
-    public bool WaitForSecond(float time)
+    private bool WaitForSecond(float wait, ref float timer)
     {
-        while (timer.Run() <= time)
+        if (TimerRun.Run(wait, ref timer))
         {
-            return false;
+            return true;
         }
-
-        return true;
+        return false;
     }
 
     public void ShowToast(string title, string message)

@@ -8,12 +8,10 @@ public class CameraFollow : MonoBehaviour
     private Vector3 alinhamento;
     private Camera myCamera;
     private Func<Vector3> GetCameraFollowPositionFunc;
-    private Func<float> GetCameraZoomFunc;
 
-    public void Setup(Func<Vector3> GetCameraFollowPositionFunc, Func<float> GetCameraZoomFunc, Vector3 alinhamento)
+    public void Setup(Func<Vector3> GetCameraFollowPositionFunc, Vector3 alinhamento)
     {
         this.GetCameraFollowPositionFunc = GetCameraFollowPositionFunc;
-        this.GetCameraZoomFunc = GetCameraZoomFunc;
         this.alinhamento = alinhamento;
     }
 
@@ -32,21 +30,10 @@ public class CameraFollow : MonoBehaviour
         this.GetCameraFollowPositionFunc = GetCameraFollowPositionFunc;
     }
 
-    public void SetCameraZoom(float cameraZoom)
-    {
-        SetGetCameraZoomFunc(() => cameraZoom);
-    }
-
-    public void SetGetCameraZoomFunc(Func<float> GetCameraZoomFunc)
-    {
-        this.GetCameraZoomFunc = GetCameraZoomFunc;
-    }
-
     // Update is called once per frame
     private void Update()
     {
         HandleMovement();
-        HandleZoom();
     }
 
     private void HandleMovement()
@@ -73,31 +60,6 @@ public class CameraFollow : MonoBehaviour
             }
 
             transform.position = newCameraPosition;
-        }
-    }
-
-    private void HandleZoom()
-    {
-        float cameraZoom = GetCameraZoomFunc();
-
-        float cameraZoomDifference = cameraZoom - myCamera.orthographicSize;
-        float cameraZoomSpeed = 1f;
-
-        myCamera.orthographicSize += cameraZoomDifference * cameraZoomSpeed * Time.deltaTime;
-
-        if (cameraZoomDifference > 0)
-        {
-            if (myCamera.orthographicSize > cameraZoom)
-            {
-                myCamera.orthographicSize = cameraZoom;
-            }
-        }
-        else
-        {
-            if (myCamera.orthographicSize < cameraZoom)
-            {
-                myCamera.orthographicSize = cameraZoom;
-            }
         }
     }
 }

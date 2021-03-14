@@ -10,7 +10,6 @@ public class GameHandler : MonoBehaviour
 
     [Header("Player Info")] public Transform playerTransform;
     public PlayerData playerData;
-    private float zoom = 60f;
 
     private void Awake()
     {
@@ -19,40 +18,15 @@ public class GameHandler : MonoBehaviour
 
     private void Start()
     {
-        var uiManager = gameObject.AddComponent<UIManager>();
-
-        cameraFollow.Setup(() => playerTransform.position, () => zoom, alinhamento);
+        cameraFollow.Setup(() => playerTransform.position, alinhamento);
         playerData.Setup(() => playerTransform);
     }
 
     private void Update()
     {
-        HandleZoomButtons();
-    }
-
-    private void HandleZoomButtons()
-    {
-        if (Input.GetKeyDown(KeyCode.Z))
-        {
-            ZoomOut();
-        }
-        if (Input.GetKeyDown(KeyCode.X))
-        {
-            ZoomIn();
-        }
-    }
-
-    private void ZoomIn()
-    {
-        zoom -= 40f;
-        if (zoom < 40f) zoom = 40f;
-        cameraFollow.SetCameraZoom(zoom);
-    }
-
-    private void ZoomOut()
-    {
-        zoom += 40f;
-        if (zoom > 200f) zoom = 200f;
-        cameraFollow.SetCameraZoom(zoom);
+        if (Input.GetKeyDown(KeyCode.Z)) Toast.Message(ToastType.Success, "Teste", "Menssage teste!");
+        if (Input.GetKeyDown(KeyCode.X)) Toast.Message(ToastType.Warning, "Teste", "Menssage teste!");
+        if (Input.GetKeyDown(KeyCode.C)) Toast.Message(ToastType.Error, "Teste", "Menssage teste!");
+        if (Input.GetKeyDown(KeyCode.V)) Toast.Message(ToastType.Info, "Teste", "Menssage teste!");
     }
 }
