@@ -133,4 +133,9 @@ public class UIManager : MonoBehaviour
             infoScreen.SetActive(false);
         }
     }
+
+    public void ToggleWindow(GameObject gameObject)
+    {
+        gameObject.SetActive(!gameObject.activeSelf);
+    }
 }
