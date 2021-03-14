@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   title: Electrolyte
   maxBuffer: 500
-  powerConsume: 45
-  maxProcessTime: 60
+  powerConsume: 60
+  maxProcessTime: 5
   inputs: 0100000000000000
   outputs: 0300000004000000

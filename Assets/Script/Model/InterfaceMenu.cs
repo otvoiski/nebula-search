@@ -5,4 +5,5 @@
     public int Buffer { get; internal set; }
     public int ProcessTime { get; internal set; }
     public int MaxProcessTime { get; internal set; }
+    public object PowerConsume { get; internal set; }
 }

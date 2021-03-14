@@ -102,7 +102,8 @@ public class Generator : MonoBehaviourExtended
                     Buffer = Buffer,
                     MaxBuffer = MaxBuffer,
                     ProcessTime = ProcessTime,
-                    MaxProcessTime = MaxProcessTime
+                    MaxProcessTime = MaxProcessTime,
+                    PowerConsume = PowerGenerator
                 };
 
                 ui.ShowInterfaceItens();
@@ -115,18 +116,14 @@ public class Generator : MonoBehaviourExtended
         }
     }
 
-    public int GetBufferFromRate(int rate)
+    public int GetBufferFromRate(int powerConsume)
     {
-        if (Buffer > 0)
+        if (Buffer - powerConsume >= 0)
         {
-            Buffer -= rate;
-            if (rate > Buffer) return Buffer;
-            else return rate;
+            Buffer -= powerConsume;
+            return powerConsume;
         }
-        else
-        {
-            return 0;
-        }
+        else return 0;
     }
 
     private void BateryLight()

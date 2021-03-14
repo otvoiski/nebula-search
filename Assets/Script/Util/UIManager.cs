@@ -97,6 +97,7 @@ public class UIManager : MonoBehaviour
             {
                 infoScreen.transform.GetChild((int)InfoScreen.Energy).GetChild(((int)ItemType.Value)).GetComponent<Text>().text = $"{Item.Buffer}/{Item.MaxBuffer}";
                 infoScreen.transform.GetChild((int)InfoScreen.ProcessTime).GetChild(((int)ItemType.Value)).GetComponent<Text>().text = $"{Item.ProcessTime}/{Item.MaxProcessTime}";
+                infoScreen.transform.GetChild((int)InfoScreen.PowerConsume).GetChild(((int)ItemType.Value)).GetComponent<Text>().text = $"{Item.PowerConsume}";
             }
         }
     }
@@ -120,6 +121,7 @@ public class UIManager : MonoBehaviour
         {
             infoScreen.transform.GetChild((int)InfoScreen.Energy).GetChild(((int)ItemType.Value)).GetComponent<Text>().text = "";
             infoScreen.transform.GetChild((int)InfoScreen.ProcessTime).GetChild(((int)ItemType.Value)).GetComponent<Text>().text = "";
+            infoScreen.transform.GetChild((int)InfoScreen.PowerConsume).GetChild(((int)ItemType.Value)).GetComponent<Text>().text = "";
 
             this.infoScreen = null;
             infoScreen.SetActive(false);
