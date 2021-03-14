@@ -75,7 +75,6 @@ public class Generator : MonoBehaviourExtended
             var ray = Utilities.GetRaycastHitFromScreenPoint();
             if (ray.HasValue)
             {
-                // TODO: A instancia do item deve ter o nome mudado
                 if (ray.GetValueOrDefault().collider.name.Contains(Title))
                 {
                     if (Input.GetKeyDown(KeyCode.Mouse0) && !ui.IsOpen)
