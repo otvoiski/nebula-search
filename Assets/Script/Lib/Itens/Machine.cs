@@ -15,11 +15,10 @@ public class Machine : MonoBehaviourExtended
     public int PowerConsume { get; private set; }
     public int Buffer { get; private set; }
     public int MaxProcessTime { get; private set; }
+    public int ProcessTime { get; private set; }
     public IList<Material> Outputs { get; private set; }
     public IList<Material> Inputs { get; private set; }
 
-    public TimerRun processTime;
-    private TimerRun connectionTimer;
     private bool isOpen;
     private SpriteRenderer sprite;
     private IList<Gas> gases;
@@ -28,7 +27,10 @@ public class Machine : MonoBehaviourExtended
     private bool isNecessaryOxigen;
 
     [Component]
-    private UIManager ui;
+    private readonly UIManager ui;
+
+    private float oneSecondProcessTimerRunner;
+    private float maxProcessTimeRunner;
 
     public void Start()
     {
@@ -50,9 +52,6 @@ public class Machine : MonoBehaviourExtended
             isNecessaryOxigen = Inputs.Contains(Material.Oxygen);
         }
 
-        connectionTimer = new TimerRun();
-        processTime = new TimerRun();
-
         debug = false;
         isOpen = false;
     }
@@ -68,14 +67,11 @@ public class Machine : MonoBehaviourExtended
         if (Buffer < 0) Buffer = 0;
         if (Buffer > MaxBuffer) Buffer = MaxBuffer;
 
-        if (processTime.Run() >= MaxProcessTime)
+        if (TimerRun.Run(1f, ref oneSecondProcessTimerRunner))
         {
-            MachineConsume();
-            processTime.Reset();
-        }
+            if (Buffer >= PowerConsume)
+                ProcessTime++;
 
-        if (connectionTimer.Run() >= 1f)
-        {
             if (isNecessaryEnergy)
             {
                 ConnectionToWire();
@@ -85,9 +81,15 @@ public class Machine : MonoBehaviourExtended
             {
                 ConnectionToGas();
             }
-
-            connectionTimer.Reset();
         }
+
+        if (TimerRun.Run(MaxProcessTime, ref maxProcessTimeRunner) && Buffer >= PowerConsume)
+        {
+            Buffer -= PowerConsume;
+            ProcessTime = 0;
+        }
+
+        SpriteColor();
     }
 
     private void MachineInterface()
@@ -117,8 +119,9 @@ public class Machine : MonoBehaviourExtended
                 Title = Title,
                 Buffer = Buffer,
                 MaxBuffer = MaxBuffer,
-                ProcessTime = (int)processTime.timer,
-                MaxProcessTime = MaxProcessTime
+                ProcessTime = ProcessTime,
+                MaxProcessTime = MaxProcessTime,
+                PowerConsume = PowerConsume
             };
 
             ui.ShowInterfaceItens();
@@ -138,7 +141,7 @@ public class Machine : MonoBehaviourExtended
         {
             foreach (var generator in Utilities.GetItemsFromRayCast<Generator>(wire.transform, CONNECTION))
             {
-                if (Inputs.Contains(generator.Output))
+                if (Inputs.Contains(generator.Output) && Buffer < MaxBuffer)
                     Buffer += generator.GetBufferFromRate(PowerConsume);
             }
             return true;
@@ -199,18 +202,8 @@ public class Machine : MonoBehaviourExtended
         }
     }
 
-    private void MachineConsume()
+    private void SpriteColor()
     {
-        if (Buffer > PowerConsume)
-        {
-            Buffer -= PowerConsume;
-        }
-
-        SpritColor();
-    }
-
-    private void SpritColor()
-    {
-        sprite.color = Buffer > 0 ? new Color(0, 1, 0, .200f) : new Color(1, 0, 0, .200f);
+        sprite.color = Buffer > PowerConsume ? new Color(0, 1, 0, .200f) : new Color(1, 0, 0, .200f);
     }
 }
