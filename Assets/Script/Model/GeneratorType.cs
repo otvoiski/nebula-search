@@ -6,7 +6,7 @@ public class GeneratorType : ScriptableObject
     public string title = "Generator";
     public int powerGenerator;
     public int maxBuffer;
-    public int processTime;
+    public int maxProcessTime;
     public Material[] inputs;
     public Material output;
 }

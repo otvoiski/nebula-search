@@ -32,7 +32,8 @@ public class MonoBehaviourSingleton<T> : MonoBehaviourExtended where T : MonoBeh
                 // Maybe it's not Awake yet, try to find it in active scenes.
                 bool stillLoading = false;
                 var method = type.GetMethod("GetComponentInChildren", new Type[0]).MakeGenericMethod(type);
-                for (int i = 0; i < SceneManager.sceneCount; i++) {
+                for (int i = 0; i < SceneManager.sceneCount; i++)
+                {
                     var scene = SceneManager.GetSceneAt(i);
                     var roots = scene.GetRootGameObjects();
                     foreach (var r in roots)

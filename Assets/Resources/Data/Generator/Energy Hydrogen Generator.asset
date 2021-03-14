@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Energy Hydrogen Generator
   m_EditorClassIdentifier: 
   title: Energy Hydrogen Generator
-  powerGenerator: 32
+  powerGenerator: 60
   maxBuffer: 1200
-  processTime: 60
+  maxProcessTime: 60
   inputs: 03000000
   output: 0

@@ -21,7 +21,6 @@ public class GameHandler : MonoBehaviour
     {
         var uiManager = gameObject.AddComponent<UIManager>();
 
-        uiManager.Setup();
         cameraFollow.Setup(() => playerTransform.position, () => zoom, alinhamento);
         playerData.Setup(() => playerTransform);
     }

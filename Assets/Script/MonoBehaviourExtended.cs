@@ -126,7 +126,9 @@ public class MonoBehaviourExtended : MonoBehaviour
         /// </summary>
         public bool Optional { get; set; }
 
-        public DependencyAttribute() { }
+        public DependencyAttribute()
+        {
+        }
 
         /// <summary>
         /// <see cref="DependencyAttribute"/>
@@ -140,7 +142,7 @@ public class MonoBehaviourExtended : MonoBehaviour
         public override string ToString()
         {
             string s = base.ToString();
-            return s.Remove(0, s.IndexOf('+')+1);
+            return s.Remove(0, s.IndexOf('+') + 1);
         }
     }
 
@@ -148,16 +150,19 @@ public class MonoBehaviourExtended : MonoBehaviour
     /// Do not use it directly, it's just base class for all of component dependency attributes.
     /// </summary>
     protected class ComponentDependencyAttribute : DependencyAttribute { public ComponentDependencyAttribute(int generationOffset = 0) : base(generationOffset) { } }
+
     /// <summary>
     /// Looks for the component only in self - <c>this.gameObject</c> or <see cref="Of"/> & <see cref="Offset"/>.
     /// </summary>
     protected class OwnComponentAttribute : ComponentDependencyAttribute { public OwnComponentAttribute(int generationOffset = 0) : base(generationOffset) { } }
+
     /// <summary>
-    /// Automaticly finds the component (traversing and climbing the hierarchy). 
+    /// Automaticly finds the component (traversing and climbing the hierarchy).
     /// Search order: <see cref="MonoBehaviourSingleton{T}">singletons</see>, [ReferencePoint]s, itself, children, siblings, children of siblings, go to parent and repeat the algorythm.
     /// </summary>
     /// <seealso cref="ReferencePointAttribute"/>
     protected class ComponentAttribute : ComponentDependencyAttribute { public ComponentAttribute(int generationOffset = 0) : base(generationOffset) { } }
+
     /// <summary>
     /// Finds the component independently from <c>this.gameObject</c>.
     /// Search order: <see cref="MonoBehaviourSingleton{T}">singletons</see>, root GameObjects, children of roots traversed in alphabetical order.
@@ -166,11 +171,13 @@ public class MonoBehaviourExtended : MonoBehaviour
     /// Roots are searched in alphabetical order to maintain consistency because order of roots in scene is not guaranteed (editor vs build).
     /// </remarks>
     protected class GlobalComponentAttribute : ComponentDependencyAttribute { public GlobalComponentAttribute() : base(0) { } }
+
     /// <summary>
     /// Searches for the component at <see cref="ReferencePointAttribute">[ReferencePoint]s</see>.
     /// </summary>
     /// <seealso cref="ReferencePointAttribute"/>
-    protected class ReferenceComponentAttribute : ComponentDependencyAttribute {
+    protected class ReferenceComponentAttribute : ComponentDependencyAttribute
+    {
         /// <summary>
         /// If true, it also searches in children of <see cref="ReferencePointAttribute">[ReferencePoints]s</see>; otherwise only directly in them.
         /// </summary>
@@ -185,6 +192,7 @@ public class MonoBehaviourExtended : MonoBehaviour
             DeepSearch = deepSearch;
         }
     }
+
     /// <summary>
     /// Finds the component in children of <c>this.gameObject</c> or <see cref="Of"/> & <see cref="Offset"/>.
     /// </summary>
@@ -201,6 +209,7 @@ public class MonoBehaviourExtended : MonoBehaviour
         /// <param name="generationOffset"> <see cref="DependencyAttribute.Offset"/></param>
         public ChildComponentAttribute(int generationOffset = 0) : base(generationOffset) { }
     }
+
     /// <summary>
     /// Finds the component in parents of <c>this.gameObject</c> or <see cref="Of"/> & <see cref="Offset"/>.
     /// </summary>
@@ -217,6 +226,7 @@ public class MonoBehaviourExtended : MonoBehaviour
         /// <param name="generationOffset"> <see cref="DependencyAttribute.Offset"/></param>
         public ParentComponentAttribute(int generationOffset = 0) : base(generationOffset) { }
     }
+
     /// <summary>
     /// Finds the component in siblings of <c>this.gameObject</c> or <see cref="Of"/> & <see cref="Offset"/>.
     /// </summary>
@@ -226,12 +236,14 @@ public class MonoBehaviourExtended : MonoBehaviour
         /// If true, it searches only in siblings skiping itself; otherwise it looks also into <c>this.gameObject</c> or <see cref="Of"/> & <see cref="Offset"/> for the component.
         /// </summary>
         public bool SkipItself { get; set; }
+
         /// <summary>
         /// <see cref="SiblingComponentAttribute"/>
         /// </summary>
         /// <param name="generationOffset"> <see cref="DependencyAttribute.Offset"/></param>
         public SiblingComponentAttribute(int generationOffset = 0) : base(generationOffset) { }
     }
+
     /// <summary>
     /// Searches for the component starting from parent (or <see cref="Generations"/> or <see cref="FromRoot"/>) down along the hierarchy.
     /// </summary>
@@ -241,10 +253,12 @@ public class MonoBehaviourExtended : MonoBehaviour
         /// If true, <c>this.gameObject</c> or <see cref="Of"/> & <see cref="Offset"/> is skiped; otherwise included in search for the component.
         /// </summary>
         public bool SkipItself { get; set; }
+
         /// <summary>
         /// If true, it starts searching from root GameObject of <c>this.gameObject</c> or <see cref="Of"/>.
         /// </summary>
         public bool FromRoot { get; set; }
+
         /// <summary>
         /// If <see cref="FromRoot"/>, it indicates how many GameObjects to skip from the top of hierarchy;
         /// otherwise how many generations to include in the search upwards from <c>this.gameObject</c> or <see cref="Of"/> & <see cref="Offset"/>.
@@ -280,7 +294,8 @@ public class MonoBehaviourExtended : MonoBehaviour
     /// <summary>
     /// Do not use it directly, it's just base class for all of GameObject dependency attributes.
     /// </summary>
-    protected class GameObjectDependencyAttribute : DependencyAttribute {
+    protected class GameObjectDependencyAttribute : DependencyAttribute
+    {
         /// <summary>
         /// Name of the GameObject to find.
         /// </summary>
@@ -301,6 +316,7 @@ public class MonoBehaviourExtended : MonoBehaviour
         /// <param name="generationOffset"> <see cref="DependencyAttribute.Offset"/></param>
         public GameObjectDependencyAttribute(int generationOffset = 0) : base(generationOffset) { }
     }
+
     /// <summary>
     /// Finds the <see cref="Named"/> GameObject in children or gets one by <see cref="Index">childIndex</see>.
     /// </summary>
@@ -330,6 +346,7 @@ public class MonoBehaviourExtended : MonoBehaviour
             Index = -1;
         }
     }
+
     /// <summary>
     /// Finds the <see cref="Named"/> GameObject in parents or gets one by <see cref="Index">parentIndex</see>.
     /// </summary>
@@ -340,6 +357,7 @@ public class MonoBehaviourExtended : MonoBehaviour
         /// </summary>
         /// <param name="parentIndex"> Index of a parent to get as the dependency. (0 = direct parent)</param>
         public ParentAttribute(int parentIndex = 0) : base(parentIndex) { }
+
         /// <summary>
         /// Finds the GameObject by <c>name</c> in parents of <c>this.gameObject</c> or <see cref="Of"/> & <see cref="Offset"/>.
         /// </summary>
@@ -349,6 +367,7 @@ public class MonoBehaviourExtended : MonoBehaviour
             Named = name;
         }
     }
+
     /// <summary>
     /// Finds GameObject by <see cref="Of">name</see> searching in all of them
     /// but starting from [ReferencePoint]s then <c>this.gameObject</c>, its children, siblings, children of siblings, then goes to a parent and repeats the algorythm.
@@ -371,6 +390,7 @@ public class MonoBehaviourExtended : MonoBehaviour
             Of = name;
         }
     }
+
     /// <summary>
     /// Gets root GameObject of <c>this</c>; or finds one by <c>name</c> searching in scene roots and then from root (-<see cref="FromTop"/>) down to <c>this</c>.
     /// By <c>this</c> you should understand <c>this.gameObject</c> or <see cref="Of"/> & <see cref="Offset"/>.
@@ -381,6 +401,7 @@ public class MonoBehaviourExtended : MonoBehaviour
         /// Level of the hierarchy to treat as root. (0 = actual root)
         /// </summary>
         public int FromTop { get; set; }
+
         /// <summary>
         /// Gets root GameObject as the dependency.
         /// </summary>
@@ -389,6 +410,7 @@ public class MonoBehaviourExtended : MonoBehaviour
         {
             FromTop = toSkipFromTop;
         }
+
         /// <summary>
         /// Finds GameObject by <c>name</c> searching from root (-<see cref="FromTop"/>) down to <c>this</c>.
         /// </summary>
@@ -401,6 +423,7 @@ public class MonoBehaviourExtended : MonoBehaviour
             Named = name;
         }
     }
+
     /// <summary>
     /// Finds the <see cref="Named"/> GameObject in siblings or gets one by <see cref="Index">siblingIndex</see>.
     /// </summary>
@@ -413,6 +436,7 @@ public class MonoBehaviourExtended : MonoBehaviour
         /// Index of a sibling to get as the dependency. (<c>this.gameObject</c> is included)
         /// </summary>
         public int Index { get; set; }
+
         /// <summary>
         /// Get the GameObject by <see cref="Index"/>.
         /// </summary>
@@ -421,6 +445,7 @@ public class MonoBehaviourExtended : MonoBehaviour
         {
             Index = siblingIndex;
         }
+
         /// <summary>
         /// Find the GameObject by <c>name</c> in siblings.
         /// </summary>
@@ -460,7 +485,7 @@ public class MonoBehaviourExtended : MonoBehaviour
 
     private object GetReferenceComponent(List<GameObject> references, MethodInfo method)
     {
-        if(references.Count == 0)
+        if (references.Count == 0)
         {
             LogWarning("There are no [ReferencePoint] GameObjects to search in for the [ReferenceComponent] in " + this + ". For automatic search use [Component] instead.");
             return null;
@@ -681,8 +706,8 @@ public class MonoBehaviourExtended : MonoBehaviour
             var roots = GetRoots(scene);
             foreach (var r in roots)
             {
-                if(r.transform != startPoint)
-                { 
+                if (r.transform != startPoint)
+                {
                     result = FindGameObjectInChildren(r.transform, name);
 
                     if (result != null)
@@ -766,7 +791,7 @@ public class MonoBehaviourExtended : MonoBehaviour
 
     private GameObject FindGameObjectIn(IEnumerable<GameObject> list, string name)
     {
-        foreach(var go in list)
+        foreach (var go in list)
         {
             try
             {
@@ -794,7 +819,7 @@ public class MonoBehaviourExtended : MonoBehaviour
         // Init field
         var component = singletonType.GetProperty("Instance").GetValue(null);
         if (component != null)
-        { 
+        {
             f.SetValue(this, component);
             Log("The [GlobalComponent] " + f + " field in " + this + " has been initialized with a delay. Don't use it in Start() & Awake()!");
         }
@@ -824,7 +849,7 @@ public class MonoBehaviourExtended : MonoBehaviour
         }
 
         if (deepSearch)
-        { 
+        {
             // Deep
             foreach (var scene in scenes)
             {
@@ -858,12 +883,12 @@ public class MonoBehaviourExtended : MonoBehaviour
                 go = new GameObject(a.Of);
             }
         }
-        
+
         Log("The [" + a + "(Of = \"" + a.Of + "\")] " + f + " field in " + this + " is initialized with a delay. Don't use it in Start() & Awake()!");
         var startPoint = GetOffsetTransform(go.transform, a.Offset);
         if (a is GameObjectDependencyAttribute oa)
             InitObjectField(oa, f, startPoint);
-        else if(a is ComponentDependencyAttribute ca)
+        else if (a is ComponentDependencyAttribute ca)
             InitComponentField(ca, this.GetType(), f, startPoint, references);
     }
 
@@ -888,13 +913,13 @@ public class MonoBehaviourExtended : MonoBehaviour
     }
 
     private object FindComponentInChildren(Transform parent, MethodInfo method)
-    {   
+    {
         // Top search
         for (int i = 0; i < parent.childCount; i++)
         {
             var child = parent.GetChild(i);
 
-            if(!HasToSkip(child))
+            if (!HasToSkip(child))
             {
                 var target = method.Invoke(child, new Type[0]);
                 if (target != null)
@@ -952,7 +977,7 @@ public class MonoBehaviourExtended : MonoBehaviour
                 if (toSkip == r)
                     continue;
 
-                if(!deepSearch || toSkip == null)
+                if (!deepSearch || toSkip == null)
                 {
                     target = method.Invoke(r.transform, new Type[0]);
                 }
@@ -964,7 +989,8 @@ public class MonoBehaviourExtended : MonoBehaviour
                 if (target != null)
                     goto outLoops;
             }
-        } outLoops:
+        }
+    outLoops:
 
         if (toSkip != null)
         {
@@ -974,14 +1000,14 @@ public class MonoBehaviourExtended : MonoBehaviour
         if (target == null && toSkip != null && deepSearch)
             target = GetComponentOnlyInChildren(toSkip.transform, method);
 
-        if(f.GetValue(this) == null || !deepSearch)
-        { 
+        if (f.GetValue(this) == null || !deepSearch)
+        {
             if (target != null)
             {
                 f.SetValue(this, target);
                 Log("The " + f + " field in " + this + " has been initialized with a delay. Don't use it in Start() & Awake()!");
             }
-            else if(f.GetValue(this) == null)
+            else if (f.GetValue(this) == null)
             {
                 if (isOptional)
                     Log("Instance of " + f + " not found for " + this + " but it's optional.", true);
@@ -1029,7 +1055,8 @@ public class MonoBehaviourExtended : MonoBehaviour
             {
                 delayedScenes.Add(scene);
             }
-        } outLoops:
+        }
+    outLoops:
 
         if (result == null)
         {
@@ -1059,7 +1086,7 @@ public class MonoBehaviourExtended : MonoBehaviour
                 isDelayed = true;
                 StartCoroutine(FindComponentInScenes(delayedScenes, f, deepSearch, isOptional, skip ? startPoint : null));
             }
-            else if(skip && startPoint != null && deepSearch)
+            else if (skip && startPoint != null && deepSearch)
             {
                 result = GetComponentOnlyInChildren(startPoint.transform, method);
             }
@@ -1083,8 +1110,8 @@ public class MonoBehaviourExtended : MonoBehaviour
     private object GetSingletonComponent(FieldInfo f, out bool isDelayed)
     {
         isDelayed = false;
-        try 
-        { 
+        try
+        {
             var fieldType = f.FieldType;
             var singletonType = typeof(MonoBehaviourSingleton<>).MakeGenericType(fieldType);
             if (fieldType.IsSubclassOf(singletonType))
@@ -1132,7 +1159,7 @@ public class MonoBehaviourExtended : MonoBehaviour
         else if (a is FamilyComponentAttribute fc)
         {
             var prePoint = startPoint;
-            if(fc.FromRoot)
+            if (fc.FromRoot)
                 startPoint = GetRoot(startPoint, fc.Generations);
             else
                 startPoint = GetOffsetTransform(startPoint, fc.Generations);
@@ -1199,8 +1226,8 @@ public class MonoBehaviourExtended : MonoBehaviour
                     if (isDelayed)
                         return;
                 }
-                
-                if(component == null)
+
+                if (component == null)
                 {
                     //... no, it's not (or optional==true) so
                     // First search in roots itself
@@ -1253,7 +1280,7 @@ public class MonoBehaviourExtended : MonoBehaviour
         else if (a is OwnComponentAttribute)
         {
             if (startPoint != null)
-            { 
+            {
                 var method = GetTopMethod(f.FieldType);
                 component = method.Invoke(startPoint, new Type[0]);
             }
@@ -1263,7 +1290,7 @@ public class MonoBehaviourExtended : MonoBehaviour
             var method = rc.DeepSearch ? GetDeepMethod(f.FieldType) : GetTopMethod(f.FieldType);
             if (a.Of != null)
             {
-                if(startPoint!=null)
+                if (startPoint != null)
                     component = method.Invoke(startPoint, new Type[0]);
             }
             else
@@ -1285,14 +1312,14 @@ public class MonoBehaviourExtended : MonoBehaviour
             var topMethod = GetTopMethod(f.FieldType);
             if (component == null && a.Of == null && references.Count != 0)
             {
-                component = GetReferenceComponent(references, topMethod);       
+                component = GetReferenceComponent(references, topMethod);
             }
 
             if (component == null && startPoint != null)
             {
                 var deepMethod = GetDeepMethod(f.FieldType);
                 component = deepMethod.Invoke(startPoint, new Type[0]);
-                    
+
                 while (component == null)
                 {
                     var toSkip = startPoint;
@@ -1309,7 +1336,7 @@ public class MonoBehaviourExtended : MonoBehaviour
                         component = GetComponentOnlyInChildren(startPoint, topMethod);
 
                     if (component == null)
-                    { 
+                    {
                         for (int i = 0; i < startPoint.childCount; i++)
                         {
                             var child = startPoint.GetChild(i);
@@ -1332,7 +1359,7 @@ public class MonoBehaviourExtended : MonoBehaviour
                 }
                 if (component == null)
                 {
-                    component = FindInRoots(f, true, a.Optional, startPoint?.gameObject, out bool isDelayed, startPoint!=null);
+                    component = FindInRoots(f, true, a.Optional, startPoint?.gameObject, out bool isDelayed, startPoint != null);
                     if (isDelayed)
                         return;
                 }
@@ -1411,7 +1438,7 @@ public class MonoBehaviourExtended : MonoBehaviour
         {
             var parent = startPoint.parent;
             if (parent != null)
-            { 
+            {
                 target = GetChild(parent, sa.Index);
 
                 if (target == null)
@@ -1474,7 +1501,7 @@ public class MonoBehaviourExtended : MonoBehaviour
             {
                 LogWarning("No GameObject named \"" + name + "\" was found for [" + a + "] " + f + " in " + this + ". Creating one...");
                 go = new GameObject(name);
-            }            
+            }
         }
 
         if (f.FieldType == typeof(GameObject))
@@ -1494,7 +1521,7 @@ public class MonoBehaviourExtended : MonoBehaviour
         foreach (var scene in scenes)
         {
             var roots = GetRoots(scene);
-            foreach(var r in roots)
+            foreach (var r in roots)
             {
                 if (deepSearch)
                 {
@@ -1508,7 +1535,7 @@ public class MonoBehaviourExtended : MonoBehaviour
                         return r.transform;
                 }
             }
-            
+
             if (!scene.isLoaded)
                 delayedScenes.Add(scene);
         }
@@ -1528,8 +1555,8 @@ public class MonoBehaviourExtended : MonoBehaviour
         var name = a.GetName();
         if (a is ParentAttribute)
         {
-            if(startPoint != null)
-            { 
+            if (startPoint != null)
+            {
                 while (startPoint.parent != null)
                 {
                     startPoint = startPoint.parent;
@@ -1555,7 +1582,7 @@ public class MonoBehaviourExtended : MonoBehaviour
             startPoint = startPoint?.parent;
             if (startPoint != null)
             {
-                for(int i = 0; i<startPoint.childCount; i++)
+                for (int i = 0; i < startPoint.childCount; i++)
                 {
                     var child = startPoint.GetChild(i);
                     if (child.name.Equals(name))
@@ -1613,14 +1640,14 @@ public class MonoBehaviourExtended : MonoBehaviour
                 if (result != null)
                     return result;
 
-                for (int i = path.Count - 1; i>=0; i--)
+                for (int i = path.Count - 1; i >= 0; i--)
                 {
                     var t = path[i];
                     if (t.name.Equals(name))
                         return t;
                 }
             }
-            else if(ra.FromTop == 0)
+            else if (ra.FromTop == 0)
             {
                 return FindGameObjectInRoots(a, f, a.Optional, name, false, out isDelayed);
             }
@@ -1679,10 +1706,10 @@ public class MonoBehaviourExtended : MonoBehaviour
             int children = startPoint.childCount;
             while (children < ca.Index)
             {
-                new GameObject("Child" + (children+1)).transform.SetParent(startPoint);
+                new GameObject("Child" + (children + 1)).transform.SetParent(startPoint);
                 children++;
             }
-                    
+
             target.SetParent(startPoint);
             if (ca.Index >= 0)
                 target.SetSiblingIndex(ca.Index);
@@ -1693,7 +1720,7 @@ public class MonoBehaviourExtended : MonoBehaviour
             int children = parent?.childCount ?? new SceneOrDdols(startPoint.gameObject).GetRootCount();
             while (children < sa.Index)
             {
-                var sibling = new GameObject("Sibling" + (children+1)).transform;
+                var sibling = new GameObject("Sibling" + (children + 1)).transform;
                 sibling.SetParent(startPoint); // Sets scene... in case the parent was null
                 sibling.SetParent(parent);
                 children++;
@@ -1778,13 +1805,13 @@ public class MonoBehaviourExtended : MonoBehaviour
                     component = gm.GetComponent(fType);
 
                     // Set scene to be the same as this
-                    gm.transform.SetParent(transform); 
+                    gm.transform.SetParent(transform);
                     gm.transform.SetParent(null);
                 }
             }
             else
             {
-                component = references[Mathf.Min(a.Offset, references.Count-1)].AddComponent(fType);
+                component = references[Mathf.Min(a.Offset, references.Count - 1)].AddComponent(fType);
             }
         }
 
@@ -1834,7 +1861,6 @@ public class MonoBehaviourExtended : MonoBehaviour
 
                 startPoint = GetOffsetTransform(startPoint, a.Offset);
                 InitObjectField(a, f, startPoint);
-                
             }
 
             if (f.GetCustomAttribute(typeof(ReferencePointAttribute)) != null)
@@ -1865,7 +1891,7 @@ public class MonoBehaviourExtended : MonoBehaviour
                 if (a.Of != null)
                 {
                     startPoint = FindGameObject(a, f, references, out bool isDelayed)?.transform;
-                    if(startPoint == null)
+                    if (startPoint == null)
                         continue;
                 }
                 else

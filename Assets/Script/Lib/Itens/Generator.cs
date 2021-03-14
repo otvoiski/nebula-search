@@ -3,7 +3,7 @@ using Assets.Script.Util;
 using System;
 using UnityEngine;
 
-public class Generator : MonoBehaviour
+public class Generator : MonoBehaviourExtended
 {
     public GeneratorType type;
 
@@ -14,12 +14,15 @@ public class Generator : MonoBehaviour
     public int Amount { get; private set; }
     public int PowerGenerator { get; private set; }
     public int Buffer { get; private set; }
-    public int CombustionTime { get; private set; }
     public int ProcessTime { get; private set; }
+    public int MaxProcessTime { get; private set; }
     public Material[] Inputs { get; private set; }
     public Material Output { get; private set; }
 
     #endregion type
+
+    [Component]
+    private readonly UIManager ui;
 
     private TimerRun timer;
     private SpriteRenderer sprite;
@@ -35,7 +38,7 @@ public class Generator : MonoBehaviour
             MaxBuffer = type.maxBuffer;
             PowerGenerator = type.powerGenerator;
             Title = type.title;
-            ProcessTime = type.processTime;
+            MaxProcessTime = type.maxProcessTime;
             Inputs = type.inputs;
             Output = type.output;
         }
@@ -46,13 +49,10 @@ public class Generator : MonoBehaviour
         Amount = 1;
     }
 
-    public void Setup(IUIManager ui)
-    {
-    }
-
     public void Update()
     {
-        //GeneratorInterface();
+        if (ui != null)
+            GeneratorInterface();
     }
 
     private void FixedUpdate()
@@ -73,34 +73,46 @@ public class Generator : MonoBehaviour
 
     private void GeneratorInterface()
     {
-        //try
-        //{
-        //    var ray = Utilities.GetRaycastHitFromScreenPoint();
-        //    if (ray.HasValue)
-        //    {
-        //        // TODO: A instancia do item deve ter o nome mudado
-        //        if (ray.GetValueOrDefault().collider.name.Contains(Title))
-        //        {
-        //            if (Input.GetKeyDown(KeyCode.Mouse0) && !ui.IsOpen)
-        //            {
-        //                isOpen = true;
-        //            }
-        //        }
-        //    }
+        try
+        {
+            var ray = Utilities.GetRaycastHitFromScreenPoint();
+            if (ray.HasValue)
+            {
+                // TODO: A instancia do item deve ter o nome mudado
+                if (ray.GetValueOrDefault().collider.name.Contains(Title))
+                {
+                    if (Input.GetKeyDown(KeyCode.Mouse0) && !ui.IsOpen)
+                    {
+                        isOpen = true;
+                    }
+                }
+            }
 
-        //    if (Input.GetKeyDown(KeyCode.Escape) && ui.IsOpen && isOpen)
-        //    {
-        //        isOpen = false;
-        //        ui.CloseInventory(this);
-        //    }
+            if (Input.GetKeyDown(KeyCode.Escape) && ui.IsOpen && isOpen)
+            {
+                isOpen = false;
+                ui.CloseInterfaceItens();
+            }
 
-        //    if (isOpen) ui.ShowInventory(this);
-        //}
-        //catch (Exception ex)
-        //{
-        //    Toast.Message(ToastType.Error, "Exception", ex.Message);
-        //    Debug.LogException(ex);
-        //}
+            if (isOpen)
+            {
+                UIManager.Item = new InterfaceItem
+                {
+                    Title = Title,
+                    Buffer = Buffer,
+                    MaxBuffer = MaxBuffer,
+                    ProcessTime = ProcessTime,
+                    MaxProcessTime = MaxProcessTime
+                };
+
+                ui.ShowInterfaceItens();
+            }
+        }
+        catch (Exception ex)
+        {
+            Toast.Message(ToastType.Error, "Exception", ex.Message);
+            Debug.LogException(ex);
+        }
     }
 
     public int GetBufferFromRate(int rate)
@@ -126,9 +138,9 @@ public class Generator : MonoBehaviour
 
     private void Powered()
     {
-        if (CombustionTime > 0 && Buffer < MaxBuffer)
+        if (ProcessTime > 0 && Buffer < MaxBuffer)
         {
-            CombustionTime--;
+            ProcessTime--;
 
             Buffer += PowerGenerator;
             if (Buffer >= MaxBuffer)
@@ -138,10 +150,10 @@ public class Generator : MonoBehaviour
 
     private void Consume()
     {
-        if (CombustionTime == 0 && Amount != 0)
+        if (ProcessTime == 0 && Amount != 0)
         {
             Amount--;
-            CombustionTime = 1 * ProcessTime;
+            ProcessTime = 1 * MaxProcessTime;
         }
     }
 }

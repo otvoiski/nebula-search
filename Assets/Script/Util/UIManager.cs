@@ -7,115 +7,122 @@ public class UIManager : MonoBehaviour
 {
     private enum MainScreen
     {
-        BottomBar = 0,
-        ToastBar = 1,
-        InterfaceMenu = 2
+        BottomBar,
+        ToastBar,
+        InterfaceMenu
     }
 
     private enum InterfaceMenu
     {
-        Title = 0,
-        Body = 1,
-        Inventory = 2,
+        Title,
+        Inventory,
+        IO,
+        Button,
+        ProcessMenu
     }
 
-    private enum Item
+    private enum ItemType
     {
-        Title = 0,
-        Text = 1,
-        Icon = 2
+        Title,
+        Value,
+        Icon
     }
 
     private enum Body
     {
-        Energy = 0,
-        Process = 1,
-        Input = 2,
-        Output = 3,
-        Others = 4
+        Energy,
+        Process,
+        Input,
+        Output,
+        Others
+    }
+
+    private enum ProcessMenu
+    {
+        Energy,
+        TimeProcess
+    }
+
+    private enum InfoScreen
+    {
+        Energy,
+        ProcessTime,
+        PowerConsume
     }
 
     private Transform interfaceMenu;
     private Text title;
-
-    private Transform energyPower;
-    private Transform timeProcess;
     private Transform inventory;
+    private Slider energyPower;
+    private Slider timeProcess;
+
+    public static InterfaceItem Item;
+    private GameObject infoScreen;
 
     public bool IsOpen { get; private set; }
 
     public void Start()
     {
-        interfaceMenu = GameObject.Find("UI").transform.Find("MainScreen");
+        interfaceMenu = GameObject.Find("UI")
+            .transform.Find("MainScreen")
+            .GetChild((int)MainScreen.InterfaceMenu);
 
         title = interfaceMenu.GetChild((int)InterfaceMenu.Title).GetComponentInChildren<Text>();
-
-        var body = interfaceMenu.GetChild((int)InterfaceMenu.Body);
-        energyPower = body.GetChild((int)Body.Energy).GetChild(0);
-        timeProcess = body.GetChild((int)Body.Process).GetChild(0);
-
         inventory = interfaceMenu.GetChild((int)InterfaceMenu.Inventory);
+
+        var processMenu = interfaceMenu.GetChild((int)InterfaceMenu.ProcessMenu);
+        energyPower = processMenu.GetChild((int)ProcessMenu.Energy).GetComponentInChildren<Slider>();
+        timeProcess = processMenu.GetChild((int)ProcessMenu.TimeProcess).GetComponentInChildren<Slider>();
+
         IsOpen = false;
     }
 
-    public void ShowInterfaceItens(string title, int buffer, int timeProcess)
+    public void ShowInterfaceItens()
     {
-        IsOpen = true;
-
-        this.title.text = Locate.Translate["Machine"][title]?.ToString() ?? title;
-
-        ChangeUIItem(body.GetChild(0), Locate.Translate["Machine"]["MachineUse"].ToString(), $"{ machine.PowerConsume } μ");
-        ChangeUIItem(body.GetChild(1), Locate.Translate["Machine"]["Buffer"].ToString(), $"{ machine.Buffer }/{machine.MaxBuffer}");
-        ChangeUIItem(body.GetChild(2), Locate.Translate["Machine"]["Timer"].ToString(), $"{Mathf.RoundToInt(machine.processorTimer.timer)}/{machine.TimeProcess}");
-
-        interfaceMenu.gameObject.SetActive(IsOpen);
-    }
-
-    public void ShowInventory(Machine machine)
-    {
-        if (machine != null)
+        if (Item != null)
         {
             IsOpen = true;
 
-            title.text = Locate.Translate["Machine"][machine.Title]?.ToString();
+            title.text = Locate.Translate["Machine"][Item.Title]?.ToString() ?? Item.Title;
 
-            ChangeUIItem(body.GetChild(0), Locate.Translate["Machine"]["MachineUse"].ToString(), $"{ machine.PowerConsume } μ");
-            ChangeUIItem(body.GetChild(1), Locate.Translate["Machine"]["Buffer"].ToString(), $"{ machine.Buffer }/{machine.MaxBuffer}");
-            ChangeUIItem(body.GetChild(2), Locate.Translate["Machine"]["Timer"].ToString(), $"{Mathf.RoundToInt(machine.processorTimer.timer)}/{machine.TimeProcess}");
+            energyPower.maxValue = Item.MaxBuffer;
+            energyPower.value = Item.Buffer;
+
+            timeProcess.maxValue = Item.MaxProcessTime;
+            timeProcess.value = Item.ProcessTime;
 
             interfaceMenu.gameObject.SetActive(IsOpen);
+
+            if (Item != null && infoScreen != null)
+            {
+                infoScreen.transform.GetChild((int)InfoScreen.Energy).GetChild(((int)ItemType.Value)).GetComponent<Text>().text = $"{Item.Buffer}/{Item.MaxBuffer}";
+                infoScreen.transform.GetChild((int)InfoScreen.ProcessTime).GetChild(((int)ItemType.Value)).GetComponent<Text>().text = $"{Item.ProcessTime}/{Item.MaxProcessTime}";
+            }
         }
     }
 
-    private void ChangeUIItem(Transform transform, string title, string value)
-    {
-        transform.GetChild((int)Item.Title).GetComponentInChildren<Text>().text = title;
-        transform.GetChild((int)Item.Value).GetComponentInChildren<Text>().text = value;
-    }
-
-    public void CloseInventory(Machine machine)
+    public void CloseInterfaceItens()
     {
         IsOpen = false;
+        title.text = "";
+        Item = null;
         interfaceMenu.gameObject.SetActive(IsOpen);
+    }
 
-        interfaceMenu
-            .GetChild(0)
-            .GetComponentInChildren<Text>()
-            .text = "";
-
-        var body = interfaceMenu.GetChild(1);
-        for (int i = 0; i < body.childCount; i++)
+    public void ToggleWindowsInformation(GameObject infoScreen)
+    {
+        if (!infoScreen.activeSelf)
         {
-            try
-            {
-                body.GetChild(i).GetChild((int)Item.Title).GetComponentInChildren<Text>().text = "";
-                body.GetChild(i).GetChild((int)Item.Value).GetComponentInChildren<Text>().text = "";
-            }
-            catch (Exception ex)
-            {
-                Toast.Message(ToastType.Error, "Exception", ex.Message);
-                Debug.LogException(ex);
-            }
+            this.infoScreen = infoScreen;
+            infoScreen.SetActive(true);
+        }
+        else
+        {
+            infoScreen.transform.GetChild((int)InfoScreen.Energy).GetChild(((int)ItemType.Value)).GetComponent<Text>().text = "";
+            infoScreen.transform.GetChild((int)InfoScreen.ProcessTime).GetChild(((int)ItemType.Value)).GetComponent<Text>().text = "";
+
+            this.infoScreen = null;
+            infoScreen.SetActive(false);
         }
     }
 }
