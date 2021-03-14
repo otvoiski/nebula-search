@@ -3,26 +3,22 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class Machine : MonoBehaviour
+public class Machine : MonoBehaviourExtended
 {
     public const float CONNECTION = 1f;
 
     public MachineType Type;
-    public bool Debug;
+    public bool debug;
 
     public string Title { get; private set; }
     public int MaxBuffer { get; private set; }
     public int PowerConsume { get; private set; }
-    public int TimeProcess { get; private set; }
     public int Buffer { get; private set; }
-    public int TimerProcess { get; private set; }
+    public int MaxProcessTime { get; private set; }
     public IList<Material> Outputs { get; private set; }
     public IList<Material> Inputs { get; private set; }
 
-    public int buffer;
-    public int timeProcess;
-
-    public TimerRun processorTimer;
+    public TimerRun processTime;
     private TimerRun connectionTimer;
     private bool isOpen;
     private SpriteRenderer sprite;
@@ -31,7 +27,8 @@ public class Machine : MonoBehaviour
     private bool isNecessaryEnergy;
     private bool isNecessaryOxigen;
 
-    private IUIManager ui;
+    [Component]
+    private UIManager ui;
 
     public void Start()
     {
@@ -40,10 +37,11 @@ public class Machine : MonoBehaviour
         if (Type != null)
         {
             name = Type.title;
+            Title = Type.title;
 
             MaxBuffer = Type.maxBuffer;
             PowerConsume = Type.powerConsume;
-            TimerProcess = Type.timerProcess;
+            MaxProcessTime = Type.maxProcessTime;
             Outputs = Type.outputs;
             Inputs = Type.inputs;
 
@@ -53,16 +51,16 @@ public class Machine : MonoBehaviour
         }
 
         connectionTimer = new TimerRun();
-        processorTimer = new TimerRun();
+        processTime = new TimerRun();
 
-        Debug = false;
+        debug = false;
+        isOpen = false;
     }
 
     public void Update()
     {
-        buffer = Buffer;
-        timeProcess = TimeProcess;
-        //MachineInterface();
+        if (ui != null)
+            MachineInterface();
     }
 
     private void FixedUpdate()
@@ -70,10 +68,10 @@ public class Machine : MonoBehaviour
         if (Buffer < 0) Buffer = 0;
         if (Buffer > MaxBuffer) Buffer = MaxBuffer;
 
-        if (processorTimer.Run() >= TimeProcess)
+        if (processTime.Run() >= MaxProcessTime)
         {
             MachineConsume();
-            processorTimer.Reset();
+            processTime.Reset();
         }
 
         if (connectionTimer.Run() >= 1f)
@@ -109,10 +107,22 @@ public class Machine : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Escape) && ui.IsOpen && isOpen)
         {
             isOpen = false;
-            ui.CloseInventory(this);
+            ui.CloseInterfaceItens();
         }
 
-        if (isOpen) ui.ShowInventory(this);
+        if (isOpen)
+        {
+            UIManager.Item = new InterfaceItem
+            {
+                Title = Title,
+                Buffer = Buffer,
+                MaxBuffer = MaxBuffer,
+                ProcessTime = (int)processTime.timer,
+                MaxProcessTime = MaxProcessTime
+            };
+
+            ui.ShowInterfaceItens();
+        }
     }
 
     private bool VerifyPathToEnergyGenerator(Wire wire, List<string> list)

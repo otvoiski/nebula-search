@@ -1,181 +1,128 @@
 ﻿using Assets.Script.Enumerator;
-using Assets.Script.Util;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UIManager : MonoBehaviour, IUIManager
+public class UIManager : MonoBehaviour
 {
-    private enum Item
+    private enum MainScreen
     {
-        Title = 0,
-        Value = 1
+        BottomBar,
+        ToastBar,
+        InterfaceMenu
     }
 
-    private RectTransform generatorInterface;
-    private RectTransform interfaceMenu;
-    private RectTransform interfaceItem;
+    private enum InterfaceMenu
+    {
+        Title,
+        Inventory,
+        IO,
+        Button,
+        ProcessMenu
+    }
+
+    private enum ItemType
+    {
+        Title,
+        Value,
+        Icon
+    }
+
+    private enum Body
+    {
+        Energy,
+        Process,
+        Input,
+        Output,
+        Others
+    }
+
+    private enum ProcessMenu
+    {
+        Energy,
+        TimeProcess
+    }
+
+    private enum InfoScreen
+    {
+        Energy,
+        ProcessTime,
+        PowerConsume
+    }
+
+    private Transform interfaceMenu;
+    private Text title;
+    private Transform inventory;
+    private Slider energyPower;
+    private Slider timeProcess;
+
+    public static InterfaceItem Item;
+    private GameObject infoScreen;
 
     public bool IsOpen { get; private set; }
 
-    public void Setup()
+    public void Start()
     {
-        var ui = GameObject
-            .Find("UI")
-            .transform
-            .Find("MainScreen");
+        interfaceMenu = GameObject.Find("UI")
+            .transform.Find("MainScreen")
+            .GetChild((int)MainScreen.InterfaceMenu);
 
-        var interfaceItemPrefab = Resources.Load("UI/InterfaceItem") as GameObject;
+        title = interfaceMenu.GetChild((int)InterfaceMenu.Title).GetComponentInChildren<Text>();
+        inventory = interfaceMenu.GetChild((int)InterfaceMenu.Inventory);
 
-        this.generatorInterface = ui.Find("Generator Interface").GetComponent<RectTransform>();
-        this.interfaceMenu = ui.Find("Interface Menu").GetComponent<RectTransform>();
-        this.interfaceItem = interfaceItemPrefab.GetComponent<RectTransform>();
+        var processMenu = interfaceMenu.GetChild((int)InterfaceMenu.ProcessMenu);
+        energyPower = processMenu.GetChild((int)ProcessMenu.Energy).GetComponentInChildren<Slider>();
+        timeProcess = processMenu.GetChild((int)ProcessMenu.TimeProcess).GetComponentInChildren<Slider>();
 
-        interfaceItem.localScale = Vector3.one;
         IsOpen = false;
     }
 
-    public void ShowInventory(Machine machine)
+    public void ShowInterfaceItens()
     {
-        if (machine != null)
+        if (Item != null)
         {
             IsOpen = true;
 
-            interfaceMenu
-                .GetChild(0)
-                .GetComponentInChildren<Text>()
-                .text = Locate.Translate["Machine"][machine.Title].ToString();
+            title.text = Locate.Translate["Machine"][Item.Title]?.ToString() ?? Item.Title;
 
-            var body = interfaceMenu.GetChild(1);
-            if (body.childCount < 3)
-            {
-                var machineUse = Instantiate(interfaceItem, body);
-                var buffer = Instantiate(interfaceItem, body);
-                var timer = Instantiate(interfaceItem, body);
+            energyPower.maxValue = Item.MaxBuffer;
+            energyPower.value = Item.Buffer;
 
-                machineUse.SetParent(body);
-                buffer.SetParent(body);
-                timer.SetParent(body);
-
-                machineUse.name = "Machine Use";
-                buffer.name = "Buffer";
-                timer.name = "Timer";
-            }
-            else
-            {
-                ChangeUIItem(body.GetChild(0), Locate.Translate["Machine"]["MachineUse"].ToString(), $"{ machine.PowerConsume } μ");
-                ChangeUIItem(body.GetChild(1), Locate.Translate["Machine"]["Buffer"].ToString(), $"{ machine.Buffer }/{machine.MaxBuffer}");
-                ChangeUIItem(body.GetChild(2), Locate.Translate["Machine"]["Timer"].ToString(), $"{Mathf.RoundToInt(machine.processorTimer.timer)}/{machine.TimeProcess}");
-            }
+            timeProcess.maxValue = Item.MaxProcessTime;
+            timeProcess.value = Item.ProcessTime;
 
             interfaceMenu.gameObject.SetActive(IsOpen);
+
+            if (Item != null && infoScreen != null)
+            {
+                infoScreen.transform.GetChild((int)InfoScreen.Energy).GetChild(((int)ItemType.Value)).GetComponent<Text>().text = $"{Item.Buffer}/{Item.MaxBuffer}";
+                infoScreen.transform.GetChild((int)InfoScreen.ProcessTime).GetChild(((int)ItemType.Value)).GetComponent<Text>().text = $"{Item.ProcessTime}/{Item.MaxProcessTime}";
+            }
         }
     }
 
-    private void ChangeUIItem(Transform transform, string title, string value)
-    {
-        transform.GetChild((int)Item.Title).GetComponentInChildren<Text>().text = title;
-        transform.GetChild((int)Item.Value).GetComponentInChildren<Text>().text = value;
-    }
-
-    public void CloseInventory(Machine machine)
+    public void CloseInterfaceItens()
     {
         IsOpen = false;
+        title.text = "";
+        Item = null;
         interfaceMenu.gameObject.SetActive(IsOpen);
+    }
 
-        interfaceMenu
-            .GetChild(0)
-            .GetComponentInChildren<Text>()
-            .text = "";
-
-        var body = interfaceMenu.GetChild(1);
-        for (int i = 0; i < body.childCount; i++)
+    public void ToggleWindowsInformation(GameObject infoScreen)
+    {
+        if (!infoScreen.activeSelf)
         {
-            try
-            {
-                body.GetChild(i).GetChild((int)Item.Title).GetComponentInChildren<Text>().text = "";
-                body.GetChild(i).GetChild((int)Item.Value).GetComponentInChildren<Text>().text = "";
-            }
-            catch (Exception ex)
-            {
-                Toast.Message(ToastType.Error, "Exception", ex.Message);
-                Debug.LogException(ex);
-            }
+            this.infoScreen = infoScreen;
+            infoScreen.SetActive(true);
+        }
+        else
+        {
+            infoScreen.transform.GetChild((int)InfoScreen.Energy).GetChild(((int)ItemType.Value)).GetComponent<Text>().text = "";
+            infoScreen.transform.GetChild((int)InfoScreen.ProcessTime).GetChild(((int)ItemType.Value)).GetComponent<Text>().text = "";
+
+            this.infoScreen = null;
+            infoScreen.SetActive(false);
         }
     }
-
-    public void ShowInventory(Generator generator)
-    {
-        // Topbar
-        if (generator != null)
-        {
-            IsOpen = true;
-
-            #region Top
-
-            var top = generatorInterface.GetChild(0);
-            top.GetComponentInChildren<Text>().text = generator.name;
-
-            #endregion Top
-
-            #region Body
-
-            var body = generatorInterface.GetChild(1);
-            var right = body.GetChild(1);
-
-            right.Find("Power Generator").GetChild(1).GetComponentInChildren<Text>().text = $"{ generator.PowerGenerator } μ";
-            right.Find("Buffer").GetChild(1).GetComponentInChildren<Text>().text = generator.Buffer.ToString();
-            right.Find("Amount").GetChild(1).GetComponentInChildren<Text>().text = generator.Amount.ToString();
-            right.Find("Combustion Timer").GetChild(1).GetComponentInChildren<Text>().text = generator.CombustionTime.ToString();
-            right.Find("Material").GetChild(1).GetComponentInChildren<Text>().text = generator.Output.ToString();
-
-            #endregion Body
-
-            generatorInterface.gameObject.SetActive(IsOpen);
-        }
-    }
-
-    public void CloseInventory(Generator generator)
-    {
-        IsOpen = false;
-
-        generatorInterface.gameObject.SetActive(IsOpen);
-
-        #region Top
-
-        var top = generatorInterface.GetChild(0);
-        top.GetComponentInChildren<Text>().text = "";
-
-        #endregion Top
-
-        #region Body
-
-        var body = generatorInterface.GetChild(1);
-        var left = body.GetChild(1);
-
-        left.Find("Power Generator").GetChild(1).GetComponentInChildren<Text>().text = "";
-        left.Find("Buffer").GetChild(1).GetComponentInChildren<Text>().text = "";
-        left.Find("Amount").GetChild(1).GetComponentInChildren<Text>().text = "";
-        left.Find("Combustion Timer").GetChild(1).GetComponentInChildren<Text>().text = "";
-        left.Find("Material").GetChild(1).GetComponentInChildren<Text>().text = "";
-
-        #endregion Body
-    }
-}
-
-public interface IUIManager
-{
-    bool IsOpen { get; }
-
-    void Setup();
-
-    void ShowInventory(Generator generator);
-
-    void CloseInventory(Generator generator);
-
-    void ShowInventory(Machine machine);
-
-    void CloseInventory(Machine machine);
 }
