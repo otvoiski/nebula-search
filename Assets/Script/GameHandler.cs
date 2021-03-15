@@ -15,12 +15,19 @@ public class GameHandler : MonoBehaviourExtended
     [Component]
     private UIManager uiManager;
 
+    public GameObject activeItemToCreate;
+
     private void Start()
     {
         Locate.LoadLocate(Language.BR);
 
         cameraFollow.Setup(() => playerTransform.position, alinhamento);
         playerData.Setup(() => playerTransform);
+    }
+
+    public void CreateItemInWorld(GameObject gameObject)
+    {
+        activeItemToCreate = gameObject;
     }
 
     private void Update()
@@ -39,16 +46,30 @@ public class GameHandler : MonoBehaviourExtended
         if (IsBuilding)
         {
             uiManager.ToggleWindowsBuild(IsBuilding);
+            activeItemToCreate.SetActive(IsBuilding);
 
-            var ray = Utilities.GetRaycastHitFromScreenPoint();
-            if (ray != null && Input.GetKeyDown(KeyCode.Mouse0))
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            if (Physics.Raycast(ray, out RaycastHit hit, 15f))
             {
-                Debug.Log(ray.GetValueOrDefault().transform.name);
+                if (activeItemToCreate != null)
+                {
+                    activeItemToCreate.transform.position = new Vector3(
+                    Mathf.CeilToInt(hit.point.x) - 0.5f,
+                    0,
+                    Mathf.CeilToInt(hit.point.z) - 0.5f);
+                }
+
+                //TODO: Change sprite color if possible to position item
+                if (Input.GetKeyDown(KeyCode.Mouse0))
+                {
+                    Instantiate(activeItemToCreate);
+                }
             }
         }
         else
         {
             uiManager.ToggleWindowsBuild(IsBuilding);
+            activeItemToCreate.SetActive(IsBuilding);
         }
     }
 }

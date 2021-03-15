@@ -23,11 +23,14 @@ namespace Assets.Script.Util
             }
         }
 
-        public static RaycastHit? GetRaycastHitFromScreenPoint()
+        public static RaycastHit? GetRaycastHitFromScreenPoint(bool debug = false)
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out RaycastHit hit, 15f))
+            if (Physics.Raycast(ray, out RaycastHit hit, 10f))
             {
+                if (debug)
+                    Debug.DrawRay(hit.point, Input.mousePosition, Color.red);
+
                 return hit;
             }
             else
