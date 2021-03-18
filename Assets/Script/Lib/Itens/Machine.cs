@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class Machine : MonoBehaviourExtended
+public class Machine : MonoBehaviour
 {
     public const float CONNECTION = 1f;
 
@@ -26,11 +26,15 @@ public class Machine : MonoBehaviourExtended
     private bool isNecessaryEnergy;
     private bool isNecessaryOxigen;
 
-    [Component]
-    private readonly UIManager ui;
+    private UIManager uiManager;
 
     private float oneSecondProcessTimerRunner;
     private float maxProcessTimeRunner;
+
+    private void Awake()
+    {
+        uiManager = GameObject.Find("GAME HANDLER").GetComponent<UIManager>();
+    }
 
     public void Start()
     {
@@ -58,7 +62,7 @@ public class Machine : MonoBehaviourExtended
 
     public void Update()
     {
-        if (ui != null)
+        if (uiManager != null)
             MachineInterface();
     }
 
@@ -99,17 +103,17 @@ public class Machine : MonoBehaviourExtended
         {
             if (ray.GetValueOrDefault().collider.name == name)
             {
-                if (Input.GetKeyDown(KeyCode.Mouse0) && !ui.IsOpen && !GameHandler.IsBuilding)
+                if (Input.GetKeyDown(KeyCode.Mouse0) && !uiManager.IsOpen && !GameHandler.IsBuilding)
                 {
                     isOpen = true;
                 }
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.Escape) && ui.IsOpen && isOpen)
+        if (Input.GetKeyDown(KeyCode.Escape) && uiManager.IsOpen && isOpen)
         {
             isOpen = false;
-            ui.CloseInterfaceItens();
+            uiManager.CloseInterfaceItens();
         }
 
         if (isOpen)
@@ -124,7 +128,7 @@ public class Machine : MonoBehaviourExtended
                 PowerConsume = PowerConsume
             };
 
-            ui.ShowInterfaceItens();
+            uiManager.ShowInterfaceItens();
         }
     }
 

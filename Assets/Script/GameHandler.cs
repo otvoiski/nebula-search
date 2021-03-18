@@ -2,32 +2,28 @@
 using Assets.Script.Util;
 using UnityEngine;
 
-public class GameHandler : MonoBehaviourExtended
+public class GameHandler : MonoBehaviour
 {
-    [Header("Camera Info")] public Vector3 alinhamento;
-    public CameraFollow cameraFollow;
-
-    [Header("Player Info")] public Transform playerTransform;
-    public PlayerData playerData;
-
     public static bool IsBuilding { get; set; }
 
-    [Component]
     private UIManager uiManager;
 
-    public GameObject activeItemToCreate;
+    public static GameObject itemSelectedToBuild;
+
+    private void Awake()
+    {
+        uiManager = GameObject.Find("GAME HANDLER").GetComponent<UIManager>();
+    }
 
     private void Start()
     {
         Locate.LoadLocate(Language.BR);
-
-        cameraFollow.Setup(() => playerTransform.position, alinhamento);
-        playerData.Setup(() => playerTransform);
     }
 
     public void CreateItemInWorld(GameObject gameObject)
     {
-        activeItemToCreate = gameObject;
+        itemSelectedToBuild = Instantiate(gameObject, this.gameObject.transform);
+        itemSelectedToBuild.SetActive(true);
     }
 
     private void Update()
@@ -46,30 +42,33 @@ public class GameHandler : MonoBehaviourExtended
         if (IsBuilding)
         {
             uiManager.ToggleWindowsBuild(IsBuilding);
-            activeItemToCreate.SetActive(IsBuilding);
+            //itemSelectedToBuild.SetActive(IsBuilding);
 
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out RaycastHit hit, 15f))
             {
-                if (activeItemToCreate != null)
+                if (itemSelectedToBuild != null)
                 {
-                    activeItemToCreate.transform.position = new Vector3(
-                    Mathf.CeilToInt(hit.point.x) - 0.5f,
+                    itemSelectedToBuild.transform.position = new Vector3(
+                    Mathf.CeilToInt(hit.point.x),
                     0,
-                    Mathf.CeilToInt(hit.point.z) - 0.5f);
+                    Mathf.CeilToInt(hit.point.z));
                 }
 
                 //TODO: Change sprite color if possible to position item
                 if (Input.GetKeyDown(KeyCode.Mouse0))
                 {
-                    Instantiate(activeItemToCreate);
+                    //TODO: Check if have itens on inventory
+                    if (itemSelectedToBuild != null)
+                        Instantiate(itemSelectedToBuild);
                 }
             }
         }
         else
         {
             uiManager.ToggleWindowsBuild(IsBuilding);
-            activeItemToCreate.SetActive(IsBuilding);
+            if (itemSelectedToBuild != null)
+                Destroy(itemSelectedToBuild);
         }
     }
 }

@@ -137,5 +137,9 @@ public class UIManager : MonoBehaviour
     public void ToggleWindow(GameObject gameObject)
     {
         gameObject.SetActive(!gameObject.activeSelf);
+
+        if (gameObject.activeSelf == false)
+        {
+        }
     }
 }

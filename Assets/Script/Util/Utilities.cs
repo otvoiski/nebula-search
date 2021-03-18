@@ -136,7 +136,7 @@ namespace Assets.Script.Util
             #endregion Position Raycast Start
         }
 
-        public static List<T> GetItemsFromRayCast<T>(Transform transform, float distance = 1)
+        public static List<T> GetItemsFromRayCast<T>(Transform transform, float distance = 1) where T : MonoBehaviour
         {
             var list = new List<T>();
 
@@ -156,7 +156,7 @@ namespace Assets.Script.Util
         }
 
         [Obsolete]
-        public static List<T> GetListItemFromRayCast<T>(Transform transform, float distance = 1)
+        public static List<T> GetListItemFromRayCast<T>(Transform transform, float distance = 1) where T : MonoBehaviour
         {
             var hit = Physics.OverlapSphere(transform.position, distance);
 

@@ -691,7 +691,7 @@ GameObject:
   - component: {fileID: 3802797393619841204}
   - component: {fileID: 1581563525}
   m_Layer: 0
-  m_Name: GasStation
+  m_Name: Electrolyte
   m_TagString: Machine
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -705,7 +705,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3802797393619841205}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.02}
+  m_LocalPosition: {x: -3.5, y: 0, z: -0.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 3802797392348331281}
@@ -739,9 +739,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Type: {fileID: 11400000, guid: 293d4367c69a4a94e8c032dc55566ae7, type: 2}
-  Debug: 0
-  buffer: 0
-  timeProcess: 0
+  debug: 0
 --- !u!1 &5639259175701340724
 GameObject:
   m_ObjectHideFlags: 0

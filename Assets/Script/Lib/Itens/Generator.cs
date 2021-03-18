@@ -3,7 +3,7 @@ using Assets.Script.Util;
 using System;
 using UnityEngine;
 
-public class Generator : MonoBehaviourExtended
+public class Generator : MonoBehaviour
 {
     public GeneratorType type;
 
@@ -21,12 +21,16 @@ public class Generator : MonoBehaviourExtended
 
     #endregion type
 
-    [Component]
-    private readonly UIManager ui;
+    private UIManager uiManager;
 
     private SpriteRenderer sprite;
     private bool isOpen;
     private float timer;
+
+    private void Awake()
+    {
+        uiManager = GameObject.Find("GAME HANDLER").GetComponent<UIManager>();
+    }
 
     public void Start()
     {
@@ -50,7 +54,7 @@ public class Generator : MonoBehaviourExtended
 
     public void Update()
     {
-        if (ui != null)
+        if (uiManager != null)
             GeneratorInterface();
     }
 
@@ -77,17 +81,17 @@ public class Generator : MonoBehaviourExtended
             {
                 if (ray.GetValueOrDefault().collider.name.Contains(Title))
                 {
-                    if (Input.GetKeyDown(KeyCode.Mouse0) && !ui.IsOpen && !GameHandler.IsBuilding)
+                    if (Input.GetKeyDown(KeyCode.Mouse0) && !uiManager.IsOpen && !GameHandler.IsBuilding)
                     {
                         isOpen = true;
                     }
                 }
             }
 
-            if (Input.GetKeyDown(KeyCode.Escape) && ui.IsOpen && isOpen)
+            if (Input.GetKeyDown(KeyCode.Escape) && uiManager.IsOpen && isOpen)
             {
                 isOpen = false;
-                ui.CloseInterfaceItens();
+                uiManager.CloseInterfaceItens();
             }
 
             if (isOpen)
@@ -102,7 +106,7 @@ public class Generator : MonoBehaviourExtended
                     PowerConsume = PowerGenerator
                 };
 
-                ui.ShowInterfaceItens();
+                uiManager.ShowInterfaceItens();
             }
         }
         catch (Exception ex)
