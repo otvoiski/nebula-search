@@ -118,15 +118,15 @@ public class Machine : MonoBehaviour
 
         if (isOpen)
         {
-            UIManager.Item = new InterfaceItem
-            {
-                Title = Title,
-                Buffer = Buffer,
-                MaxBuffer = MaxBuffer,
-                ProcessTime = ProcessTime,
-                MaxProcessTime = MaxProcessTime,
-                PowerConsume = PowerConsume
-            };
+            //UIManager.Item = new InterfaceItem
+            //{
+            //    Title = Title,
+            //    Buffer = Buffer,
+            //    MaxBuffer = MaxBuffer,
+            //    ProcessTime = ProcessTime,
+            //    MaxProcessTime = MaxProcessTime,
+            //    PowerConsume = PowerConsume
+            //};
 
             uiManager.ShowInterfaceItens();
         }

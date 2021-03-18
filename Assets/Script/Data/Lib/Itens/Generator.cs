@@ -96,15 +96,15 @@ public class Generator : MonoBehaviour
 
             if (isOpen)
             {
-                UIManager.Item = new InterfaceItem
-                {
-                    Title = Title,
-                    Buffer = Buffer,
-                    MaxBuffer = MaxBuffer,
-                    ProcessTime = ProcessTime,
-                    MaxProcessTime = MaxProcessTime,
-                    PowerConsume = PowerGenerator
-                };
+                //UIManager.Item = new InterfaceItem
+                //{
+                //    Title = Title,
+                //    Buffer = Buffer,
+                //    MaxBuffer = MaxBuffer,
+                //    ProcessTime = ProcessTime,
+                //    MaxProcessTime = MaxProcessTime,
+                //    PowerConsume = PowerGenerator
+                //};
 
                 uiManager.ShowInterfaceItens();
             }
