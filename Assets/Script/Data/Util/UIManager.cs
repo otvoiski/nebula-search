@@ -28,14 +28,6 @@ public class UIManager : MonoBehaviour
 
     public bool IsOpen { get; private set; }
 
-    private void Awake()
-    {
-    }
-
-    public void Start()
-    {
-    }
-
     #region Machines
 
     public void ShowInterfaceItens()

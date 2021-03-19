@@ -92,6 +92,7 @@
     <Compile Include="Assets\Script\View\Model\BuildScreen.cs" />
     <Compile Include="Assets\Script\View\Model\InterfaceMenu.cs" />
     <Compile Include="Assets\Script\View\Model\MainScreen.cs" />
+    <Compile Include="Assets\Script\View\Service\BuilderScreenService.cs" />
     <Compile Include="Assets\Script\View\ViewHandler.cs" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader" />

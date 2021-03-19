@@ -1,13 +1,17 @@
 ﻿using Assets.Script.Enum;
 using Assets.Script.View.Enumerator;
 using Assets.Script.View.Model;
+using Assets.Script.View.Service;
+using System;
 using UnityEngine;
 
 namespace Assets.Script.View
 {
     public class ViewHandler : MonoBehaviour
     {
+        public BuilderScreenService BuilderScreenService { get; private set; }
         public MainScreen MainScreen { get; private set; }
+        public bool IsBuilding { get; private set; }
         public bool IsOpen { get; private set; }
 
         private void Awake()
@@ -15,7 +19,7 @@ namespace Assets.Script.View
             #region General
 
             var mainScreen = GameObject
-                .Find("UI")
+                .Find("VIEW HANDLER")
                 .transform
                 .Find("MainScreen");
             MainScreen = mainScreen.gameObject
@@ -42,84 +46,26 @@ namespace Assets.Script.View
         private void Start()
         {
             IsOpen = false;
+
+            BuilderScreenService = gameObject.AddComponent<BuilderScreenService>();
+            BuilderScreenService.Setup(MainScreen.BuildScreen);
         }
 
-        public void ToggleBuildList(MachineEnumerator enumerator)
+        private void Update()
         {
-            var generalList = MainScreen.BuildScreen.transform.GetChild((int)BuildListEnum.GeneratorList);
-            var machineList = MainScreen.BuildScreen.transform.GetChild((int)BuildListEnum.MachineList);
-            var pipeList = MainScreen.BuildScreen.transform.GetChild((int)BuildListEnum.PipeList);
-
-            switch (enumerator)
-            {
-                case MachineEnumerator.Generator:
-                    generalList.gameObject.SetActive(generalList.gameObject.activeSelf);
-                    break;
-
-                case MachineEnumerator.Machine:
-                    machineList.gameObject.SetActive(machineList.gameObject.activeSelf);
-                    break;
-
-                case MachineEnumerator.Pipe:
-                    pipeList.gameObject.SetActive(pipeList.gameObject.activeSelf);
-                    break;
-
-                default:
-                    break;
-            }
+            Building();
         }
 
-        public void CreateItemInWorld(GameObject gameObject)
+        private void Building()
         {
-            MainScreen.BuildScreen.SelectedItem = Instantiate(gameObject, this.gameObject.transform);
-            MainScreen.BuildScreen.SelectedItem.SetActive(true);
+            if (Input.GetKeyDown(KeyCode.B) && !IsOpen) IsBuilding = !IsBuilding;
+
+            BuilderScreenService.ToggleWindowsBuild(IsBuilding);
         }
 
-        public void ToggleWindowsBuild(bool isBuilding)
+        public void ToggleBuildList(int machine)
         {
-            // TODO: If client press V reset mouse selectedItem
-            // TODO: Open build screen
-            // TODO: If client click um item from build screen open listItemBuild
-            // TODO: If client pass mouse in item show infoScreenBuild
-            // TODO: If client click close all screen exceto buildScreen and change icon
-
-            //var button = gameObject.GetComponent<Button>();
-            //button.onClick.AddListener(delegate { CreateItemInWorld(gameObject); });
-
-            if (isBuilding)
-            {
-                // Moved mouse with item
-                if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hit, 15f))
-                {
-                    if (MainScreen.BuildScreen.SelectedItem != null)
-                    {
-                        MainScreen.BuildScreen.SelectedItem.transform.position = new Vector3(
-                        Mathf.CeilToInt(hit.point.x),
-                        0,
-                        Mathf.CeilToInt(hit.point.z));
-                    }
-
-                    if (Input.GetKeyDown(KeyCode.Mouse0))
-                    {
-                        //TODO: Check if have itens on inventory
-                        // Inventory
-
-                        if (MainScreen.BuildScreen.SelectedItem != null)
-                            Instantiate(MainScreen.BuildScreen.SelectedItem);
-                    }
-                }
-            }
-            else
-            {
-                if (MainScreen.BuildScreen.SelectedItem != null)
-                {
-                    MainScreen.BuildScreen.SelectedItem.SetActive(isBuilding);
-                    Destroy(MainScreen.BuildScreen.SelectedItem);
-                    MainScreen.BuildScreen.SelectedItem = null;
-                }
-            }
-
-            MainScreen.BuildScreen.gameObject.SetActive(isBuilding);
+            BuilderScreenService.ToggleBuildList((MachineEnumerator)machine);
         }
 
         public void ToggleWindow(GameObject gameObject)

@@ -1,19 +1,13 @@
 ﻿using Assets.Script.Enumerator;
 using Assets.Script.Util;
+using Assets.Script.View;
 using UnityEngine;
 
 public class GameHandler : MonoBehaviour
 {
     public static bool IsBuilding { get; set; }
 
-    private UIManager uiManager;
-
     public static GameObject itemSelectedToBuild;
-
-    private void Awake()
-    {
-        uiManager = GameObject.Find("GAME HANDLER").GetComponent<UIManager>();
-    }
 
     private void Start()
     {
@@ -23,12 +17,6 @@ public class GameHandler : MonoBehaviour
     private void Update()
     {
         KeyEvents();
-        Windows();
-    }
-
-    private void Windows()
-    {
-        uiManager.ToggleWindowsBuild(IsBuilding);
     }
 
     private void KeyEvents()
@@ -37,7 +25,5 @@ public class GameHandler : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.X)) Toast.Message(ToastType.Warning, "Teste", "Menssage teste!");
         if (Input.GetKeyDown(KeyCode.C)) Toast.Message(ToastType.Error, "Teste", "Menssage teste!");
         if (Input.GetKeyDown(KeyCode.V)) Toast.Message(ToastType.Info, "Teste", "Menssage teste!");
-
-        if (Input.GetKeyDown(KeyCode.B) && !uiManager.IsOpen) IsBuilding = !IsBuilding;
     }
 }
