@@ -11,7 +11,6 @@ namespace Assets.Script.View
     {
         public BuilderScreenService BuilderScreenService { get; private set; }
         public MainScreen MainScreen { get; private set; }
-        public bool IsBuilding { get; private set; }
         public bool IsOpen { get; private set; }
 
         private void Awake()
@@ -53,14 +52,7 @@ namespace Assets.Script.View
 
         private void Update()
         {
-            Building();
-        }
-
-        private void Building()
-        {
-            if (Input.GetKeyDown(KeyCode.B) && !IsOpen) IsBuilding = !IsBuilding;
-
-            BuilderScreenService.ToggleWindowsBuild(IsBuilding);
+            BuilderScreenService.ToggleWindowsBuild();
         }
 
         public void ToggleBuildList(int machine)
@@ -68,9 +60,14 @@ namespace Assets.Script.View
             BuilderScreenService.ToggleBuildList((MachineEnumerator)machine);
         }
 
-        public void ToggleWindow(GameObject gameObject)
+        public void ItemSelectedToBuild(GameObject gameObject)
         {
-            gameObject.SetActive(!gameObject.activeSelf);
+            BuilderScreenService.ItemSelectedToBuild(gameObject);
+        }
+
+        public void AcceptToBuildMoveTransformSelectedItem()
+        {
+            BuilderScreenService.AcceptToBuildMoveTransformSelectedItem();
         }
     }
 }
