@@ -1,6 +1,4 @@
 ﻿using Assets.Script.Enumerator;
-using Assets.Script.Util;
-using Assets.Script.View;
 using UnityEngine;
 
 public class GameHandler : MonoBehaviour

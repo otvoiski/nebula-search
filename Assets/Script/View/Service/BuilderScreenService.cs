@@ -24,16 +24,6 @@ namespace Assets.Script.View.Service
             IsBuilding = false;
         }
 
-        public void Update()
-        {
-            if (IsBuilding && IsReadyToConstruction && BuildScreen.SelectedItem != null)
-            {
-                var ray = Utilities.GetPositionGridFromScreenPoint(1);
-
-                BuildScreen.SelectedItem.transform.position = ray;
-            }
-        }
-
         /// <summary>
         /// When the player press B
         /// </summary>
@@ -47,23 +37,14 @@ namespace Assets.Script.View.Service
             KeyCommands();
 
             // Movement of transform item when user select item
-            //Movement();
+            Movement();
         }
 
         private void Movement()
         {
             if (IsBuilding && IsReadyToConstruction && BuildScreen.SelectedItem != null)
             {
-                var ray = Utilities.GetPositionGridFromScreenPoint(0);
-
-                BuildScreen.SelectedItem.transform.position = ray;
-
-                //var ray = Utilities.GetRaycastHitFromScreenPoint();
-                //if (ray.HasValue)
-                //    BuildScreen.SelectedItem.transform.position = ray
-                //        .GetValueOrDefault()
-                //        .transform
-                //        .position;
+                BuildScreen.SelectedItem.transform.position = Utilities.GetPositionGridFromScreenPoint(1);
             }
         }
 
@@ -91,30 +72,30 @@ namespace Assets.Script.View.Service
             {
                 // TODO: Remove necessary itens from inventory of player.
 
-                var item = Instantiate(BuildScreen.SelectedItem, GameObject.Find("Map").transform);
-                item.SetActive(true);
+                Instantiate(BuildScreen.SelectedItem, GameObject.Find("Map").transform)
+                    .SetActive(true);
 
-                Debug.Log("Clicou");
+                if (BuildScreen.SelectedItem != null && IsReadyToConstruction)
+                    Destroy(BuildScreen.SelectedItem);
+
+                BuildScreen.SelectedItem = null;
+
                 IsReadyToConstruction = false;
                 IsReadyToAccept = false;
                 IsReadyToSelect = false;
-                BuildScreen.SelectedItem = null;
-                if (BuildScreen.SelectedItem != null)
-                    Destroy(BuildScreen.SelectedItem);
             }
 
             if (Input.GetKeyDown(KeyCode.Escape) && IsBuilding)
             {
+                if (BuildScreen.SelectedItem != null && IsReadyToConstruction)
+                    Destroy(BuildScreen.SelectedItem);
+
+                BuildScreen.SelectedItem = null;
+
                 IsReadyToConstruction = false;
                 IsReadyToSelect = false;
                 IsReadyToAccept = false;
                 IsBuilding = false;
-
-                if (BuildScreen.SelectedItem != null)
-                    Destroy(BuildScreen.SelectedItem);
-                BuildScreen.SelectedItem = null;
-
-                Debug.Log("bye");
             }
         }
 
@@ -124,8 +105,8 @@ namespace Assets.Script.View.Service
         /// <param name="gameObject"></param>
         public void AcceptToBuildMoveTransformSelectedItem()
         {
-            var item = Instantiate(BuildScreen.SelectedItem, GameObject.Find("GAME HANDLER").transform);
-            item.SetActive(true);
+            BuildScreen.SelectedItem = Instantiate(BuildScreen.SelectedItem, GameObject.Find("GAME HANDLER").transform);
+            BuildScreen.SelectedItem.SetActive(true);
 
             IsReadyToConstruction = true;
             IsReadyToSelect = false;
@@ -152,27 +133,22 @@ namespace Assets.Script.View.Service
             var machineList = BuildScreen.BuildList.transform.GetChild((int)BuildListEnum.MachineList);
             var pipeList = BuildScreen.BuildList.transform.GetChild((int)BuildListEnum.PipeList);
 
+            pipeList.gameObject.SetActive(false);
+            generatorList.gameObject.SetActive(false);
+            machineList.gameObject.SetActive(false);
+
             switch (enumerator)
             {
                 case MachineEnumerator.Generator:
                     generatorList.gameObject.SetActive(true);
-
-                    machineList.gameObject.SetActive(false);
-                    pipeList.gameObject.SetActive(false);
                     break;
 
                 case MachineEnumerator.Machine:
                     machineList.gameObject.SetActive(true);
-
-                    pipeList.gameObject.SetActive(false);
-                    generatorList.gameObject.SetActive(false);
                     break;
 
                 case MachineEnumerator.Pipe:
                     pipeList.gameObject.SetActive(true);
-
-                    machineList.gameObject.SetActive(false);
-                    generatorList.gameObject.SetActive(false);
                     break;
 
                 default:
@@ -180,6 +156,7 @@ namespace Assets.Script.View.Service
             }
 
             IsReadyToSelect = !IsReadyToSelect;
+            IsReadyToAccept = false;
         }
     }
 }

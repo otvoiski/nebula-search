@@ -13,9 +13,9 @@ namespace Assets.Script.Util
             if (Physics.Raycast(ray, out RaycastHit hit, 15f))
             {
                 return new Vector3(
-                    Mathf.CeilToInt(hit.point.x) - 0.5f,
+                    Mathf.CeilToInt(hit.point.x),
                     height,
-                    Mathf.CeilToInt(hit.point.z) - 0.5f);
+                    Mathf.CeilToInt(hit.point.z));
             }
             else
             {

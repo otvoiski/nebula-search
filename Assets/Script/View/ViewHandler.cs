@@ -17,10 +17,11 @@ namespace Assets.Script.View
         {
             #region General
 
-            var mainScreen = GameObject
-                .Find("VIEW HANDLER")
-                .transform
-                .Find("MainScreen");
+            var viewHandler = GameObject.Find("VIEW HANDLER")
+                .GetComponent<ViewHandler>();
+
+            var mainScreen = viewHandler.transform.Find("MainScreen");
+
             MainScreen = mainScreen.gameObject
                 .AddComponent<MainScreenModel>();
             MainScreen.BottomBar = mainScreen.GetChild((int)MainScreenEnum.BottomBar);
@@ -46,7 +47,9 @@ namespace Assets.Script.View
         {
             IsOpen = false;
 
-            BuilderScreenService = gameObject.AddComponent<BuilderScreenService>();
+            BuilderScreenService = MainScreen.BuildScreen.gameObject
+                .AddComponent<BuilderScreenService>();
+
             BuilderScreenService.Setup(MainScreen.BuildScreen);
         }
 
