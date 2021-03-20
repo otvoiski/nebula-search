@@ -1,15 +1,21 @@
 ﻿using Assets.Script.Enumerator;
+using System;
 using UnityEngine;
 
 public class GameHandler : MonoBehaviour
 {
-    public static bool IsBuilding { get; set; }
-
-    public static GameObject itemSelectedToBuild;
+    public GameObject[] Itens;
 
     private void Start()
     {
         Locate.LoadLocate(Language.BR);
+
+        LoadItens();
+    }
+
+    private void LoadItens()
+    {
+        throw new NotImplementedException();
     }
 
     private void Update()
