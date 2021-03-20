@@ -77,10 +77,10 @@
     <Compile Include="Assets\Script\Data\Lib\Itens\Wire.cs" />
     <Compile Include="Assets\Script\Data\Lib\PlayerData.cs" />
     <Compile Include="Assets\Script\Data\Lib\ToastControl.cs" />
-    <Compile Include="Assets\Script\Data\Locate\Locate.cs" />
     <Compile Include="Assets\Script\Data\Model\GeneratorType.cs" />
     <Compile Include="Assets\Script\Data\Model\MachineType.cs" />
     <Compile Include="Assets\Script\Data\Model\PipeType.cs" />
+    <Compile Include="Assets\Script\Data\Util\Locate.cs" />
     <Compile Include="Assets\Script\Data\Util\TimerRun.cs" />
     <Compile Include="Assets\Script\Data\Util\Toast.cs" />
     <Compile Include="Assets\Script\Data\Util\UIManager.cs" />
