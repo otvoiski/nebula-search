@@ -81,7 +81,7 @@ public class Generator : MonoBehaviour
             {
                 if (ray.GetValueOrDefault().collider.name.Contains(Title))
                 {
-                    if (Input.GetKeyDown(KeyCode.Mouse0) && !uiManager.IsOpen && !GameHandler.IsBuilding)
+                    if (Input.GetKeyDown(KeyCode.Mouse0) && !uiManager.IsOpen)
                     {
                         isOpen = true;
                     }

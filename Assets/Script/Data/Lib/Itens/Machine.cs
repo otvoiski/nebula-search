@@ -103,7 +103,7 @@ public class Machine : MonoBehaviour
         {
             if (ray.GetValueOrDefault().collider.name == name)
             {
-                if (Input.GetKeyDown(KeyCode.Mouse0) && !uiManager.IsOpen && !GameHandler.IsBuilding)
+                if (Input.GetKeyDown(KeyCode.Mouse0) && !uiManager.IsOpen)
                 {
                     isOpen = true;
                 }
