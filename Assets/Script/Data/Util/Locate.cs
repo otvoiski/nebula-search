@@ -9,7 +9,7 @@ using UnityEngine;
 public class Locate : MonoBehaviour
 {
     public static IniData Translate { get; private set; }
-    private const string LOCATE_PATH = @".\Assets\Script\Data\Locate\";
+    private const string LOCATE_PATH = @".\Assets\Resources\Locate\";
 
     public static void LoadLocate(Language language)
     {
@@ -19,15 +19,15 @@ public class Locate : MonoBehaviour
             switch (language)
             {
                 case Language.BR:
-                    path = @"pt\pt-br";
+                    path = @"pt-BR";
                     break;
 
                 case Language.EN:
-                    path = @"en\en-us";
+                    path = @"en-US";
                     break;
 
                 default:
-                    path = @"pt\pt-br";
+                    path = @"pt-BR";
                     break;
             }
 
