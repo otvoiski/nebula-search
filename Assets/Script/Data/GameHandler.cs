@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GameHandler : MonoBehaviour
 {
-    public GameObject[] Itens;
+    public static GameObject[] Itens;
 
     private void Start()
     {
@@ -15,7 +15,7 @@ public class GameHandler : MonoBehaviour
 
     private void LoadItens()
     {
-        throw new NotImplementedException();
+        Itens = Resources.LoadAll<GameObject>("Itens");
     }
 
     private void Update()
