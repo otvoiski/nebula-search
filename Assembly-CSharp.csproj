@@ -89,9 +89,9 @@
     <Compile Include="Assets\Script\View\Enumerator\BuildMenuEnum.cs" />
     <Compile Include="Assets\Script\View\Enumerator\InterfaceMenuEnum.cs" />
     <Compile Include="Assets\Script\View\Enumerator\MainScreenEnum.cs" />
-    <Compile Include="Assets\Script\View\Model\BuildScreen.cs" />
-    <Compile Include="Assets\Script\View\Model\InterfaceMenu.cs" />
-    <Compile Include="Assets\Script\View\Model\MainScreen.cs" />
+    <Compile Include="Assets\Script\View\Model\BuildScreenModel.cs" />
+    <Compile Include="Assets\Script\View\Model\InterfaceMenuModel.cs" />
+    <Compile Include="Assets\Script\View\Model\MainScreenModel.cs" />
     <Compile Include="Assets\Script\View\Service\BuilderScreenService.cs" />
     <Compile Include="Assets\Script\View\ViewHandler.cs" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

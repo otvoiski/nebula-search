@@ -10,7 +10,7 @@ namespace Assets.Script.View
     public class ViewHandler : MonoBehaviour
     {
         public BuilderScreenService BuilderScreenService { get; private set; }
-        public MainScreen MainScreen { get; private set; }
+        public MainScreenModel MainScreen { get; private set; }
         public bool IsOpen { get; private set; }
 
         private void Awake()
@@ -22,11 +22,11 @@ namespace Assets.Script.View
                 .transform
                 .Find("MainScreen");
             MainScreen = mainScreen.gameObject
-                .AddComponent<MainScreen>();
+                .AddComponent<MainScreenModel>();
             MainScreen.BottomBar = mainScreen.GetChild((int)MainScreenEnum.BottomBar);
             MainScreen.Toast = mainScreen.GetChild((int)MainScreenEnum.Toast);
             MainScreen.InterfaceMenu = mainScreen.GetChild((int)MainScreenEnum.InterfaceMenu).gameObject
-                .AddComponent<InterfaceMenu>();
+                .AddComponent<InterfaceMenuModel>();
             MainScreen.InterfaceMenu.Title = MainScreen.InterfaceMenu.transform.GetChild((int)InterfaceMenuEnum.Title);
             MainScreen.InterfaceMenu.Inventory = MainScreen.InterfaceMenu.transform.GetChild((int)InterfaceMenuEnum.Inventory);
             MainScreen.InterfaceMenu.IO = MainScreen.InterfaceMenu.transform.GetChild((int)InterfaceMenuEnum.IO);
@@ -34,7 +34,7 @@ namespace Assets.Script.View
             MainScreen.InterfaceMenu.ProcessMenu = MainScreen.InterfaceMenu.transform.GetChild((int)InterfaceMenuEnum.ProcessMenu);
             MainScreen.InterfaceMenu.Info = MainScreen.InterfaceMenu.transform.GetChild((int)InterfaceMenuEnum.Info);
             MainScreen.BuildScreen = mainScreen.GetChild((int)MainScreenEnum.BuildScreen).gameObject
-                .AddComponent<BuildScreen>();
+                .AddComponent<BuildScreenModel>();
             MainScreen.BuildScreen.BuildMenu = MainScreen.BuildScreen.transform.GetChild((int)BuildMenuEnum.BuildMenu);
             MainScreen.BuildScreen.BuildList = MainScreen.BuildScreen.transform.GetChild((int)BuildMenuEnum.BuildList);
             MainScreen.BuildScreen.InfoScreen = MainScreen.BuildScreen.transform.GetChild((int)BuildMenuEnum.InfoScreen);

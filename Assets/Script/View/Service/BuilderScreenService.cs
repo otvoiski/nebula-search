@@ -8,13 +8,13 @@ namespace Assets.Script.View.Service
 {
     public class BuilderScreenService : MonoBehaviour
     {
-        public BuildScreen BuildScreen { get; private set; }
+        public BuildScreenModel BuildScreen { get; private set; }
         public bool IsReadyToSelect { get; private set; }
         public bool IsReadyToAccept { get; private set; }
         public bool IsReadyToConstruction { get; private set; }
         public bool IsBuilding { get; private set; }
 
-        public void Setup(BuildScreen buildScreen)
+        public void Setup(BuildScreenModel buildScreen)
         {
             BuildScreen = buildScreen;
 
