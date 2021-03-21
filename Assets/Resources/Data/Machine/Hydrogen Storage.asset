@@ -13,8 +13,9 @@ MonoBehaviour:
   m_Name: Hydrogen Storage
   m_EditorClassIdentifier: 
   title: Gas Storage
+  categoy: 1
+  inputs: 03000000
+  outputs: 03000000
   maxBuffer: 5000
   powerConsume: 60
   maxProcessTime: 32
-  inputs: 03000000
-  outputs: 03000000

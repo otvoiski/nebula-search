@@ -67,6 +67,7 @@
     <Compile Include="Assets\$CommonUtils.cs" />
     <Compile Include="Assets\$VersionIncrementor.cs" />
     <Compile Include="Assets\Input\InputMaster.cs" />
+    <Compile Include="Assets\Script\Data\Enum\CategoryItenEnum.cs" />
     <Compile Include="Assets\Script\Data\Enum\Language.cs" />
     <Compile Include="Assets\Script\Data\Enum\MachineEnumerator.cs" />
     <Compile Include="Assets\Script\Data\Enum\Material.cs" />
@@ -80,9 +81,10 @@
     <Compile Include="Assets\Script\Data\Lib\Itens\Wire.cs" />
     <Compile Include="Assets\Script\Data\Lib\PlayerData.cs" />
     <Compile Include="Assets\Script\Data\Lib\ToastControl.cs" />
-    <Compile Include="Assets\Script\Data\Model\GeneratorType.cs" />
-    <Compile Include="Assets\Script\Data\Model\MachineType.cs" />
-    <Compile Include="Assets\Script\Data\Model\PipeType.cs" />
+    <Compile Include="Assets\Script\Data\Model\CategoryItenModel.cs" />
+    <Compile Include="Assets\Script\Data\Model\GeneratorModel.cs" />
+    <Compile Include="Assets\Script\Data\Model\MachineModel.cs" />
+    <Compile Include="Assets\Script\Data\Model\PipeModel.cs" />
     <Compile Include="Assets\Script\Data\Util\Locate.cs" />
     <Compile Include="Assets\Script\Data\Util\TimerRun.cs" />
     <Compile Include="Assets\Script\Data\Util\Toast.cs" />

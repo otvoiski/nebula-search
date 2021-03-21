@@ -13,8 +13,10 @@ MonoBehaviour:
   m_Name: Energy Hydrogen Generator
   m_EditorClassIdentifier: 
   title: Energy Hydrogen Generator
+  categoy: 0
+  icon: {fileID: 21300000, guid: 9fd45a81aac0c724c83d22c1d6a7d93c, type: 3}
+  inputs: 03000000
+  outputs: 
   powerGenerator: 32
   maxBuffer: 1200
   maxProcessTime: 60
-  inputs: 03000000
-  output: 0

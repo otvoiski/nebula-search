@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Generator : MonoBehaviour
 {
-    public GeneratorType type;
+    public GeneratorModel type;
 
     #region type
 
@@ -44,7 +44,7 @@ public class Generator : MonoBehaviour
             Title = type.title;
             MaxProcessTime = type.maxProcessTime;
             Inputs = type.inputs;
-            Output = type.output;
+            Output = type.outputs[0];
         }
 
         sprite = GetComponentInChildren<SpriteRenderer>();

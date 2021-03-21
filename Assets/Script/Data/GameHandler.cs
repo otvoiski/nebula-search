@@ -1,11 +1,14 @@
-﻿using Assets.Script.Enumerator;
+﻿using Assets.Script.Data.Enum;
+using Assets.Script.Data.Model;
+using Assets.Script.Enumerator;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class GameHandler : MonoBehaviour
 {
     public InputMaster _input;
-    public static GameObject[] Itens;
+    public static IDictionary<string, IList> Itens;
 
     private void Awake()
     {
@@ -23,7 +26,42 @@ public class GameHandler : MonoBehaviour
 
     private void LoadItens()
     {
-        Itens = Resources.LoadAll<GameObject>("Itens");
+        var itens = Resources.LoadAll<GameObject>("Itens");
+
+        var generators = new List<GeneratorModel>();
+        var machines = new List<MachineModel>();
+        var pipes = new List<PipeModel>();
+        foreach (var item in itens)
+        {
+            var category = item.GetComponent<CategoryItenModel>();
+            switch (category.categoy)
+            {
+                case CategoryItenEnum.Generator:
+                    generators.Add(item.GetComponent<GeneratorModel>());
+                    break;
+
+                case CategoryItenEnum.Machine:
+                    machines.Add(item.GetComponent<MachineModel>());
+                    break;
+
+                case CategoryItenEnum.Pipe:
+                    pipes.Add(item.GetComponent<PipeModel>());
+                    break;
+
+                case CategoryItenEnum.Floor:
+                    break;
+
+                case CategoryItenEnum.Wall:
+                    break;
+
+                default:
+                    break;
+            }
+        }
+
+        Itens.Add($"{CategoryItenEnum.Generator}", generators);
+        Itens.Add($"{CategoryItenEnum.Machine}", machines);
+        Itens.Add($"{CategoryItenEnum.Pipe}", pipes);
     }
 
     private void OnEnable()

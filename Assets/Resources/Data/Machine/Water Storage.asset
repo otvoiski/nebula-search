@@ -13,8 +13,9 @@ MonoBehaviour:
   m_Name: Water Storage
   m_EditorClassIdentifier: 
   title: Gas Storage
+  categoy: 1
+  inputs: 01000000
+  outputs: 01000000
   maxBuffer: 5000
   powerConsume: 60
   maxProcessTime: 32
-  inputs: 01000000
-  outputs: 01000000

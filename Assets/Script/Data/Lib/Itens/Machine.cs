@@ -7,7 +7,7 @@ public class Machine : MonoBehaviour
 {
     public const float CONNECTION = 1f;
 
-    public MachineType Type;
+    public MachineModel Type;
     public bool debug;
 
     public string Title { get; private set; }

@@ -2,9 +2,9 @@
 using Assets.Script.Util;
 using Assets.Script.View.Enumerator;
 using Assets.Script.View.Model;
-using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 namespace Assets.Script.View.Service
 {
@@ -15,12 +15,12 @@ namespace Assets.Script.View.Service
         [SerializeField] private bool IsReadyToAccept;
         [SerializeField] private bool IsReadyToConstruction;
         [SerializeField] private bool IsBuilding;
+        public Sprite sprite;
 
-        public void ToggleBuildMenu()
-        {
-            IsBuilding = !IsBuilding;
-        }
-
+        /// <summary>
+        /// Setup BuildScreenService
+        /// </summary>
+        /// <param name="buildScreen"></param>
         public void Setup(BuildScreenModel buildScreen)
         {
             BuildScreen = buildScreen;
@@ -29,6 +29,27 @@ namespace Assets.Script.View.Service
             IsReadyToConstruction = false;
             IsReadyToSelect = false;
             IsBuilding = false;
+
+            LoadingMenuList();
+        }
+
+        /// <summary>
+        /// Load menu list from resources objects
+        /// </summary>
+        private void LoadingMenuList()
+        {
+            // load buildMenuItem
+            var buildMenuItem = Resources.Load<GameObject>("Prefabs/UI/MainScreen/BuildScreen/BuildMenu/BuildMenuItem");
+
+            var itemMenuButton = Instantiate(buildMenuItem, BuildScreen.BuildMenu.transform);
+        }
+
+        /// <summary>
+        /// Togle building variable
+        /// </summary>
+        public void ToggleBuildMenu()
+        {
+            IsBuilding = !IsBuilding;
         }
 
         /// <summary>
@@ -44,10 +65,13 @@ namespace Assets.Script.View.Service
             KeyCommands();
 
             // Movement of transform item when user select item
-            Movement();
+            MovementItem();
         }
 
-        private void Movement()
+        /// <summary>
+        /// Move item selected
+        /// </summary>
+        private void MovementItem()
         {
             if (IsBuilding && IsReadyToConstruction && BuildScreen.SelectedItem != null)
             {
@@ -55,6 +79,9 @@ namespace Assets.Script.View.Service
             }
         }
 
+        /// <summary>
+        /// Manager windows if open or not
+        /// </summary>
         private void ToggleWindows()
         {
             // BuildMenu
@@ -68,6 +95,9 @@ namespace Assets.Script.View.Service
             BuildScreen.InfoScreen.gameObject.SetActive(IsBuilding && IsReadyToSelect && IsReadyToAccept);
         }
 
+        /// <summary>
+        /// Key commands
+        /// </summary>
         private void KeyCommands()
         {
             var kb = InputSystem.GetDevice<Keyboard>();
