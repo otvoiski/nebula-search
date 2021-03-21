@@ -1,10 +1,18 @@
 ﻿using Assets.Script.Enumerator;
-using System;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameHandler : MonoBehaviour
 {
+    public InputMaster _input;
     public static GameObject[] Itens;
+
+    private void Awake()
+    {
+        _input = new InputMaster();
+
+        _input.ToastTest.ShowToast.performed += _ => Toast.Message(ToastType.Success, "Teste", "Menssage teste!");
+    }
 
     private void Start()
     {
@@ -18,16 +26,13 @@ public class GameHandler : MonoBehaviour
         Itens = Resources.LoadAll<GameObject>("Itens");
     }
 
-    private void Update()
+    private void OnEnable()
     {
-        KeyEvents();
+        _input.Enable();
     }
 
-    private void KeyEvents()
+    private void OnDisable()
     {
-        if (Input.GetKeyDown(KeyCode.Z)) Toast.Message(ToastType.Success, "Teste", "Menssage teste!");
-        if (Input.GetKeyDown(KeyCode.X)) Toast.Message(ToastType.Warning, "Teste", "Menssage teste!");
-        if (Input.GetKeyDown(KeyCode.C)) Toast.Message(ToastType.Error, "Teste", "Menssage teste!");
-        if (Input.GetKeyDown(KeyCode.V)) Toast.Message(ToastType.Info, "Teste", "Menssage teste!");
+        _input.Disable();
     }
 }
