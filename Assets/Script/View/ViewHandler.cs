@@ -4,6 +4,8 @@ using Assets.Script.View.Model;
 using Assets.Script.View.Service;
 using System;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 namespace Assets.Script.View
 {
@@ -13,8 +15,18 @@ namespace Assets.Script.View
         public MainScreenModel MainScreen { get; private set; }
         public bool IsOpen { get; private set; }
 
+        private InputMaster _input;
+
         private void Awake()
         {
+            #region Input
+
+            _input = new InputMaster();
+
+            _input.UI.ToggleBuildScreen.performed += ToggleBuildMenu;
+
+            #endregion Input
+
             #region General
 
             var viewHandler = GameObject.Find("VIEW HANDLER")
@@ -55,7 +67,15 @@ namespace Assets.Script.View
 
         private void Update()
         {
+            if (string.IsNullOrEmpty(MainScreen.BottomBar.GetComponentInChildren<Text>().text))
+                MainScreen.BottomBar.GetComponentInChildren<Text>().text = VersionIncrementor.version;
+
             BuilderScreenService.ToggleWindowsBuild();
+        }
+
+        public void ToggleBuildMenu(InputAction.CallbackContext obj)
+        {
+            BuilderScreenService.ToggleBuildMenu();
         }
 
         public void ToggleBuildList(int machine)
@@ -71,6 +91,16 @@ namespace Assets.Script.View
         public void AcceptToBuildMoveTransformSelectedItem()
         {
             BuilderScreenService.AcceptToBuildMoveTransformSelectedItem();
+        }
+
+        private void OnEnable()
+        {
+            _input.Enable();
+        }
+
+        private void OnDisable()
+        {
+            _input.Disable();
         }
     }
 }

@@ -1,0 +1,96 @@
+{
+    "name": "InputMaster",
+    "maps": [
+        {
+            "name": "UI",
+            "id": "de14ebf8-ba8f-4b89-99ca-681af0287c57",
+            "actions": [
+                {
+                    "name": "Toggle Build Screen",
+                    "type": "Button",
+                    "id": "7b1ea71f-90a2-463b-9f08-e8e616a132b8",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "Escape Build Screen",
+                    "type": "Button",
+                    "id": "f540ec94-46a9-4ddb-a8b9-c780ce6a5c18",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "edaa0626-b16a-4823-8c2c-5d04d45011a8",
+                    "path": "<Keyboard>/b",
+                    "interactions": "Press",
+                    "processors": "",
+                    "groups": "Keyboard & Mouse",
+                    "action": "Toggle Build Screen",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a2c15bcf-5ba4-4d89-84bd-b554418d7eb5",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "Press",
+                    "processors": "",
+                    "groups": "Keyboard & Mouse",
+                    "action": "Escape Build Screen",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "ToastTest",
+            "id": "6f576464-1abd-43ca-bfdc-0b3fdfbf501b",
+            "actions": [
+                {
+                    "name": "ShowToast",
+                    "type": "Button",
+                    "id": "c5cdb34a-ba61-4abb-a9a8-c520bfb08eb0",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "a95a1c00-0a57-448b-b207-7d8b41b2dfd2",
+                    "path": "<Keyboard>/x",
+                    "interactions": "Press",
+                    "processors": "",
+                    "groups": "Keyboard & Mouse",
+                    "action": "ShowToast",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": [
+        {
+            "name": "Keyboard & Mouse",
+            "bindingGroup": "Keyboard & Mouse",
+            "devices": [
+                {
+                    "devicePath": "<Keyboard>",
+                    "isOptional": false,
+                    "isOR": false
+                },
+                {
+                    "devicePath": "<Mouse>",
+                    "isOptional": false,
+                    "isOR": false
+                }
+            ]
+        }
+    ]
+}

@@ -2,17 +2,24 @@
 using Assets.Script.Util;
 using Assets.Script.View.Enumerator;
 using Assets.Script.View.Model;
+using System;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Assets.Script.View.Service
 {
     public class BuilderScreenService : MonoBehaviour
     {
         public BuildScreenModel BuildScreen { get; private set; }
-        public bool IsReadyToSelect { get; private set; }
-        public bool IsReadyToAccept { get; private set; }
-        public bool IsReadyToConstruction { get; private set; }
-        public bool IsBuilding { get; private set; }
+        [SerializeField] private bool IsReadyToSelect;
+        [SerializeField] private bool IsReadyToAccept;
+        [SerializeField] private bool IsReadyToConstruction;
+        [SerializeField] private bool IsBuilding;
+
+        public void ToggleBuildMenu()
+        {
+            IsBuilding = !IsBuilding;
+        }
 
         public void Setup(BuildScreenModel buildScreen)
         {
@@ -63,12 +70,9 @@ namespace Assets.Script.View.Service
 
         private void KeyCommands()
         {
-            if (Input.GetKeyDown(KeyCode.B))
-            {
-                IsBuilding = !IsBuilding;
-            }
+            var kb = InputSystem.GetDevice<Keyboard>();
 
-            if (Input.GetKeyDown(KeyCode.Mouse0) && IsBuilding && IsReadyToConstruction)
+            if (kb.spaceKey.wasPressedThisFrame && IsBuilding && IsReadyToConstruction)
             {
                 // TODO: Remove necessary itens from inventory of player.
 
@@ -85,7 +89,7 @@ namespace Assets.Script.View.Service
                 IsReadyToSelect = false;
             }
 
-            if (Input.GetKeyDown(KeyCode.Escape) && IsBuilding)
+            if (kb.escapeKey.wasPressedThisFrame && IsBuilding)
             {
                 if (BuildScreen.SelectedItem != null && IsReadyToConstruction)
                     Destroy(BuildScreen.SelectedItem);
