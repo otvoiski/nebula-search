@@ -59,9 +59,10 @@ namespace Assets.Script.View.Service
         /// <summary>
         /// Togle building variable
         /// </summary>
-        public void ToggleBuildMenu()
+        public bool ToggleBuildMenu()
         {
             IsBuilding = !IsBuilding;
+            return IsBuilding;
         }
 
         /// <summary>

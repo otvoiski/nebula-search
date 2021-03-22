@@ -1,4 +1,8 @@
-﻿using Assets.Script.Util;
+﻿using Assets.Script.Enumerator;
+using Assets.Script.Util;
+using Assets.Script.View;
+using Assets.Script.View.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -27,6 +31,13 @@ public class MachineService : MonoBehaviour
 
     private float oneSecondProcessTimerRunner;
     private float maxProcessTimeRunner;
+    private ViewHandler _viewHandler;
+
+    private void Awake()
+    {
+        _viewHandler = GameObject.Find("VIEW HANDLER")
+            .GetComponent<ViewHandler>();
+    }
 
     public void Start()
     {
@@ -49,6 +60,11 @@ public class MachineService : MonoBehaviour
         }
 
         debug = false;
+    }
+
+    public void Update()
+    {
+        MachineInterface();
     }
 
     private void FixedUpdate()
@@ -81,41 +97,48 @@ public class MachineService : MonoBehaviour
         SpriteColor();
     }
 
-    //private void MachineInterface()
-    //{
-    //    var ray = Utilities.GetRaycastHitFromScreenPoint();
-    //    if (ray.HasValue)
-    //    {
-    //        if (ray.GetValueOrDefault().collider.name == name)
-    //        {
-    //            if (Input.GetKeyDown(KeyCode.Mouse0) && !uiManager.IsOpen)
-    //            {
-    //                isOpen = true;
-    //            }
-    //        }
-    //    }
+    private void MachineInterface()
+    {
+        try
+        {
+            var ray = Utilities.GetRaycastHitFromScreenPoint();
+            if (ray.HasValue)
+            {
+                if (ray.GetValueOrDefault().collider.name.Contains(Title))
+                {
+                    if (Input.GetKeyDown(KeyCode.Mouse0) && !_viewHandler.GetWindowsMachine().activeSelf)
+                    {
+                        _viewHandler.GetWindowsMachine().SetActive(true);
+                    }
+                }
+            }
 
-    //    if (Input.GetKeyDown(KeyCode.Escape) && uiManager.IsOpen && isOpen)
-    //    {
-    //        isOpen = false;
-    //        uiManager.CloseInterfaceItens();
-    //    }
+            if (Input.GetKeyDown(KeyCode.Escape) && _viewHandler.GetWindowsMachine().activeSelf)
+            {
+                _viewHandler.CloseInterfaceMachine();
+            }
 
-    //    if (isOpen)
-    //    {
-    //        //UIManager.Item = new InterfaceItem
-    //        //{
-    //        //    Title = Title,
-    //        //    Buffer = Buffer,
-    //        //    MaxBuffer = MaxBuffer,
-    //        //    ProcessTime = ProcessTime,
-    //        //    MaxProcessTime = MaxProcessTime,
-    //        //    PowerConsume = PowerConsume
-    //        //};
-
-    //        uiManager.ShowInterfaceItens();
-    //    }
-    //}
+            if (_viewHandler.GetWindowsMachine().activeSelf)
+            {
+                _viewHandler.ShowInterfaceMachine(new WindowsMachineItemModel
+                {
+                    buffer = Buffer,
+                    maxBuffer = MaxBuffer,
+                    maxProcessTime = MaxProcessTime,
+                    powerGenerator = PowerConsume,
+                    processTime = ProcessTime,
+                    title = Title,
+                    InputAmount = Inputs.Count,
+                    OutputAmount = Outputs.Count
+                });
+            }
+        }
+        catch (Exception ex)
+        {
+            Toast.Message(ToastType.Error, "Exception", ex.Message);
+            Debug.LogException(ex);
+        }
+    }
 
     private bool VerifyPathToEnergyGenerator(WireService wire, List<string> list)
     {

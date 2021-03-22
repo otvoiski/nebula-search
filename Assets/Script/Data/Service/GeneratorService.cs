@@ -1,9 +1,17 @@
-﻿using Assets.Script.Enumerator;
+﻿using Assets.Script.Data.Model;
+using Assets.Script.Enumerator;
 using Assets.Script.Util;
+using Assets.Script.View;
+using Assets.Script.View.Model;
 using System;
 using UnityEngine;
 
-public class GeneratorService : MonoBehaviour
+public interface IMachine
+{
+    CategoryItemModel GetType();
+}
+
+public class GeneratorService : MonoBehaviour, IMachine
 {
     public GeneratorModel type;
 
@@ -23,6 +31,13 @@ public class GeneratorService : MonoBehaviour
 
     private SpriteRenderer sprite;
     private float timer;
+    private ViewHandler _viewHandler;
+
+    private void Awake()
+    {
+        _viewHandler = GameObject.Find("VIEW HANDLER")
+            .GetComponent<ViewHandler>();
+    }
 
     public void Start()
     {
@@ -44,6 +59,11 @@ public class GeneratorService : MonoBehaviour
         Amount = 1;
     }
 
+    public void Update()
+    {
+        GeneratorInterface();
+    }
+
     private void FixedUpdate()
     {
         if (TimerRun.Run(1f, ref timer))
@@ -58,49 +78,48 @@ public class GeneratorService : MonoBehaviour
         if (Buffer > MaxBuffer) Buffer = MaxBuffer;
     }
 
-    //private void GeneratorInterface()
-    //{
-    //    try
-    //    {
-    //        var ray = Utilities.GetRaycastHitFromScreenPoint();
-    //        if (ray.HasValue)
-    //        {
-    //            if (ray.GetValueOrDefault().collider.name.Contains(Title))
-    //            {
-    //                if (Input.GetKeyDown(KeyCode.Mouse0) && !uiManager.IsOpen)
-    //                {
-    //                    isOpen = true;
-    //                }
-    //            }
-    //        }
+    private void GeneratorInterface()
+    {
+        try
+        {
+            var ray = Utilities.GetRaycastHitFromScreenPoint();
+            if (ray.HasValue)
+            {
+                if (ray.GetValueOrDefault().collider.name.Contains(Title))
+                {
+                    if (Input.GetKeyDown(KeyCode.Mouse0) && !_viewHandler.GetWindowsMachine().activeSelf)
+                    {
+                        _viewHandler.GetWindowsMachine().SetActive(true);
+                    }
+                }
+            }
 
-    //        if (Input.GetKeyDown(KeyCode.Escape) && uiManager.IsOpen && isOpen)
-    //        {
-    //            isOpen = false;
-    //            uiManager.CloseInterfaceItens();
-    //        }
+            if (Input.GetKeyDown(KeyCode.Escape) && _viewHandler.GetWindowsMachine().activeSelf)
+            {
+                _viewHandler.CloseInterfaceMachine();
+            }
 
-    //        if (isOpen)
-    //        {
-    //            //UIManager.Item = new InterfaceItem
-    //            //{
-    //            //    Title = Title,
-    //            //    Buffer = Buffer,
-    //            //    MaxBuffer = MaxBuffer,
-    //            //    ProcessTime = ProcessTime,
-    //            //    MaxProcessTime = MaxProcessTime,
-    //            //    PowerConsume = PowerGenerator
-    //            //};
-
-    //            uiManager.ShowInterfaceItens();
-    //        }
-    //    }
-    //    catch (Exception ex)
-    //    {
-    //        Toast.Message(ToastType.Error, "Exception", ex.Message);
-    //        Debug.LogException(ex);
-    //    }
-    //}
+            if (_viewHandler.GetWindowsMachine().activeSelf)
+            {
+                _viewHandler.ShowInterfaceMachine(new WindowsMachineItemModel
+                {
+                    buffer = Buffer,
+                    maxBuffer = MaxBuffer,
+                    maxProcessTime = MaxProcessTime,
+                    powerGenerator = PowerGenerator,
+                    processTime = ProcessTime,
+                    title = Title,
+                    InputAmount = Inputs.Length,
+                    OutputAmount = 1
+                });
+            }
+        }
+        catch (Exception ex)
+        {
+            Toast.Message(ToastType.Error, "Exception", ex.Message);
+            Debug.LogException(ex);
+        }
+    }
 
     public int GetBufferFromRate(int powerConsume)
     {
@@ -138,5 +157,10 @@ public class GeneratorService : MonoBehaviour
             Amount--;
             ProcessTime = 1 * MaxProcessTime;
         }
+    }
+
+    CategoryItemModel IMachine.GetType()
+    {
+        return type;
     }
 }

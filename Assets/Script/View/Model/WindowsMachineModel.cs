@@ -2,7 +2,7 @@
 
 namespace Assets.Script.View.Model
 {
-    public class InterfaceMenuModel : MonoBehaviour
+    public class WindowsMachineModel : MonoBehaviour
     {
         public Transform Title { get; set; }
         public Transform Inventory { get; set; }

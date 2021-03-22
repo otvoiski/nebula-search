@@ -10,7 +10,7 @@ namespace Assets.Script.View.Enumerator
     {
         BottomBar,
         Toast,
-        InterfaceMenu,
+        WindowsMachine,
         BuildScreen
     }
 }

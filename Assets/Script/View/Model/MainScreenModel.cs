@@ -6,7 +6,7 @@ namespace Assets.Script.View.Model
     {
         public Transform BottomBar { get; set; }
         public Transform Toast { get; set; }
-        public InterfaceMenuModel InterfaceMenu { get; set; }
+        public WindowsMachineModel WindowsMachine { get; set; }
         public BuildScreenModel BuildScreen { get; set; }
     }
 }
