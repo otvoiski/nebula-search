@@ -1,12 +1,10 @@
-﻿using UnityEngine;
+﻿using Assets.Script.Data.Model;
+using UnityEngine;
 
 [CreateAssetMenu(fileName = "Machine", menuName = "Itens/Machine")]
-public class MachineType : ScriptableObject
+public class MachineModel : CategoryItemModel
 {
-    public string title;
     public int maxBuffer;
     public int powerConsume;
     public int maxProcessTime;
-    public Material[] inputs;
-    public Material[] outputs;
 }

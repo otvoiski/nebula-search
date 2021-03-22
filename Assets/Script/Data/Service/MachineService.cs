@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class Machine : MonoBehaviour
+public class MachineService : MonoBehaviour
 {
     public const float CONNECTION = 1f;
 
-    public MachineType Type;
+    public MachineModel type;
     public bool debug;
 
     public string Title { get; private set; }
@@ -19,37 +19,29 @@ public class Machine : MonoBehaviour
     public IList<Material> Outputs { get; private set; }
     public IList<Material> Inputs { get; private set; }
 
-    private bool isOpen;
     private SpriteRenderer sprite;
-    private IList<Gas> gases;
-    private IList<Wire> wires;
+    private IList<GasService> gases;
+    private IList<WireService> wires;
     private bool isNecessaryEnergy;
     private bool isNecessaryOxigen;
 
-    private UIManager uiManager;
-
     private float oneSecondProcessTimerRunner;
     private float maxProcessTimeRunner;
-
-    private void Awake()
-    {
-        uiManager = GameObject.Find("GAME HANDLER").GetComponent<UIManager>();
-    }
 
     public void Start()
     {
         sprite = GetComponentInChildren<SpriteRenderer>();
 
-        if (Type != null)
+        if (type != null)
         {
-            name = Type.title;
-            Title = Type.title;
+            name = type.title;
+            Title = type.title;
 
-            MaxBuffer = Type.maxBuffer;
-            PowerConsume = Type.powerConsume;
-            MaxProcessTime = Type.maxProcessTime;
-            Outputs = Type.outputs;
-            Inputs = Type.inputs;
+            MaxBuffer = type.maxBuffer;
+            PowerConsume = type.powerConsume;
+            MaxProcessTime = type.maxProcessTime;
+            Outputs = type.outputs;
+            Inputs = type.inputs;
 
             Buffer = 0;
             isNecessaryEnergy = Inputs.Contains(Material.Energy);
@@ -57,13 +49,6 @@ public class Machine : MonoBehaviour
         }
 
         debug = false;
-        isOpen = false;
-    }
-
-    public void Update()
-    {
-        if (uiManager != null)
-            MachineInterface();
     }
 
     private void FixedUpdate()
@@ -96,43 +81,43 @@ public class Machine : MonoBehaviour
         SpriteColor();
     }
 
-    private void MachineInterface()
-    {
-        var ray = Utilities.GetRaycastHitFromScreenPoint();
-        if (ray.HasValue)
-        {
-            if (ray.GetValueOrDefault().collider.name == name)
-            {
-                if (Input.GetKeyDown(KeyCode.Mouse0) && !uiManager.IsOpen)
-                {
-                    isOpen = true;
-                }
-            }
-        }
+    //private void MachineInterface()
+    //{
+    //    var ray = Utilities.GetRaycastHitFromScreenPoint();
+    //    if (ray.HasValue)
+    //    {
+    //        if (ray.GetValueOrDefault().collider.name == name)
+    //        {
+    //            if (Input.GetKeyDown(KeyCode.Mouse0) && !uiManager.IsOpen)
+    //            {
+    //                isOpen = true;
+    //            }
+    //        }
+    //    }
 
-        if (Input.GetKeyDown(KeyCode.Escape) && uiManager.IsOpen && isOpen)
-        {
-            isOpen = false;
-            uiManager.CloseInterfaceItens();
-        }
+    //    if (Input.GetKeyDown(KeyCode.Escape) && uiManager.IsOpen && isOpen)
+    //    {
+    //        isOpen = false;
+    //        uiManager.CloseInterfaceItens();
+    //    }
 
-        if (isOpen)
-        {
-            //UIManager.Item = new InterfaceItem
-            //{
-            //    Title = Title,
-            //    Buffer = Buffer,
-            //    MaxBuffer = MaxBuffer,
-            //    ProcessTime = ProcessTime,
-            //    MaxProcessTime = MaxProcessTime,
-            //    PowerConsume = PowerConsume
-            //};
+    //    if (isOpen)
+    //    {
+    //        //UIManager.Item = new InterfaceItem
+    //        //{
+    //        //    Title = Title,
+    //        //    Buffer = Buffer,
+    //        //    MaxBuffer = MaxBuffer,
+    //        //    ProcessTime = ProcessTime,
+    //        //    MaxProcessTime = MaxProcessTime,
+    //        //    PowerConsume = PowerConsume
+    //        //};
 
-            uiManager.ShowInterfaceItens();
-        }
-    }
+    //        uiManager.ShowInterfaceItens();
+    //    }
+    //}
 
-    private bool VerifyPathToEnergyGenerator(Wire wire, List<string> list)
+    private bool VerifyPathToEnergyGenerator(WireService wire, List<string> list)
     {
         var nextWire = wire.Next(last: list);
         if (nextWire != null)
@@ -141,9 +126,9 @@ public class Machine : MonoBehaviour
             nextWire.SpriteColor(resultado);
             return resultado;
         }
-        else if (Utilities.GetItemsFromRayCast<Generator>(wire.transform, CONNECTION).Count != 0)
+        else if (Utilities.GetItemsFromRayCast<GeneratorService>(wire.transform, CONNECTION).Count != 0)
         {
-            foreach (var generator in Utilities.GetItemsFromRayCast<Generator>(wire.transform, CONNECTION))
+            foreach (var generator in Utilities.GetItemsFromRayCast<GeneratorService>(wire.transform, CONNECTION))
             {
                 if (Inputs.Contains(generator.Output) && Buffer < MaxBuffer)
                     Buffer += generator.GetBufferFromRate(PowerConsume);
@@ -156,7 +141,7 @@ public class Machine : MonoBehaviour
         }
     }
 
-    private bool VerifyPathToEnergyGenerator(Gas gas, List<string> list)
+    private bool VerifyPathToEnergyGenerator(GasService gas, List<string> list)
     {
         var nextGas = gas.Next(last: list);
         if (nextGas != null)
@@ -165,9 +150,9 @@ public class Machine : MonoBehaviour
             nextGas.SpriteColor(resultado);
             return resultado;
         }
-        else if (Utilities.GetItemsFromRayCast<Generator>(gas.transform, CONNECTION).Count != 0)
+        else if (Utilities.GetItemsFromRayCast<GeneratorService>(gas.transform, CONNECTION).Count != 0)
         {
-            foreach (var generator in Utilities.GetItemsFromRayCast<Generator>(gas.transform, CONNECTION))
+            foreach (var generator in Utilities.GetItemsFromRayCast<GeneratorService>(gas.transform, CONNECTION))
             {
                 if (Inputs.Contains(generator.Output))
                     Buffer += generator.GetBufferFromRate(PowerConsume);
@@ -182,7 +167,7 @@ public class Machine : MonoBehaviour
 
     private void ConnectionToWire()
     {
-        wires = Utilities.GetItemsFromRayCast<Wire>(transform, CONNECTION);
+        wires = Utilities.GetItemsFromRayCast<WireService>(transform, CONNECTION);
 
         var list = new List<string>();
         foreach (var wire in wires)
@@ -194,7 +179,7 @@ public class Machine : MonoBehaviour
 
     private void ConnectionToGas()
     {
-        gases = Utilities.GetItemsFromRayCast<Gas>(transform, CONNECTION);
+        gases = Utilities.GetItemsFromRayCast<GasService>(transform, CONNECTION);
         if (gases.Count > 0)
         {
             var list = new List<string>();

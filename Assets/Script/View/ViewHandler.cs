@@ -1,8 +1,7 @@
-﻿using Assets.Script.Enum;
+﻿using Assets.Script.Data.Enum;
 using Assets.Script.View.Enumerator;
 using Assets.Script.View.Model;
 using Assets.Script.View.Service;
-using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -80,7 +79,7 @@ namespace Assets.Script.View
 
         public void ToggleBuildList(int machine)
         {
-            BuilderScreenService.ToggleBuildList((MachineEnumerator)machine);
+            BuilderScreenService.ToggleBuildList((CategoryItemEnum)machine);
         }
 
         public void ItemSelectedToBuild(GameObject gameObject)
