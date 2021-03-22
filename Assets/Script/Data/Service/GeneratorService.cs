@@ -26,7 +26,6 @@ public class GeneratorService : MonoBehaviour, IMachine
     public int MaxProcessTime { get; private set; }
     public Material[] Inputs { get; private set; }
     public Material Output { get; private set; }
-    public bool isOpen { get; private set; }
 
     #endregion type
 
@@ -88,20 +87,19 @@ public class GeneratorService : MonoBehaviour, IMachine
             {
                 if (ray.GetValueOrDefault().collider.name.Contains(Title))
                 {
-                    if (Input.GetKeyDown(KeyCode.Mouse0) && !isOpen)
+                    if (Input.GetKeyDown(KeyCode.Mouse0) && !_viewHandler.GetWindowsMachine().activeSelf)
                     {
-                        isOpen = true;
+                        _viewHandler.GetWindowsMachine().SetActive(true);
                     }
                 }
             }
 
-            if (Input.GetKeyDown(KeyCode.Escape) && isOpen)
+            if (Input.GetKeyDown(KeyCode.Escape) && _viewHandler.GetWindowsMachine().activeSelf)
             {
-                isOpen = false;
                 _viewHandler.CloseInterfaceMachine();
             }
 
-            if (isOpen)
+            if (_viewHandler.GetWindowsMachine().activeSelf)
             {
                 _viewHandler.ShowInterfaceMachine(new WindowsMachineItemModel
                 {

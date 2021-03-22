@@ -41,7 +41,13 @@ namespace Assets.Script.View.Service
 
         public void CloseInterfaceMachine()
         {
-            Debug.Log("Close");
+            windowsMachineItemModelStatic = null;
+
+            ChangeTitleReset();
+            LoadProcessReset();
+            LoadIOReset();
+            LoadInventoryReset();
+            LoadInfoReset();
 
             windowsMachine.gameObject.SetActive(false);
         }
@@ -65,6 +71,12 @@ namespace Assets.Script.View.Service
                 .GetComponent<Text>().text = windowsMachineItemModelStatic.title;
         }
 
+        private void ChangeTitleReset()
+        {
+            windowsMachine.Title.Find(TITLE_TEXT) // Text
+                .GetComponent<Text>().text = "";
+        }
+
         private void LoadProcess()
         {
             var energy = windowsMachine.ProcessMenu.Find(PROCESS_ITEM_ENERGY) // Text
@@ -78,6 +90,21 @@ namespace Assets.Script.View.Service
 
             timer.maxValue = windowsMachineItemModelStatic.maxProcessTime;
             timer.value = windowsMachineItemModelStatic.processTime;
+        }
+
+        private void LoadProcessReset()
+        {
+            var energy = windowsMachine.ProcessMenu.Find(PROCESS_ITEM_ENERGY) // Text
+               .GetComponentInChildren<Slider>();
+
+            var timer = windowsMachine.ProcessMenu.Find(PROCESS_ITEM_TIMER)
+               .GetComponentInChildren<Slider>();
+
+            energy.maxValue = 1;
+            energy.value = 0;
+
+            timer.maxValue = 1;
+            timer.value = 0;
         }
 
         private void LoadIO()
@@ -100,7 +127,23 @@ namespace Assets.Script.View.Service
             }
         }
 
+        private void LoadIOReset()
+        {
+            foreach (Transform child in windowsMachine.IO.Find("Input"))
+            {
+                Destroy(child.gameObject);
+            }
+            foreach (Transform child in windowsMachine.IO.Find("Output"))
+            {
+                Destroy(child.gameObject);
+            }
+        }
+
         private void LoadInventory()
+        {
+        }
+
+        private void LoadInventoryReset()
         {
         }
 
@@ -112,14 +155,36 @@ namespace Assets.Script.View.Service
                 var timer = windowsMachine.Info.Find("ProcessTime");
                 var consume = windowsMachine.Info.Find("PowerConsume");
 
-                //TODO: Continue to fill
-
-                Change(energy, "Energy", $"{windowsMachineItemModelStatic.buffer}/{windowsMachineItemModelStatic.maxBuffer}");
+                Change(energy, Locate.Translate["WindowsMachine"]["Energy"], $"{ windowsMachineItemModelStatic.buffer}/{windowsMachineItemModelStatic.maxBuffer}");
+                Change(timer, Locate.Translate["WindowsMachine"]["ProcessTime"], $"{ windowsMachineItemModelStatic.processTime}/{windowsMachineItemModelStatic.maxProcessTime}");
+                Change(consume, Locate.Translate["WindowsMachine"]["PowerConsume"], $"{ windowsMachineItemModelStatic.powerGenerator}");
 
                 void Change(Transform transform, string title, string value)
                 {
                     transform.Find("Title").GetComponent<Text>().text = title;
                     transform.Find("Value").GetComponent<Text>().text = value;
+                }
+            }
+
+            windowsMachine.Info.gameObject.SetActive(isShowInfo);
+        }
+
+        private void LoadInfoReset()
+        {
+            if (windowsMachineItemModelStatic != null)
+            {
+                var energy = windowsMachine.Info.Find("Energy");
+                var timer = windowsMachine.Info.Find("ProcessTime");
+                var consume = windowsMachine.Info.Find("PowerConsume");
+
+                Change(energy);
+                Change(timer);
+                Change(consume);
+
+                void Change(Transform transform)
+                {
+                    transform.Find("Title").GetComponent<Text>().text = string.Empty;
+                    transform.Find("Value").GetComponent<Text>().text = string.Empty;
                 }
             }
 

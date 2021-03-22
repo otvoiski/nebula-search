@@ -14,7 +14,6 @@ namespace Assets.Script.View
         public WindowsMachineService WindowsMachineService { get; private set; }
         public BuilderScreenService BuilderScreenService { get; private set; }
         public MainScreenModel MainScreen { get; private set; }
-        public bool IsOpen { get; private set; }
 
         private InputMaster _input;
 
@@ -56,10 +55,13 @@ namespace Assets.Script.View
             #endregion General
         }
 
+        public GameObject GetWindowsMachine()
+        {
+            return MainScreen.WindowsMachine.gameObject;
+        }
+
         private void Start()
         {
-            IsOpen = false;
-
             BuilderScreenService = MainScreen.BuildScreen.gameObject
                 .AddComponent<BuilderScreenService>();
             WindowsMachineService = MainScreen.WindowsMachine.gameObject
@@ -72,15 +74,11 @@ namespace Assets.Script.View
         public void CloseInterfaceMachine()
         {
             WindowsMachineService.CloseInterfaceMachine();
-            IsOpen = false;
         }
 
         public void ShowInterfaceMachine(WindowsMachineItemModel model)
         {
-            if (!IsOpen)
-            {
-                WindowsMachineService.ShowInterfaceMachine(model);
-            }
+            WindowsMachineService.ShowInterfaceMachine(model);
         }
 
         private void Update()
@@ -93,7 +91,7 @@ namespace Assets.Script.View
 
         public void ToggleBuildMenu(InputAction.CallbackContext obj)
         {
-            IsOpen = BuilderScreenService.ToggleBuildMenu();
+            BuilderScreenService.ToggleBuildMenu();
         }
 
         public void ToggleBuildList(int machine)
