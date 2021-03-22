@@ -33,6 +33,14 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Toggle Machine Screen"",
+                    ""type"": ""Button"",
+                    ""id"": ""65df057e-2351-470c-a6f2-c021f414b561"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -55,6 +63,28 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""processors"": """",
                     ""groups"": ""Keyboard & Mouse"",
                     ""action"": ""Escape Build Screen"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""085c1c62-ba80-4805-9233-7347c9e22fb7"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": ""Press(behavior=1)"",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard & Mouse"",
+                    ""action"": ""Toggle Machine Screen"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c1a75953-4b77-4a07-ac8c-af75617f5066"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": ""Press"",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard & Mouse"",
+                    ""action"": ""Toggle Machine Screen"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -111,6 +141,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_ToggleBuildScreen = m_UI.FindAction("Toggle Build Screen", throwIfNotFound: true);
         m_UI_EscapeBuildScreen = m_UI.FindAction("Escape Build Screen", throwIfNotFound: true);
+        m_UI_ToggleMachineScreen = m_UI.FindAction("Toggle Machine Screen", throwIfNotFound: true);
         // ToastTest
         m_ToastTest = asset.FindActionMap("ToastTest", throwIfNotFound: true);
         m_ToastTest_ShowToast = m_ToastTest.FindAction("ShowToast", throwIfNotFound: true);
@@ -165,12 +196,14 @@ public class @InputMaster : IInputActionCollection, IDisposable
     private IUIActions m_UIActionsCallbackInterface;
     private readonly InputAction m_UI_ToggleBuildScreen;
     private readonly InputAction m_UI_EscapeBuildScreen;
+    private readonly InputAction m_UI_ToggleMachineScreen;
     public struct UIActions
     {
         private @InputMaster m_Wrapper;
         public UIActions(@InputMaster wrapper) { m_Wrapper = wrapper; }
         public InputAction @ToggleBuildScreen => m_Wrapper.m_UI_ToggleBuildScreen;
         public InputAction @EscapeBuildScreen => m_Wrapper.m_UI_EscapeBuildScreen;
+        public InputAction @ToggleMachineScreen => m_Wrapper.m_UI_ToggleMachineScreen;
         public InputActionMap Get() { return m_Wrapper.m_UI; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -186,6 +219,9 @@ public class @InputMaster : IInputActionCollection, IDisposable
                 @EscapeBuildScreen.started -= m_Wrapper.m_UIActionsCallbackInterface.OnEscapeBuildScreen;
                 @EscapeBuildScreen.performed -= m_Wrapper.m_UIActionsCallbackInterface.OnEscapeBuildScreen;
                 @EscapeBuildScreen.canceled -= m_Wrapper.m_UIActionsCallbackInterface.OnEscapeBuildScreen;
+                @ToggleMachineScreen.started -= m_Wrapper.m_UIActionsCallbackInterface.OnToggleMachineScreen;
+                @ToggleMachineScreen.performed -= m_Wrapper.m_UIActionsCallbackInterface.OnToggleMachineScreen;
+                @ToggleMachineScreen.canceled -= m_Wrapper.m_UIActionsCallbackInterface.OnToggleMachineScreen;
             }
             m_Wrapper.m_UIActionsCallbackInterface = instance;
             if (instance != null)
@@ -196,6 +232,9 @@ public class @InputMaster : IInputActionCollection, IDisposable
                 @EscapeBuildScreen.started += instance.OnEscapeBuildScreen;
                 @EscapeBuildScreen.performed += instance.OnEscapeBuildScreen;
                 @EscapeBuildScreen.canceled += instance.OnEscapeBuildScreen;
+                @ToggleMachineScreen.started += instance.OnToggleMachineScreen;
+                @ToggleMachineScreen.performed += instance.OnToggleMachineScreen;
+                @ToggleMachineScreen.canceled += instance.OnToggleMachineScreen;
             }
         }
     }
@@ -246,6 +285,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
     {
         void OnToggleBuildScreen(InputAction.CallbackContext context);
         void OnEscapeBuildScreen(InputAction.CallbackContext context);
+        void OnToggleMachineScreen(InputAction.CallbackContext context);
     }
     public interface IToastTestActions
     {

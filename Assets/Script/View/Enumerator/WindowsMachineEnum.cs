@@ -13,7 +13,7 @@ namespace Assets.Script.View.Enumerator
         PowerConsume
     }
 
-    public enum InterfaceMenuEnum
+    public enum WindowsMachineEnum
     {
         Title,
         Inventory,

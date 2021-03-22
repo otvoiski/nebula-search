@@ -2,6 +2,7 @@
 using Assets.Script.View.Enumerator;
 using Assets.Script.View.Model;
 using Assets.Script.View.Service;
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -10,6 +11,7 @@ namespace Assets.Script.View
 {
     public class ViewHandler : MonoBehaviour
     {
+        public WindowsMachineService WindowsMachineService { get; private set; }
         public BuilderScreenService BuilderScreenService { get; private set; }
         public MainScreenModel MainScreen { get; private set; }
         public bool IsOpen { get; private set; }
@@ -37,14 +39,14 @@ namespace Assets.Script.View
                 .AddComponent<MainScreenModel>();
             MainScreen.BottomBar = mainScreen.GetChild((int)MainScreenEnum.BottomBar);
             MainScreen.Toast = mainScreen.GetChild((int)MainScreenEnum.Toast);
-            MainScreen.InterfaceMenu = mainScreen.GetChild((int)MainScreenEnum.InterfaceMenu).gameObject
-                .AddComponent<InterfaceMenuModel>();
-            MainScreen.InterfaceMenu.Title = MainScreen.InterfaceMenu.transform.GetChild((int)InterfaceMenuEnum.Title);
-            MainScreen.InterfaceMenu.Inventory = MainScreen.InterfaceMenu.transform.GetChild((int)InterfaceMenuEnum.Inventory);
-            MainScreen.InterfaceMenu.IO = MainScreen.InterfaceMenu.transform.GetChild((int)InterfaceMenuEnum.IO);
-            MainScreen.InterfaceMenu.Button = MainScreen.InterfaceMenu.transform.GetChild((int)InterfaceMenuEnum.Button);
-            MainScreen.InterfaceMenu.ProcessMenu = MainScreen.InterfaceMenu.transform.GetChild((int)InterfaceMenuEnum.ProcessMenu);
-            MainScreen.InterfaceMenu.Info = MainScreen.InterfaceMenu.transform.GetChild((int)InterfaceMenuEnum.Info);
+            MainScreen.WindowsMachine = mainScreen.GetChild((int)MainScreenEnum.WindowsMachine).gameObject
+                .AddComponent<WindowsMachineModel>();
+            MainScreen.WindowsMachine.Title = MainScreen.WindowsMachine.transform.GetChild((int)WindowsMachineEnum.Title);
+            MainScreen.WindowsMachine.Inventory = MainScreen.WindowsMachine.transform.GetChild((int)WindowsMachineEnum.Inventory);
+            MainScreen.WindowsMachine.IO = MainScreen.WindowsMachine.transform.GetChild((int)WindowsMachineEnum.IO);
+            MainScreen.WindowsMachine.Button = MainScreen.WindowsMachine.transform.GetChild((int)WindowsMachineEnum.Button);
+            MainScreen.WindowsMachine.ProcessMenu = MainScreen.WindowsMachine.transform.GetChild((int)WindowsMachineEnum.ProcessMenu);
+            MainScreen.WindowsMachine.Info = MainScreen.WindowsMachine.transform.GetChild((int)WindowsMachineEnum.Info);
             MainScreen.BuildScreen = mainScreen.GetChild((int)MainScreenEnum.BuildScreen).gameObject
                 .AddComponent<BuildScreenModel>();
             MainScreen.BuildScreen.BuildMenu = MainScreen.BuildScreen.transform.GetChild((int)BuildMenuEnum.BuildMenu);
@@ -60,8 +62,25 @@ namespace Assets.Script.View
 
             BuilderScreenService = MainScreen.BuildScreen.gameObject
                 .AddComponent<BuilderScreenService>();
+            WindowsMachineService = MainScreen.WindowsMachine.gameObject
+                .AddComponent<WindowsMachineService>();
 
             BuilderScreenService.Setup(MainScreen.BuildScreen);
+            WindowsMachineService.Setup(MainScreen.WindowsMachine);
+        }
+
+        public void CloseInterfaceMachine()
+        {
+            WindowsMachineService.CloseInterfaceMachine();
+            IsOpen = false;
+        }
+
+        public void ShowInterfaceMachine(WindowsMachineItemModel model)
+        {
+            if (!IsOpen)
+            {
+                WindowsMachineService.ShowInterfaceMachine(model);
+            }
         }
 
         private void Update()
@@ -74,7 +93,7 @@ namespace Assets.Script.View
 
         public void ToggleBuildMenu(InputAction.CallbackContext obj)
         {
-            BuilderScreenService.ToggleBuildMenu();
+            IsOpen = BuilderScreenService.ToggleBuildMenu();
         }
 
         public void ToggleBuildList(int machine)

@@ -146,7 +146,9 @@ namespace Assets.Script.Util
                 {
                     Debug.DrawRay(transform.position, coord, Color.white, distance);
 
+#pragma warning disable UNT0014 // Invalid type for call to GetComponent
                     var t = hit.transform.GetComponent<T>();
+#pragma warning restore UNT0014 // Invalid type for call to GetComponent
                     if (t != null)
                         list.Add(t);
                 }

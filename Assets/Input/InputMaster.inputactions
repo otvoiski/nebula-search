@@ -20,6 +20,14 @@
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
+                },
+                {
+                    "name": "Toggle Machine Screen",
+                    "type": "Button",
+                    "id": "65df057e-2351-470c-a6f2-c021f414b561",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
                 }
             ],
             "bindings": [
@@ -42,6 +50,28 @@
                     "processors": "",
                     "groups": "Keyboard & Mouse",
                     "action": "Escape Build Screen",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "085c1c62-ba80-4805-9233-7347c9e22fb7",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "Press(behavior=1)",
+                    "processors": "",
+                    "groups": "Keyboard & Mouse",
+                    "action": "Toggle Machine Screen",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "c1a75953-4b77-4a07-ac8c-af75617f5066",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "Press",
+                    "processors": "",
+                    "groups": "Keyboard & Mouse",
+                    "action": "Toggle Machine Screen",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
