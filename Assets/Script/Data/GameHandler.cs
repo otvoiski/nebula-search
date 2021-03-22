@@ -1,10 +1,21 @@
-﻿using Assets.Script.Enumerator;
-using System;
+﻿using Assets.Script.Data.Enum;
+using Assets.Script.Data.Model;
+using Assets.Script.Enumerator;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class GameHandler : MonoBehaviour
 {
-    public static GameObject[] Itens;
+    public InputMaster _input;
+    public static IDictionary<string, IList> Itens;
+
+    private void Awake()
+    {
+        _input = new InputMaster();
+
+        _input.ToastTest.ShowToast.performed += _ => Toast.Message(ToastType.Success, "Teste", "Menssage teste!");
+    }
 
     private void Start()
     {
@@ -15,19 +26,58 @@ public class GameHandler : MonoBehaviour
 
     private void LoadItens()
     {
-        Itens = Resources.LoadAll<GameObject>("Itens");
+        Itens = new Dictionary<string, IList>();
+
+        var itens = Resources.LoadAll<GameObject>("Itens") as GameObject[];
+
+        var generators = new List<GeneratorService>();
+        var machines = new List<MachineService>();
+        var wires = new List<WireService>();
+        var gases = new List<GasService>();
+        foreach (var item in itens)
+        {
+            var generator = item.GetComponent<GeneratorService>();
+            if (generator != null)
+            {
+                generators.Add(item.GetComponent<GeneratorService>());
+                continue;
+            }
+
+            var machine = item.GetComponent<MachineService>();
+            if (machine != null)
+            {
+                machines.Add(item.GetComponent<MachineService>());
+                continue;
+            }
+
+            var wire = item.GetComponent<WireService>();
+            if (wire != null)
+            {
+                wires.Add(item.GetComponent<WireService>());
+                continue;
+            }
+
+            var gas = item.GetComponent<GasService>();
+            if (gas != null)
+            {
+                gases.Add(item.GetComponent<GasService>());
+                continue;
+            }
+        }
+
+        Itens.Add($"{CategoryItemEnum.Generator}", generators);
+        Itens.Add($"{CategoryItemEnum.Machine}", machines);
+        Itens.Add($"{CategoryItemEnum.Wire}", wires);
+        Itens.Add($"{CategoryItemEnum.Gas}", gases);
     }
 
-    private void Update()
+    private void OnEnable()
     {
-        KeyEvents();
+        _input.Enable();
     }
 
-    private void KeyEvents()
+    private void OnDisable()
     {
-        if (Input.GetKeyDown(KeyCode.Z)) Toast.Message(ToastType.Success, "Teste", "Menssage teste!");
-        if (Input.GetKeyDown(KeyCode.X)) Toast.Message(ToastType.Warning, "Teste", "Menssage teste!");
-        if (Input.GetKeyDown(KeyCode.C)) Toast.Message(ToastType.Error, "Teste", "Menssage teste!");
-        if (Input.GetKeyDown(KeyCode.V)) Toast.Message(ToastType.Info, "Teste", "Menssage teste!");
+        _input.Disable();
     }
 }

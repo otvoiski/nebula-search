@@ -1,19 +1,31 @@
-﻿using Assets.Script.Enum;
+﻿using Assets.Script.Data.Enum;
+using Assets.Script.Data.Model;
+using Assets.Script.Enumerator;
 using Assets.Script.Util;
 using Assets.Script.View.Enumerator;
 using Assets.Script.View.Model;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 namespace Assets.Script.View.Service
 {
     public class BuilderScreenService : MonoBehaviour
     {
         public BuildScreenModel BuildScreen { get; private set; }
-        public bool IsReadyToSelect { get; private set; }
-        public bool IsReadyToAccept { get; private set; }
-        public bool IsReadyToConstruction { get; private set; }
-        public bool IsBuilding { get; private set; }
+        [SerializeField] private bool IsReadyToSelect;
+        [SerializeField] private bool IsReadyToAccept;
+        [SerializeField] private bool IsReadyToConstruction;
+        [SerializeField] private bool IsBuilding;
 
+        /// <summary>
+        /// Setup BuildScreenService
+        /// </summary>
+        /// <param name="buildScreen"></param>
         public void Setup(BuildScreenModel buildScreen)
         {
             BuildScreen = buildScreen;
@@ -22,6 +34,34 @@ namespace Assets.Script.View.Service
             IsReadyToConstruction = false;
             IsReadyToSelect = false;
             IsBuilding = false;
+
+            LoadingMenuList();
+        }
+
+        /// <summary>
+        /// Load menu list from resources objects
+        /// </summary>
+        private void LoadingMenuList()
+        {
+            foreach (var category in System.Enum.GetValues(typeof(CategoryItemEnum)).Cast<CategoryItemEnum>())
+            {
+                var itemMenuButton = Instantiate(
+                    Resources.Load<GameObject>("Prefabs/UI/MainScreen/BuildScreen/BuildMenu/BuildMenuItem"),
+                    BuildScreen.BuildMenu.transform);
+                itemMenuButton.transform.GetChild(0)
+                    .GetComponentInChildren<Image>().sprite = Resources.Load<Sprite>($"Icons/{category.ToString().ToLower()}");
+                itemMenuButton.name = category.ToString();
+
+                itemMenuButton.GetComponent<Button>().onClick.AddListener(delegate { ToggleBuildList(category); });
+            }
+        }
+
+        /// <summary>
+        /// Togle building variable
+        /// </summary>
+        public void ToggleBuildMenu()
+        {
+            IsBuilding = !IsBuilding;
         }
 
         /// <summary>
@@ -37,10 +77,13 @@ namespace Assets.Script.View.Service
             KeyCommands();
 
             // Movement of transform item when user select item
-            Movement();
+            MovementItem();
         }
 
-        private void Movement()
+        /// <summary>
+        /// Move item selected
+        /// </summary>
+        private void MovementItem()
         {
             if (IsBuilding && IsReadyToConstruction && BuildScreen.SelectedItem != null)
             {
@@ -48,6 +91,9 @@ namespace Assets.Script.View.Service
             }
         }
 
+        /// <summary>
+        /// Manager windows if open or not
+        /// </summary>
         private void ToggleWindows()
         {
             // BuildMenu
@@ -61,15 +107,21 @@ namespace Assets.Script.View.Service
             BuildScreen.InfoScreen.gameObject.SetActive(IsBuilding && IsReadyToSelect && IsReadyToAccept);
         }
 
+        /// <summary>
+        /// Key commands
+        /// </summary>
         private void KeyCommands()
         {
-            if (Input.GetKeyDown(KeyCode.B))
-            {
-                IsBuilding = !IsBuilding;
-            }
+            var kb = InputSystem.GetDevice<Keyboard>();
 
             if (Input.GetKeyDown(KeyCode.Mouse0) && IsBuilding && IsReadyToConstruction)
             {
+                if (!CanConstruct())
+                {
+                    Toast.Message(ToastType.Error, "Falha ao construir", "Você não pode construir aqui!");
+                    return;
+                }
+
                 // TODO: Remove necessary itens from inventory of player.
 
                 Instantiate(BuildScreen.SelectedItem, GameObject.Find("Map").transform)
@@ -85,7 +137,7 @@ namespace Assets.Script.View.Service
                 IsReadyToSelect = false;
             }
 
-            if (Input.GetKeyDown(KeyCode.Escape) && IsBuilding)
+            if (kb.escapeKey.wasPressedThisFrame && IsBuilding)
             {
                 if (BuildScreen.SelectedItem != null && IsReadyToConstruction)
                     Destroy(BuildScreen.SelectedItem);
@@ -97,6 +149,21 @@ namespace Assets.Script.View.Service
                 IsReadyToAccept = false;
                 IsBuilding = false;
             }
+        }
+
+        private bool CanConstruct()
+        {
+            var r = true;
+            foreach (var item in Utilities.GetItemsFromRayCast<GameObject>(BuildScreen.SelectedItem.transform, .10f))
+            {
+                if (item != null)
+                {
+                    r = false;
+                    break;
+                }
+            }
+
+            return r;
         }
 
         /// <summary>
@@ -127,36 +194,72 @@ namespace Assets.Script.View.Service
         /// Update screen to build list
         /// </summary>
         /// <param name="enumerator"></param>
-        public void ToggleBuildList(MachineEnumerator enumerator)
+        public void ToggleBuildList(CategoryItemEnum enumerator)
         {
-            var generatorList = BuildScreen.BuildList.transform.GetChild((int)BuildListEnum.GeneratorList);
-            var machineList = BuildScreen.BuildList.transform.GetChild((int)BuildListEnum.MachineList);
-            var pipeList = BuildScreen.BuildList.transform.GetChild((int)BuildListEnum.PipeList);
-
-            pipeList.gameObject.SetActive(false);
-            generatorList.gameObject.SetActive(false);
-            machineList.gameObject.SetActive(false);
-
-            switch (enumerator)
-            {
-                case MachineEnumerator.Generator:
-                    generatorList.gameObject.SetActive(true);
-                    break;
-
-                case MachineEnumerator.Machine:
-                    machineList.gameObject.SetActive(true);
-                    break;
-
-                case MachineEnumerator.Pipe:
-                    pipeList.gameObject.SetActive(true);
-                    break;
-
-                default:
-                    break;
-            }
-
             IsReadyToSelect = !IsReadyToSelect;
             IsReadyToAccept = false;
+
+            var list = BuildScreen.BuildList.transform.GetChild(0); // <-- List
+            var buildListItem = Resources.Load<GameObject>("Prefabs/UI/MainScreen/BuildScreen/BuildList/BuildListItem");
+
+            // reset childs
+            foreach (Transform child in list.transform)
+            {
+                if (child != null)
+                    Destroy(child.gameObject);
+            }
+
+            if (IsReadyToSelect)
+            {
+                switch (enumerator)
+                {
+                    case CategoryItemEnum.Generator:
+                        foreach (var item in GameHandler.Itens[$"{enumerator}"] as IList<GeneratorService>)
+                        {
+                            var button = FillItemBuildList(item.type, Instantiate(buildListItem, list));
+                            button.onClick.AddListener(delegate { ItemSelectedToBuild(item.gameObject); });
+                        }
+                        break;
+
+                    case CategoryItemEnum.Machine:
+                        foreach (var item in GameHandler.Itens[$"{enumerator}"] as IList<MachineService>)
+                        {
+                            var button = FillItemBuildList(item.type, Instantiate(buildListItem, list));
+                            button.onClick.AddListener(delegate { ItemSelectedToBuild(item.gameObject); });
+                        }
+                        break;
+
+                    case CategoryItemEnum.Wire:
+                        foreach (var item in GameHandler.Itens[$"{enumerator}"] as IList<WireService>)
+                        {
+                        }
+                        break;
+
+                    case CategoryItemEnum.Gas:
+                        foreach (var item in GameHandler.Itens[$"{enumerator}"] as IList<GasService>)
+                        {
+                        }
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+
+            list.gameObject.SetActive(IsReadyToSelect);
+            Button FillItemBuildList(CategoryItemModel item, GameObject i)
+            {
+                if (item != null)
+                {
+                    i.name = item.title;
+
+                    i.transform.GetChild(0).GetComponent<Image>().sprite = item.icon;
+                    i.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = item.title;
+                    return i.GetComponent<Button>();
+                }
+
+                return default;
+            }
         }
     }
 }

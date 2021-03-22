@@ -13,9 +13,9 @@ namespace Assets.Script.Util
             if (Physics.Raycast(ray, out RaycastHit hit, 15f))
             {
                 return new Vector3(
-                    Mathf.CeilToInt(hit.point.x),
+                    Mathf.CeilToInt(hit.point.x - .5f),
                     height,
-                    Mathf.CeilToInt(hit.point.z));
+                    Mathf.CeilToInt(hit.point.z - .5f));
             }
             else
             {
@@ -136,7 +136,7 @@ namespace Assets.Script.Util
             #endregion Position Raycast Start
         }
 
-        public static List<T> GetItemsFromRayCast<T>(Transform transform, float distance = 1) where T : MonoBehaviour
+        public static List<T> GetItemsFromRayCast<T>(Transform transform, float distance = 1)
         {
             var list = new List<T>();
 
