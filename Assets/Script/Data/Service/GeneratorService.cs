@@ -3,7 +3,7 @@ using Assets.Script.Util;
 using System;
 using UnityEngine;
 
-public class Generator : MonoBehaviour
+public class GeneratorService : MonoBehaviour
 {
     public GeneratorModel type;
 
@@ -21,16 +21,8 @@ public class Generator : MonoBehaviour
 
     #endregion type
 
-    private UIManager uiManager;
-
     private SpriteRenderer sprite;
-    private bool isOpen;
     private float timer;
-
-    private void Awake()
-    {
-        uiManager = GameObject.Find("GAME HANDLER").GetComponent<UIManager>();
-    }
 
     public void Start()
     {
@@ -52,12 +44,6 @@ public class Generator : MonoBehaviour
         Amount = 1;
     }
 
-    public void Update()
-    {
-        if (uiManager != null)
-            GeneratorInterface();
-    }
-
     private void FixedUpdate()
     {
         if (TimerRun.Run(1f, ref timer))
@@ -72,49 +58,49 @@ public class Generator : MonoBehaviour
         if (Buffer > MaxBuffer) Buffer = MaxBuffer;
     }
 
-    private void GeneratorInterface()
-    {
-        try
-        {
-            var ray = Utilities.GetRaycastHitFromScreenPoint();
-            if (ray.HasValue)
-            {
-                if (ray.GetValueOrDefault().collider.name.Contains(Title))
-                {
-                    if (Input.GetKeyDown(KeyCode.Mouse0) && !uiManager.IsOpen)
-                    {
-                        isOpen = true;
-                    }
-                }
-            }
+    //private void GeneratorInterface()
+    //{
+    //    try
+    //    {
+    //        var ray = Utilities.GetRaycastHitFromScreenPoint();
+    //        if (ray.HasValue)
+    //        {
+    //            if (ray.GetValueOrDefault().collider.name.Contains(Title))
+    //            {
+    //                if (Input.GetKeyDown(KeyCode.Mouse0) && !uiManager.IsOpen)
+    //                {
+    //                    isOpen = true;
+    //                }
+    //            }
+    //        }
 
-            if (Input.GetKeyDown(KeyCode.Escape) && uiManager.IsOpen && isOpen)
-            {
-                isOpen = false;
-                uiManager.CloseInterfaceItens();
-            }
+    //        if (Input.GetKeyDown(KeyCode.Escape) && uiManager.IsOpen && isOpen)
+    //        {
+    //            isOpen = false;
+    //            uiManager.CloseInterfaceItens();
+    //        }
 
-            if (isOpen)
-            {
-                //UIManager.Item = new InterfaceItem
-                //{
-                //    Title = Title,
-                //    Buffer = Buffer,
-                //    MaxBuffer = MaxBuffer,
-                //    ProcessTime = ProcessTime,
-                //    MaxProcessTime = MaxProcessTime,
-                //    PowerConsume = PowerGenerator
-                //};
+    //        if (isOpen)
+    //        {
+    //            //UIManager.Item = new InterfaceItem
+    //            //{
+    //            //    Title = Title,
+    //            //    Buffer = Buffer,
+    //            //    MaxBuffer = MaxBuffer,
+    //            //    ProcessTime = ProcessTime,
+    //            //    MaxProcessTime = MaxProcessTime,
+    //            //    PowerConsume = PowerGenerator
+    //            //};
 
-                uiManager.ShowInterfaceItens();
-            }
-        }
-        catch (Exception ex)
-        {
-            Toast.Message(ToastType.Error, "Exception", ex.Message);
-            Debug.LogException(ex);
-        }
-    }
+    //            uiManager.ShowInterfaceItens();
+    //        }
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        Toast.Message(ToastType.Error, "Exception", ex.Message);
+    //        Debug.LogException(ex);
+    //    }
+    //}
 
     public int GetBufferFromRate(int powerConsume)
     {

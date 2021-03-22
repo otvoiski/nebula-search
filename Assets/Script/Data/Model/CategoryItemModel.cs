@@ -3,10 +3,10 @@ using UnityEngine;
 
 namespace Assets.Script.Data.Model
 {
-    public abstract class CategoryItenModel : ScriptableObject
+    public abstract class CategoryItemModel : ScriptableObject
     {
         public string title;
-        public CategoryItenEnum categoy;
+        public CategoryItemEnum categoy;
         public Sprite icon;
         public Material[] inputs;
         public Material[] outputs;

@@ -758,7 +758,7 @@ GameObject:
   - component: {fileID: 6998537299779995338}
   - component: {fileID: 5850825422981489427}
   m_Layer: 0
-  m_Name: GasStorage
+  m_Name: Oxygen Storage
   m_TagString: Machine
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -802,13 +802,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 6998537299779995339}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1c03d270a1a785e4cb6379c4d352d3b8, type: 3}
+  m_Script: {fileID: 11500000, guid: 7421e37a23085ea48a56c2e2ea9fa2c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Type: {fileID: 11400000, guid: 691ddf8316cf2684a835a48e17e84c3e, type: 2}
-  Debug: 0
-  buffer: 0
-  timeProcess: 0
+  type: {fileID: 11400000, guid: 691ddf8316cf2684a835a48e17e84c3e, type: 2}
+  debug: 0
 --- !u!1 &6998537301185563500
 GameObject:
   m_ObjectHideFlags: 0

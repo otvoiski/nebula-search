@@ -2,7 +2,7 @@
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Generator", menuName = "Itens/Generator")]
-public class GeneratorModel : CategoryItenModel
+public class GeneratorModel : CategoryItemModel
 {
     public int powerGenerator;
     public int maxBuffer;

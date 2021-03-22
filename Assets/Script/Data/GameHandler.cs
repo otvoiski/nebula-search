@@ -26,42 +26,49 @@ public class GameHandler : MonoBehaviour
 
     private void LoadItens()
     {
-        var itens = Resources.LoadAll<GameObject>("Itens");
+        Itens = new Dictionary<string, IList>();
 
-        var generators = new List<GeneratorModel>();
-        var machines = new List<MachineModel>();
-        var pipes = new List<PipeModel>();
+        var itens = Resources.LoadAll<GameObject>("Itens") as GameObject[];
+
+        var generators = new List<GeneratorService>();
+        var machines = new List<MachineService>();
+        var wires = new List<WireService>();
+        var gases = new List<GasService>();
         foreach (var item in itens)
         {
-            var category = item.GetComponent<CategoryItenModel>();
-            switch (category.categoy)
+            var generator = item.GetComponent<GeneratorService>();
+            if (generator != null)
             {
-                case CategoryItenEnum.Generator:
-                    generators.Add(item.GetComponent<GeneratorModel>());
-                    break;
+                generators.Add(item.GetComponent<GeneratorService>());
+                continue;
+            }
 
-                case CategoryItenEnum.Machine:
-                    machines.Add(item.GetComponent<MachineModel>());
-                    break;
+            var machine = item.GetComponent<MachineService>();
+            if (machine != null)
+            {
+                machines.Add(item.GetComponent<MachineService>());
+                continue;
+            }
 
-                case CategoryItenEnum.Pipe:
-                    pipes.Add(item.GetComponent<PipeModel>());
-                    break;
+            var wire = item.GetComponent<WireService>();
+            if (wire != null)
+            {
+                wires.Add(item.GetComponent<WireService>());
+                continue;
+            }
 
-                case CategoryItenEnum.Floor:
-                    break;
-
-                case CategoryItenEnum.Wall:
-                    break;
-
-                default:
-                    break;
+            var gas = item.GetComponent<GasService>();
+            if (gas != null)
+            {
+                gases.Add(item.GetComponent<GasService>());
+                continue;
             }
         }
 
-        Itens.Add($"{CategoryItenEnum.Generator}", generators);
-        Itens.Add($"{CategoryItenEnum.Machine}", machines);
-        Itens.Add($"{CategoryItenEnum.Pipe}", pipes);
+        Itens.Add($"{CategoryItemEnum.Generator}", generators);
+        Itens.Add($"{CategoryItemEnum.Machine}", machines);
+        Itens.Add($"{CategoryItemEnum.Wire}", wires);
+        Itens.Add($"{CategoryItemEnum.Gas}", gases);
     }
 
     private void OnEnable()

@@ -2,7 +2,7 @@
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Machine", menuName = "Itens/Machine")]
-public class MachineModel : CategoryItenModel
+public class MachineModel : CategoryItemModel
 {
     public int maxBuffer;
     public int powerConsume;
