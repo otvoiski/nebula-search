@@ -12,9 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d95f19ef47b4743409e5890d178e38be, type: 3}
   m_Name: Hydrogen Storage
   m_EditorClassIdentifier: 
-  title: Gas Storage
+  title: Hydrogen Storage
+  categoy: 1
+  icon: {fileID: 21300000, guid: 99d10ee2131df564f85aeb9f630435a2, type: 3}
+  inputs: 03000000
+  outputs: 03000000
   maxBuffer: 5000
   powerConsume: 60
   maxProcessTime: 32
-  inputs: 03000000
-  outputs: 03000000
