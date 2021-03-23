@@ -94,11 +94,13 @@
     <Compile Include="Assets\Script\Data\Util\TimerRun.cs" />
     <Compile Include="Assets\Script\Data\Util\Toast.cs" />
     <Compile Include="Assets\Script\Data\Util\Utilities.cs" />
-    <Compile Include="Assets\Script\View\Enumerator\BuildListEnum.cs" />
-    <Compile Include="Assets\Script\View\Enumerator\BuildMenuEnum.cs" />
-    <Compile Include="Assets\Script\View\Enumerator\MainScreenEnum.cs" />
-    <Compile Include="Assets\Script\View\Enumerator\WindowsMachineEnum.cs" />
+    <Compile Include="Assets\Script\View\Enum\BuildListEnum.cs" />
+    <Compile Include="Assets\Script\View\Enum\BuildMenuEnum.cs" />
+    <Compile Include="Assets\Script\View\Enum\DeveloperConsoleEnum.cs" />
+    <Compile Include="Assets\Script\View\Enum\MainScreenEnum.cs" />
+    <Compile Include="Assets\Script\View\Enum\WindowsMachineEnum.cs" />
     <Compile Include="Assets\Script\View\Model\BuildScreenModel.cs" />
+    <Compile Include="Assets\Script\View\Model\DeveloperConsoleModel.cs" />
     <Compile Include="Assets\Script\View\Model\MainScreenModel.cs" />
     <Compile Include="Assets\Script\View\Model\WindowsMachineItemModel.cs" />
     <Compile Include="Assets\Script\View\Model\WindowsMachineModel.cs" />

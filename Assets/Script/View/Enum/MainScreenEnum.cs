@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Assets.Script.View.Enumerator
+namespace Assets.Script.View.Enum
 {
     public enum MainScreenEnum
     {

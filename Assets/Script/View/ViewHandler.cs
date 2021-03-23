@@ -1,9 +1,8 @@
 ﻿using Assets.Script.Data.Enum;
 using Assets.Script.Data.Util.DeveloperConsole;
-using Assets.Script.View.Enumerator;
+using Assets.Script.View.Enum;
 using Assets.Script.View.Model;
 using Assets.Script.View.Service;
-using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -13,7 +12,10 @@ namespace Assets.Script.View
 {
     public class ViewHandler : MonoBehaviour
     {
+        [Header("UI")] public static int LimitTextConsoleItem;
+
         public WindowsMachineService WindowsMachineService { get; private set; }
+        public DeveloperConsoleBehaviour DeveloperConsoleBehaviour { get; private set; }
         public BuilderScreenService BuilderScreenService { get; private set; }
         public MainScreenModel MainScreen { get; private set; }
 
@@ -21,6 +23,8 @@ namespace Assets.Script.View
 
         private void Awake()
         {
+            LimitTextConsoleItem = 100;
+
             #region Input
 
             input = new InputMaster();
@@ -38,6 +42,7 @@ namespace Assets.Script.View
                 .AddComponent<MainScreenModel>();
             MainScreen.BottomBar = mainScreen.GetChild((int)MainScreenEnum.BottomBar);
             MainScreen.Toast = mainScreen.GetChild((int)MainScreenEnum.Toast);
+
             MainScreen.WindowsMachine = mainScreen.GetChild((int)MainScreenEnum.WindowsMachine).gameObject
                 .AddComponent<WindowsMachineModel>();
             MainScreen.WindowsMachine.Title = MainScreen.WindowsMachine.transform.GetChild((int)WindowsMachineEnum.Title);
@@ -46,13 +51,17 @@ namespace Assets.Script.View
             MainScreen.WindowsMachine.Button = MainScreen.WindowsMachine.transform.GetChild((int)WindowsMachineEnum.Button);
             MainScreen.WindowsMachine.ProcessMenu = MainScreen.WindowsMachine.transform.GetChild((int)WindowsMachineEnum.ProcessMenu);
             MainScreen.WindowsMachine.Info = MainScreen.WindowsMachine.transform.GetChild((int)WindowsMachineEnum.Info);
+
             MainScreen.BuildScreen = mainScreen.GetChild((int)MainScreenEnum.BuildScreen).gameObject
                 .AddComponent<BuildScreenModel>();
             MainScreen.BuildScreen.BuildMenu = MainScreen.BuildScreen.transform.GetChild((int)BuildMenuEnum.BuildMenu);
             MainScreen.BuildScreen.BuildList = MainScreen.BuildScreen.transform.GetChild((int)BuildMenuEnum.BuildList);
             MainScreen.BuildScreen.InfoScreen = MainScreen.BuildScreen.transform.GetChild((int)BuildMenuEnum.InfoScreen);
+
             MainScreen.DeveloperConsole = mainScreen.GetChild((int)MainScreenEnum.DeveloperConsole).gameObject
-                .GetComponent<DeveloperConsoleBehaviour>();
+                .AddComponent<DeveloperConsoleModel>();
+            MainScreen.DeveloperConsole.Input = MainScreen.DeveloperConsole.transform.GetChild((int)DeveloperConsoleEnum.Input);
+            MainScreen.DeveloperConsole.ScrollView = MainScreen.DeveloperConsole.transform.GetChild((int)DeveloperConsoleEnum.ScrollView);
 
             #endregion General
         }
@@ -63,6 +72,8 @@ namespace Assets.Script.View
                 .AddComponent<BuilderScreenService>();
             WindowsMachineService = MainScreen.WindowsMachine.gameObject
                 .AddComponent<WindowsMachineService>();
+            DeveloperConsoleBehaviour = MainScreen.DeveloperConsole.gameObject
+                .GetComponent<DeveloperConsoleBehaviour>();
 
             BuilderScreenService.Setup(MainScreen.BuildScreen);
             WindowsMachineService.Setup(MainScreen.WindowsMachine);
@@ -74,10 +85,10 @@ namespace Assets.Script.View
         {
             input.Enable();
             input.UI.ToggleBuildScreen.performed += ToggleBuildMenu;
-            input.Developer.ToggleConsole.performed += StartTest;
+            input.Developer.ToggleConsole.performed += ShowDeveloperConsole;
         }
 
-        private void StartTest(CallbackContext context)
+        private void ShowDeveloperConsole(CallbackContext context)
         {
             if (!context.action.triggered) { return; }
 

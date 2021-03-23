@@ -1,4 +1,4 @@
-﻿namespace Assets.Script.View.Enumerator
+﻿namespace Assets.Script.View.Enum
 {
     public enum BuildListEnum
     {

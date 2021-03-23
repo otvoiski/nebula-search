@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 namespace Assets.Script.Data.Util.DeveloperConsole
 {
@@ -7,11 +8,21 @@ namespace Assets.Script.Data.Util.DeveloperConsole
     {
         public override bool Process(string[] args)
         {
-            string logText = string.Join(" ", args);
+            string text = string.Join(" ", args);
 
-            Debug.Log(logText);
+            if (string.IsNullOrEmpty(text))
+            {
+                var t = PrintOnConsole(text);
+                t.text = $"You dont said nothing!";
+                t.color = Color.red;
 
-            return true;
+                return false;
+            }
+            else
+            {
+                PrintOnConsole(text).text = $"You said: {text}";
+                return true;
+            }
         }
     }
 }

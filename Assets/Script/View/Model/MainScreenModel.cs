@@ -9,6 +9,6 @@ namespace Assets.Script.View.Model
         public Transform Toast { get; set; }
         public WindowsMachineModel WindowsMachine { get; set; }
         public BuildScreenModel BuildScreen { get; set; }
-        public DeveloperConsoleBehaviour DeveloperConsole { get; internal set; }
+        public DeveloperConsoleModel DeveloperConsole { get; internal set; }
     }
 }
