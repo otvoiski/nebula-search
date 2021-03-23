@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace Assets.Script.Data.Util.DeveloperConsole
 {
@@ -16,5 +18,18 @@ namespace Assets.Script.Data.Util.DeveloperConsole
         public string CommandWord => commandWord;
 
         public abstract bool Process(string[] args);
+
+        public void PrintConsole(string log)
+        {
+            ListView myListView = new ListView();
+
+            myListView.Q<ScrollView>().Query<Scroller>().ForEach(scroller =>
+            {
+                scroller.RegisterCallback<PointerDownEvent>((e) =>
+                {
+                    //set autoScroll to false
+                }, TrickleDown.TrickleDown);
+            });
+        }
     }
 }
