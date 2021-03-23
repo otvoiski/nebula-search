@@ -116,6 +116,33 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""Developer"",
+            ""id"": ""3dcc4b8d-92e7-4959-b42e-7465dbdc8a82"",
+            ""actions"": [
+                {
+                    ""name"": ""Toggle Console"",
+                    ""type"": ""Button"",
+                    ""id"": ""e874a72c-8e3d-4ebd-8648-3ed69f0a6cf0"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""441c3593-b766-4e5e-8bcb-450896c55e04"",
+                    ""path"": ""<Keyboard>/backquote"",
+                    ""interactions"": ""Press"",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard & Mouse"",
+                    ""action"": ""Toggle Console"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": [
@@ -145,6 +172,9 @@ public class @InputMaster : IInputActionCollection, IDisposable
         // ToastTest
         m_ToastTest = asset.FindActionMap("ToastTest", throwIfNotFound: true);
         m_ToastTest_ShowToast = m_ToastTest.FindAction("ShowToast", throwIfNotFound: true);
+        // Developer
+        m_Developer = asset.FindActionMap("Developer", throwIfNotFound: true);
+        m_Developer_ToggleConsole = m_Developer.FindAction("Toggle Console", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -272,6 +302,39 @@ public class @InputMaster : IInputActionCollection, IDisposable
         }
     }
     public ToastTestActions @ToastTest => new ToastTestActions(this);
+
+    // Developer
+    private readonly InputActionMap m_Developer;
+    private IDeveloperActions m_DeveloperActionsCallbackInterface;
+    private readonly InputAction m_Developer_ToggleConsole;
+    public struct DeveloperActions
+    {
+        private @InputMaster m_Wrapper;
+        public DeveloperActions(@InputMaster wrapper) { m_Wrapper = wrapper; }
+        public InputAction @ToggleConsole => m_Wrapper.m_Developer_ToggleConsole;
+        public InputActionMap Get() { return m_Wrapper.m_Developer; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(DeveloperActions set) { return set.Get(); }
+        public void SetCallbacks(IDeveloperActions instance)
+        {
+            if (m_Wrapper.m_DeveloperActionsCallbackInterface != null)
+            {
+                @ToggleConsole.started -= m_Wrapper.m_DeveloperActionsCallbackInterface.OnToggleConsole;
+                @ToggleConsole.performed -= m_Wrapper.m_DeveloperActionsCallbackInterface.OnToggleConsole;
+                @ToggleConsole.canceled -= m_Wrapper.m_DeveloperActionsCallbackInterface.OnToggleConsole;
+            }
+            m_Wrapper.m_DeveloperActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @ToggleConsole.started += instance.OnToggleConsole;
+                @ToggleConsole.performed += instance.OnToggleConsole;
+                @ToggleConsole.canceled += instance.OnToggleConsole;
+            }
+        }
+    }
+    public DeveloperActions @Developer => new DeveloperActions(this);
     private int m_KeyboardMouseSchemeIndex = -1;
     public InputControlScheme KeyboardMouseScheme
     {
@@ -290,5 +353,9 @@ public class @InputMaster : IInputActionCollection, IDisposable
     public interface IToastTestActions
     {
         void OnShowToast(InputAction.CallbackContext context);
+    }
+    public interface IDeveloperActions
+    {
+        void OnToggleConsole(InputAction.CallbackContext context);
     }
 }

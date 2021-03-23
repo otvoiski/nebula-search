@@ -11,6 +11,7 @@ namespace Assets.Script.View.Enumerator
         BottomBar,
         Toast,
         WindowsMachine,
-        BuildScreen
+        BuildScreen,
+        DeveloperConsole
     }
 }
