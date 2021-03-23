@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Assets.Script.Data.Util.DeveloperConsole;
+using UnityEngine;
 
 namespace Assets.Script.View.Model
 {
@@ -8,5 +9,6 @@ namespace Assets.Script.View.Model
         public Transform Toast { get; set; }
         public WindowsMachineModel WindowsMachine { get; set; }
         public BuildScreenModel BuildScreen { get; set; }
+        public DeveloperConsoleModel DeveloperConsole { get; internal set; }
     }
 }

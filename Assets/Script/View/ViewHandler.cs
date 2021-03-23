@@ -1,29 +1,33 @@
 ﻿using Assets.Script.Data.Enum;
-using Assets.Script.View.Enumerator;
+using Assets.Script.Data.Util.DeveloperConsole;
+using Assets.Script.View.Enum;
 using Assets.Script.View.Model;
 using Assets.Script.View.Service;
-using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
+using static UnityEngine.InputSystem.InputAction;
 
 namespace Assets.Script.View
 {
     public class ViewHandler : MonoBehaviour
     {
+        [Header("UI")] public static int LimitTextConsoleItem;
+
         public WindowsMachineService WindowsMachineService { get; private set; }
+        public DeveloperConsoleBehaviour DeveloperConsoleBehaviour { get; private set; }
         public BuilderScreenService BuilderScreenService { get; private set; }
         public MainScreenModel MainScreen { get; private set; }
 
-        private InputMaster _input;
+        private InputMaster input;
 
         private void Awake()
         {
+            LimitTextConsoleItem = 100;
+
             #region Input
 
-            _input = new InputMaster();
-
-            _input.UI.ToggleBuildScreen.performed += ToggleBuildMenu;
+            input = new InputMaster();
 
             #endregion Input
 
@@ -38,6 +42,7 @@ namespace Assets.Script.View
                 .AddComponent<MainScreenModel>();
             MainScreen.BottomBar = mainScreen.GetChild((int)MainScreenEnum.BottomBar);
             MainScreen.Toast = mainScreen.GetChild((int)MainScreenEnum.Toast);
+
             MainScreen.WindowsMachine = mainScreen.GetChild((int)MainScreenEnum.WindowsMachine).gameObject
                 .AddComponent<WindowsMachineModel>();
             MainScreen.WindowsMachine.Title = MainScreen.WindowsMachine.transform.GetChild((int)WindowsMachineEnum.Title);
@@ -46,18 +51,19 @@ namespace Assets.Script.View
             MainScreen.WindowsMachine.Button = MainScreen.WindowsMachine.transform.GetChild((int)WindowsMachineEnum.Button);
             MainScreen.WindowsMachine.ProcessMenu = MainScreen.WindowsMachine.transform.GetChild((int)WindowsMachineEnum.ProcessMenu);
             MainScreen.WindowsMachine.Info = MainScreen.WindowsMachine.transform.GetChild((int)WindowsMachineEnum.Info);
+
             MainScreen.BuildScreen = mainScreen.GetChild((int)MainScreenEnum.BuildScreen).gameObject
                 .AddComponent<BuildScreenModel>();
             MainScreen.BuildScreen.BuildMenu = MainScreen.BuildScreen.transform.GetChild((int)BuildMenuEnum.BuildMenu);
             MainScreen.BuildScreen.BuildList = MainScreen.BuildScreen.transform.GetChild((int)BuildMenuEnum.BuildList);
             MainScreen.BuildScreen.InfoScreen = MainScreen.BuildScreen.transform.GetChild((int)BuildMenuEnum.InfoScreen);
 
-            #endregion General
-        }
+            MainScreen.DeveloperConsole = mainScreen.GetChild((int)MainScreenEnum.DeveloperConsole).gameObject
+                .AddComponent<DeveloperConsoleModel>();
+            MainScreen.DeveloperConsole.Input = MainScreen.DeveloperConsole.transform.GetChild((int)DeveloperConsoleEnum.Input);
+            MainScreen.DeveloperConsole.ScrollView = MainScreen.DeveloperConsole.transform.GetChild((int)DeveloperConsoleEnum.ScrollView);
 
-        public GameObject GetWindowsMachine()
-        {
-            return MainScreen.WindowsMachine.gameObject;
+            #endregion General
         }
 
         private void Start()
@@ -66,9 +72,45 @@ namespace Assets.Script.View
                 .AddComponent<BuilderScreenService>();
             WindowsMachineService = MainScreen.WindowsMachine.gameObject
                 .AddComponent<WindowsMachineService>();
+            DeveloperConsoleBehaviour = MainScreen.DeveloperConsole.gameObject
+                .GetComponent<DeveloperConsoleBehaviour>();
 
             BuilderScreenService.Setup(MainScreen.BuildScreen);
             WindowsMachineService.Setup(MainScreen.WindowsMachine);
+
+            DontDestroyOnLoad(gameObject);
+        }
+
+        private void OnEnable()
+        {
+            input.Enable();
+            input.UI.ToggleBuildScreen.performed += ToggleBuildMenu;
+            input.Developer.ToggleConsole.performed += ShowDeveloperConsole;
+        }
+
+        private void ShowDeveloperConsole(CallbackContext context)
+        {
+            if (!context.action.triggered) { return; }
+
+            if (MainScreen.DeveloperConsole.gameObject.activeSelf)
+            {
+                MainScreen.DeveloperConsole.gameObject.SetActive(false);
+            }
+            else
+            {
+                MainScreen.DeveloperConsole.gameObject.SetActive(true);
+                MainScreen.DeveloperConsole.transform.GetChild(0).GetComponent<TMPro.TMP_InputField>().ActivateInputField();
+            }
+        }
+
+        private void OnDisable()
+        {
+            input.Disable();
+        }
+
+        public GameObject GetWindowsMachine()
+        {
+            return MainScreen.WindowsMachine.gameObject;
         }
 
         public void CloseInterfaceMachine()
@@ -79,14 +121,6 @@ namespace Assets.Script.View
         public void ShowInterfaceMachine(WindowsMachineItemModel model)
         {
             WindowsMachineService.ShowInterfaceMachine(model);
-        }
-
-        private void Update()
-        {
-            if (string.IsNullOrEmpty(MainScreen.BottomBar.GetComponentInChildren<Text>().text))
-                MainScreen.BottomBar.GetComponentInChildren<Text>().text = VersionIncrementor.version;
-
-            BuilderScreenService.ToggleWindowsBuild();
         }
 
         public void ToggleBuildMenu(InputAction.CallbackContext obj)
@@ -109,14 +143,12 @@ namespace Assets.Script.View
             BuilderScreenService.AcceptToBuildMoveTransformSelectedItem();
         }
 
-        private void OnEnable()
+        private void Update()
         {
-            _input.Enable();
-        }
+            if (string.IsNullOrEmpty(MainScreen.BottomBar.GetComponentInChildren<Text>().text))
+                MainScreen.BottomBar.GetComponentInChildren<Text>().text = VersionIncrementor.version;
 
-        private void OnDisable()
-        {
-            _input.Disable();
+            BuilderScreenService.ToggleWindowsBuild();
         }
     }
 }

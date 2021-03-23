@@ -2,9 +2,7 @@
 using Assets.Script.Data.Model;
 using Assets.Script.Enumerator;
 using Assets.Script.Util;
-using Assets.Script.View.Enumerator;
 using Assets.Script.View.Model;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;

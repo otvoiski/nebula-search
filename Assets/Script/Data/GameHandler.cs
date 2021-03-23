@@ -22,6 +22,8 @@ public class GameHandler : MonoBehaviour
         Locate.LoadLocate(Language.BR);
 
         LoadItens();
+
+        DontDestroyOnLoad(gameObject);
     }
 
     private void LoadItens()
