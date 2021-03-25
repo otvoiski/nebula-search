@@ -78,33 +78,6 @@
             ]
         },
         {
-            "name": "ToastTest",
-            "id": "6f576464-1abd-43ca-bfdc-0b3fdfbf501b",
-            "actions": [
-                {
-                    "name": "ShowToast",
-                    "type": "Button",
-                    "id": "c5cdb34a-ba61-4abb-a9a8-c520bfb08eb0",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": ""
-                }
-            ],
-            "bindings": [
-                {
-                    "name": "",
-                    "id": "a95a1c00-0a57-448b-b207-7d8b41b2dfd2",
-                    "path": "<Keyboard>/x",
-                    "interactions": "Press",
-                    "processors": "",
-                    "groups": "Keyboard & Mouse",
-                    "action": "ShowToast",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                }
-            ]
-        },
-        {
             "name": "Developer",
             "id": "3dcc4b8d-92e7-4959-b42e-7465dbdc8a82",
             "actions": [

@@ -91,33 +91,6 @@ public class @InputMaster : IInputActionCollection, IDisposable
             ]
         },
         {
-            ""name"": ""ToastTest"",
-            ""id"": ""6f576464-1abd-43ca-bfdc-0b3fdfbf501b"",
-            ""actions"": [
-                {
-                    ""name"": ""ShowToast"",
-                    ""type"": ""Button"",
-                    ""id"": ""c5cdb34a-ba61-4abb-a9a8-c520bfb08eb0"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """"
-                }
-            ],
-            ""bindings"": [
-                {
-                    ""name"": """",
-                    ""id"": ""a95a1c00-0a57-448b-b207-7d8b41b2dfd2"",
-                    ""path"": ""<Keyboard>/x"",
-                    ""interactions"": ""Press"",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard & Mouse"",
-                    ""action"": ""ShowToast"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                }
-            ]
-        },
-        {
             ""name"": ""Developer"",
             ""id"": ""3dcc4b8d-92e7-4959-b42e-7465dbdc8a82"",
             ""actions"": [
@@ -169,9 +142,6 @@ public class @InputMaster : IInputActionCollection, IDisposable
         m_UI_ToggleBuildScreen = m_UI.FindAction("Toggle Build Screen", throwIfNotFound: true);
         m_UI_EscapeBuildScreen = m_UI.FindAction("Escape Build Screen", throwIfNotFound: true);
         m_UI_ToggleMachineScreen = m_UI.FindAction("Toggle Machine Screen", throwIfNotFound: true);
-        // ToastTest
-        m_ToastTest = asset.FindActionMap("ToastTest", throwIfNotFound: true);
-        m_ToastTest_ShowToast = m_ToastTest.FindAction("ShowToast", throwIfNotFound: true);
         // Developer
         m_Developer = asset.FindActionMap("Developer", throwIfNotFound: true);
         m_Developer_ToggleConsole = m_Developer.FindAction("Toggle Console", throwIfNotFound: true);
@@ -270,39 +240,6 @@ public class @InputMaster : IInputActionCollection, IDisposable
     }
     public UIActions @UI => new UIActions(this);
 
-    // ToastTest
-    private readonly InputActionMap m_ToastTest;
-    private IToastTestActions m_ToastTestActionsCallbackInterface;
-    private readonly InputAction m_ToastTest_ShowToast;
-    public struct ToastTestActions
-    {
-        private @InputMaster m_Wrapper;
-        public ToastTestActions(@InputMaster wrapper) { m_Wrapper = wrapper; }
-        public InputAction @ShowToast => m_Wrapper.m_ToastTest_ShowToast;
-        public InputActionMap Get() { return m_Wrapper.m_ToastTest; }
-        public void Enable() { Get().Enable(); }
-        public void Disable() { Get().Disable(); }
-        public bool enabled => Get().enabled;
-        public static implicit operator InputActionMap(ToastTestActions set) { return set.Get(); }
-        public void SetCallbacks(IToastTestActions instance)
-        {
-            if (m_Wrapper.m_ToastTestActionsCallbackInterface != null)
-            {
-                @ShowToast.started -= m_Wrapper.m_ToastTestActionsCallbackInterface.OnShowToast;
-                @ShowToast.performed -= m_Wrapper.m_ToastTestActionsCallbackInterface.OnShowToast;
-                @ShowToast.canceled -= m_Wrapper.m_ToastTestActionsCallbackInterface.OnShowToast;
-            }
-            m_Wrapper.m_ToastTestActionsCallbackInterface = instance;
-            if (instance != null)
-            {
-                @ShowToast.started += instance.OnShowToast;
-                @ShowToast.performed += instance.OnShowToast;
-                @ShowToast.canceled += instance.OnShowToast;
-            }
-        }
-    }
-    public ToastTestActions @ToastTest => new ToastTestActions(this);
-
     // Developer
     private readonly InputActionMap m_Developer;
     private IDeveloperActions m_DeveloperActionsCallbackInterface;
@@ -349,10 +286,6 @@ public class @InputMaster : IInputActionCollection, IDisposable
         void OnToggleBuildScreen(InputAction.CallbackContext context);
         void OnEscapeBuildScreen(InputAction.CallbackContext context);
         void OnToggleMachineScreen(InputAction.CallbackContext context);
-    }
-    public interface IToastTestActions
-    {
-        void OnShowToast(InputAction.CallbackContext context);
     }
     public interface IDeveloperActions
     {

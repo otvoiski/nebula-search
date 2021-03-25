@@ -57,10 +57,14 @@ namespace Assets.Script.View.Service
         /// <summary>
         /// Togle building variable
         /// </summary>
-        public bool ToggleBuildMenu()
+        public bool ToggleBuildMenu(bool isBuilding)
         {
-            IsBuilding = !IsBuilding;
-            return IsBuilding;
+            IsBuilding = isBuilding;
+
+            return isBuilding;
+
+            //IsBuilding = !IsBuilding;
+            //return IsBuilding;
         }
 
         /// <summary>
@@ -193,7 +197,7 @@ namespace Assets.Script.View.Service
         /// Update screen to build list
         /// </summary>
         /// <param name="enumerator"></param>
-        public void ToggleBuildList(CategoryItemEnum enumerator)
+        public bool ToggleBuildList(CategoryItemEnum enumerator)
         {
             IsReadyToSelect = !IsReadyToSelect;
             IsReadyToAccept = false;
@@ -259,6 +263,7 @@ namespace Assets.Script.View.Service
 
                 return default;
             }
+            return IsReadyToSelect;
         }
     }
 }
