@@ -29,7 +29,10 @@ namespace Assets.Script.View.Service
             var closeButton = windowsMachine.Title.Find(CLOSE_BUTTON).GetComponent<Button>();
             var infoButton = windowsMachine.Button.Find(INFO_BUTTON).GetComponent<Button>();
 
-            closeButton.GetComponent<Button>().onClick.AddListener(delegate { CloseInterfaceMachine(); });
+            closeButton.GetComponent<Button>().onClick.AddListener(delegate
+            {
+                GameObject.Find("VIEW HANDLER").GetComponent<ViewHandler>().CloseInterfaceMachine();
+            });
             infoButton.GetComponent<Button>().onClick.AddListener(delegate { ShowInfoMachine(); });
         }
 
@@ -48,21 +51,19 @@ namespace Assets.Script.View.Service
             LoadIOReset();
             LoadInventoryReset();
             LoadInfoReset();
-
-            windowsMachine.gameObject.SetActive(false);
         }
 
-        public void ShowInterfaceMachine(WindowsMachineItemModel model)
+        public void UpdateInterfaceMachine(WindowsMachineItemModel model)
         {
             windowsMachineItemModelStatic = model;
-
-            ChangeTitle();
-            LoadProcess();
-            LoadIO();
-            LoadInventory();
-            LoadInfo();
-
-            windowsMachine.gameObject.SetActive(true);
+            if (windowsMachineItemModelStatic != null)
+            {
+                ChangeTitle();
+                LoadProcess();
+                LoadIO();
+                LoadInventory();
+                LoadInfo();
+            }
         }
 
         private void ChangeTitle()

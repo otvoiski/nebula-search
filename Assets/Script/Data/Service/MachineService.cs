@@ -106,32 +106,29 @@ public class MachineService : MonoBehaviour
             {
                 if (ray.GetValueOrDefault().collider.name.Contains(Title))
                 {
-                    if (Input.GetKeyDown(KeyCode.Mouse0) && !_viewHandler.GetWindowsMachine().activeSelf)
+                    if (Input.GetKeyDown(KeyCode.Mouse0))
                     {
-                        _viewHandler.GetWindowsMachine().SetActive(true);
+                        _viewHandler.ShowInterfaceMachine();
                     }
                 }
             }
 
-            if (Input.GetKeyDown(KeyCode.Escape) && _viewHandler.GetWindowsMachine().activeSelf)
+            if (Input.GetKeyDown(KeyCode.Escape))
             {
                 _viewHandler.CloseInterfaceMachine();
             }
 
-            if (_viewHandler.GetWindowsMachine().activeSelf)
+            _viewHandler.UpdateInterfaceMachine(new WindowsMachineItemModel
             {
-                _viewHandler.ShowInterfaceMachine(new WindowsMachineItemModel
-                {
-                    buffer = Buffer,
-                    maxBuffer = MaxBuffer,
-                    maxProcessTime = MaxProcessTime,
-                    powerGenerator = PowerConsume,
-                    processTime = ProcessTime,
-                    title = Title,
-                    InputAmount = Inputs.Count,
-                    OutputAmount = Outputs.Count
-                });
-            }
+                buffer = Buffer,
+                maxBuffer = MaxBuffer,
+                maxProcessTime = MaxProcessTime,
+                powerGenerator = PowerConsume,
+                processTime = ProcessTime,
+                title = Title,
+                InputAmount = Inputs.Count,
+                OutputAmount = Outputs.Count
+            });
         }
         catch (Exception ex)
         {

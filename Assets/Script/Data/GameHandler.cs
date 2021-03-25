@@ -13,8 +13,6 @@ public class GameHandler : MonoBehaviour
     private void Awake()
     {
         _input = new InputMaster();
-
-        _input.ToastTest.ShowToast.performed += _ => Toast.Message(ToastType.Success, "Teste", "Menssage teste!");
     }
 
     private void Start()

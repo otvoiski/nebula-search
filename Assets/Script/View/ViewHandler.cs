@@ -3,6 +3,7 @@ using Assets.Script.Data.Util.DeveloperConsole;
 using Assets.Script.View.Enum;
 using Assets.Script.View.Model;
 using Assets.Script.View.Service;
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -19,7 +20,9 @@ namespace Assets.Script.View
         public BuilderScreenService BuilderScreenService { get; private set; }
         public MainScreenModel MainScreen { get; private set; }
 
-        private InputMaster input;
+        private InputMaster _input;
+
+        private bool _isOpen;
 
         private void Awake()
         {
@@ -27,7 +30,7 @@ namespace Assets.Script.View
 
             #region Input
 
-            input = new InputMaster();
+            _input = new InputMaster();
 
             #endregion Input
 
@@ -78,54 +81,77 @@ namespace Assets.Script.View
             BuilderScreenService.Setup(MainScreen.BuildScreen);
             WindowsMachineService.Setup(MainScreen.WindowsMachine);
 
+            _isOpen = false;
+
             DontDestroyOnLoad(gameObject);
         }
 
         private void OnEnable()
         {
-            input.Enable();
-            input.UI.ToggleBuildScreen.performed += ToggleBuildMenu;
-            input.Developer.ToggleConsole.performed += ShowDeveloperConsole;
+            _input.Enable();
+            _input.UI.ToggleBuildScreen.performed += ToggleBuildMenu;
+            _input.Developer.ToggleConsole.performed += ShowDeveloperConsole;
+        }
+
+        private void OnDisable()
+        {
+            _input.Disable();
         }
 
         private void ShowDeveloperConsole(CallbackContext context)
         {
             if (!context.action.triggered) { return; }
 
-            if (MainScreen.DeveloperConsole.gameObject.activeSelf)
+            if (!MainScreen.DeveloperConsole.gameObject.activeSelf && !_isOpen)
             {
-                MainScreen.DeveloperConsole.gameObject.SetActive(false);
-            }
-            else
-            {
+                _isOpen = true;
+
                 MainScreen.DeveloperConsole.gameObject.SetActive(true);
                 MainScreen.DeveloperConsole.transform.GetChild(0).GetComponent<TMPro.TMP_InputField>().ActivateInputField();
             }
+            else
+            {
+                if (MainScreen.DeveloperConsole.gameObject.activeSelf)
+                {
+                    MainScreen.DeveloperConsole.gameObject.SetActive(false);
+                    _isOpen = false;
+                }
+            }
         }
 
-        private void OnDisable()
+        public void UpdateInterfaceMachine(WindowsMachineItemModel windowsMachineItemModel)
         {
-            input.Disable();
+            if (MainScreen.WindowsMachine.gameObject.activeSelf)
+                WindowsMachineService.UpdateInterfaceMachine(windowsMachineItemModel);
         }
 
-        public GameObject GetWindowsMachine()
+        public void ShowInterfaceMachine()
         {
-            return MainScreen.WindowsMachine.gameObject;
+            if (!_isOpen)
+            {
+                _isOpen = true;
+                MainScreen.WindowsMachine.gameObject.SetActive(true);
+            }
         }
 
         public void CloseInterfaceMachine()
         {
-            WindowsMachineService.CloseInterfaceMachine();
-        }
+            if (_isOpen)
+            {
+                MainScreen.WindowsMachine.gameObject.SetActive(false);
+                WindowsMachineService.CloseInterfaceMachine();
 
-        public void ShowInterfaceMachine(WindowsMachineItemModel model)
-        {
-            WindowsMachineService.ShowInterfaceMachine(model);
+                _isOpen = false;
+            }
         }
 
         public void ToggleBuildMenu(InputAction.CallbackContext obj)
         {
-            BuilderScreenService.ToggleBuildMenu();
+            if (!MainScreen.BuildScreen.BuildMenu.gameObject.activeSelf && !_isOpen)
+                _isOpen = BuilderScreenService.ToggleBuildMenu(true);
+
+            if (MainScreen.BuildScreen.BuildMenu.gameObject.activeSelf && _isOpen)
+                _isOpen = BuilderScreenService.ToggleBuildMenu(false);
         }
 
         public void ToggleBuildList(int machine)
@@ -143,7 +169,7 @@ namespace Assets.Script.View
             BuilderScreenService.AcceptToBuildMoveTransformSelectedItem();
         }
 
-        private void Update()
+        private void FixedUpdate()
         {
             if (string.IsNullOrEmpty(MainScreen.BottomBar.GetComponentInChildren<Text>().text))
                 MainScreen.BottomBar.GetComponentInChildren<Text>().text = VersionIncrementor.version;
