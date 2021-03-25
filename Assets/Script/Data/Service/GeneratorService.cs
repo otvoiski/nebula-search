@@ -5,6 +5,7 @@ using Assets.Script.View;
 using Assets.Script.View.Model;
 using System;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public interface IMachine
 {
@@ -87,16 +88,11 @@ public class GeneratorService : MonoBehaviour, IMachine
             {
                 if (ray.GetValueOrDefault().collider.name.Contains(Title))
                 {
-                    if (Input.GetKeyDown(KeyCode.Mouse0))
+                    if (Mouse.current.leftButton.wasPressedThisFrame)
                     {
                         _viewHandler.ShowInterfaceMachine();
                     }
                 }
-            }
-
-            if (Input.GetKeyDown(KeyCode.Escape))
-            {
-                _viewHandler.CloseInterfaceMachine();
             }
 
             _viewHandler.UpdateInterfaceMachine(new WindowsMachineItemModel

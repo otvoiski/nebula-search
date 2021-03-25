@@ -4,6 +4,7 @@ using Assets.Script.View.Enum;
 using Assets.Script.View.Model;
 using Assets.Script.View.Service;
 using System;
+using Assets.Script.Util;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -20,9 +21,9 @@ namespace Assets.Script.View
         public BuilderScreenService BuilderScreenService { get; private set; }
         public MainScreenModel MainScreen { get; private set; }
 
-        private InputMaster _input;
+        public InputMaster Input;
 
-        private bool _isOpen;
+        [SerializeField] private bool _isOpen;
 
         private void Awake()
         {
@@ -30,7 +31,7 @@ namespace Assets.Script.View
 
             #region Input
 
-            _input = new InputMaster();
+            Input = new InputMaster();
 
             #endregion Input
 
@@ -88,14 +89,20 @@ namespace Assets.Script.View
 
         private void OnEnable()
         {
-            _input.Enable();
-            _input.UI.ToggleBuildScreen.performed += ToggleBuildMenu;
-            _input.Developer.ToggleConsole.performed += ShowDeveloperConsole;
+            Input.Enable();
+            Input.UI.ToggleBuildScreen.performed += ToggleBuildMenu;
+            Input.UI.EscapeMachineScreen.performed += EscapeMachineScreen;
+            Input.Developer.ToggleConsole.performed += ShowDeveloperConsole;
         }
 
         private void OnDisable()
         {
-            _input.Disable();
+            Input.Disable();
+        }
+
+        private void EscapeMachineScreen(CallbackContext context)
+        {
+            CloseInterfaceMachine();
         }
 
         private void ShowDeveloperConsole(CallbackContext context)
@@ -136,7 +143,7 @@ namespace Assets.Script.View
 
         public void CloseInterfaceMachine()
         {
-            if (_isOpen)
+            if (MainScreen.WindowsMachine.gameObject.activeSelf && _isOpen)
             {
                 MainScreen.WindowsMachine.gameObject.SetActive(false);
                 WindowsMachineService.CloseInterfaceMachine();

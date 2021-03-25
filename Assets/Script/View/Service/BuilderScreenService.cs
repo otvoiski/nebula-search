@@ -117,7 +117,7 @@ namespace Assets.Script.View.Service
         {
             var kb = InputSystem.GetDevice<Keyboard>();
 
-            if (Input.GetKeyDown(KeyCode.Mouse0) && IsBuilding && IsReadyToConstruction)
+            if (Mouse.current.leftButton.wasPressedThisFrame && IsBuilding && IsReadyToConstruction)
             {
                 if (!CanConstruct())
                 {
