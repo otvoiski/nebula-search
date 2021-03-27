@@ -42,11 +42,13 @@ namespace Assets.Script.View
 
             var mainScreen = viewHandler.transform.Find("MainScreen");
 
+            // Main Screen
             MainScreen = mainScreen.gameObject
                 .AddComponent<MainScreenModel>();
             MainScreen.BottomBar = mainScreen.GetChild((int)MainScreenEnum.BottomBar);
             MainScreen.Toast = mainScreen.GetChild((int)MainScreenEnum.Toast);
 
+            // Windows Machines
             MainScreen.WindowsMachine = mainScreen.GetChild((int)MainScreenEnum.WindowsMachine).gameObject
                 .AddComponent<WindowsMachineModel>();
             MainScreen.WindowsMachine.Title = MainScreen.WindowsMachine.transform.GetChild((int)WindowsMachineEnum.Title);
@@ -56,16 +58,21 @@ namespace Assets.Script.View
             MainScreen.WindowsMachine.ProcessMenu = MainScreen.WindowsMachine.transform.GetChild((int)WindowsMachineEnum.ProcessMenu);
             MainScreen.WindowsMachine.Info = MainScreen.WindowsMachine.transform.GetChild((int)WindowsMachineEnum.Info);
 
+            // Build Screen
             MainScreen.BuildScreen = mainScreen.GetChild((int)MainScreenEnum.BuildScreen).gameObject
                 .AddComponent<BuildScreenModel>();
             MainScreen.BuildScreen.BuildMenu = MainScreen.BuildScreen.transform.GetChild((int)BuildMenuEnum.BuildMenu);
             MainScreen.BuildScreen.BuildList = MainScreen.BuildScreen.transform.GetChild((int)BuildMenuEnum.BuildList);
             MainScreen.BuildScreen.InfoScreen = MainScreen.BuildScreen.transform.GetChild((int)BuildMenuEnum.InfoScreen);
 
+            // Developer Console
             MainScreen.DeveloperConsole = mainScreen.GetChild((int)MainScreenEnum.DeveloperConsole).gameObject
                 .AddComponent<DeveloperConsoleModel>();
             MainScreen.DeveloperConsole.Input = MainScreen.DeveloperConsole.transform.GetChild((int)DeveloperConsoleEnum.Input);
             MainScreen.DeveloperConsole.ScrollView = MainScreen.DeveloperConsole.transform.GetChild((int)DeveloperConsoleEnum.ScrollView);
+
+            // Menu Screen
+            MainScreen.MenuScreen = mainScreen.Find($"{MainScreenEnum.MenuScreen}");
 
             #endregion General
         }
@@ -92,7 +99,25 @@ namespace Assets.Script.View
             Input.Enable();
             Input.UI.ToggleBuildScreen.performed += ToggleBuildMenu;
             Input.UI.EscapeMachineScreen.performed += EscapeMachineScreen;
+            Input.UI.ToggleMenuScreen.performed += ToggleMenuScreen;
             Input.Developer.ToggleConsole.performed += ShowDeveloperConsole;
+        }
+
+        private void ToggleMenuScreen(CallbackContext obj)
+        {
+            if (!MainScreen.MenuScreen.gameObject.activeSelf && !_isOpen)
+            {
+                _isOpen = true;
+                MainScreen.MenuScreen.gameObject.SetActive(true);
+            }
+            else
+            {
+                if (MainScreen.MenuScreen.gameObject.activeSelf && _isOpen)
+                {
+                    _isOpen = false;
+                    MainScreen.MenuScreen.gameObject.SetActive(false);
+                }
+            }
         }
 
         private void OnDisable()
@@ -150,6 +175,11 @@ namespace Assets.Script.View
 
                 _isOpen = false;
             }
+        }
+
+        public void ToggleBuildMenu()
+        {
+            ToggleBuildMenu(default);
         }
 
         public void ToggleBuildMenu(InputAction.CallbackContext obj)

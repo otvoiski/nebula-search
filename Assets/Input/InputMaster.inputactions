@@ -6,6 +6,14 @@
             "id": "de14ebf8-ba8f-4b89-99ca-681af0287c57",
             "actions": [
                 {
+                    "name": "Toggle Menu Screen",
+                    "type": "Button",
+                    "id": "affe604e-a2fc-4f98-8038-f428b1c9f1f6",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
                     "name": "Toggle Build Screen",
                     "type": "Button",
                     "id": "7b1ea71f-90a2-463b-9f08-e8e616a132b8",
@@ -61,6 +69,17 @@
                     "processors": "",
                     "groups": "Keyboard & Mouse",
                     "action": "Escape Machine Screen",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "0ab1be56-3c13-40a7-88d2-ff93e3ded23d",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "Press",
+                    "processors": "",
+                    "groups": "Keyboard & Mouse",
+                    "action": "Toggle Menu Screen",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

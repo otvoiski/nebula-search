@@ -12,6 +12,7 @@ namespace Assets.Script.View.Enum
         Toast,
         WindowsMachine,
         BuildScreen,
-        DeveloperConsole
+        DeveloperConsole,
+        MenuScreen
     }
 }
