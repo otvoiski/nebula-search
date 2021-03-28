@@ -20,6 +20,25 @@ namespace Assets.Script.View.Service
         [SerializeField] private bool _isReadyToConstruction;
         [SerializeField] private bool _isBuilding;
 
+        private InputMaster _input;
+
+        public void Awake()
+        {
+            _input = new InputMaster();
+
+            _input.BuildMode.ClickToContruct.performed += _ => ClickToConstruct();
+        }
+
+        public void OnEnable()
+        {
+            _input.BuildMode.Enable();
+        }
+
+        public void OnDisable()
+        {
+            _input.BuildMode.Disable();
+        }
+
         /// <summary>
         /// Setup BuildScreenService
         /// </summary>
@@ -106,14 +125,9 @@ namespace Assets.Script.View.Service
             BuildScreen.InfoScreen.gameObject.SetActive(_isBuilding && _isReadyToSelect && _isReadyToAccept);
         }
 
-        /// <summary>
-        /// Key commands
-        /// </summary>
-        private void KeyCommands()
+        private void ClickToConstruct()
         {
-            var kb = InputSystem.GetDevice<Keyboard>();
-
-            if (Mouse.current.leftButton.wasPressedThisFrame && _isBuilding && _isReadyToConstruction)
+            if (_isReadyToConstruction)
             {
                 if (!CanConstruct())
                 {
@@ -124,7 +138,7 @@ namespace Assets.Script.View.Service
                     return;
                 }
 
-                // TODO: Remove necessary itens from inventory of player.
+                // TODO: Remove necessary items from inventory of player.
 
                 Instantiate(BuildScreen.SelectedItem, GameObject.Find("Map").transform)
                     .SetActive(true);
@@ -138,6 +152,40 @@ namespace Assets.Script.View.Service
                 _isReadyToAccept = false;
                 _isReadyToSelect = false;
             }
+        }
+
+        /// <summary>
+        /// Key commands
+        /// </summary>
+        private void KeyCommands()
+        {
+            var kb = InputSystem.GetDevice<Keyboard>();
+
+            //if (Mouse.current.leftButton.wasPressedThisFrame && _isBuilding && _isReadyToConstruction)
+            //{
+            //    if (!CanConstruct())
+            //    {
+            //        Toast.Message(
+            //            ToastType.Error,
+            //            Locate.Translate["BuildMode"]["CantConstructTitle"],
+            //            Locate.Translate["BuildMode"]["CantConstruct"]);
+            //        return;
+            //    }
+
+            //    // TODO: Remove necessary items from inventory of player.
+
+            //    Instantiate(BuildScreen.SelectedItem, GameObject.Find("Map").transform)
+            //        .SetActive(true);
+
+            //    if (BuildScreen.SelectedItem != null && _isReadyToConstruction)
+            //        Destroy(BuildScreen.SelectedItem);
+
+            //    BuildScreen.SelectedItem = null;
+
+            //    _isReadyToConstruction = false;
+            //    _isReadyToAccept = false;
+            //    _isReadyToSelect = false;
+            //}
 
             if (kb.escapeKey.wasPressedThisFrame && _isBuilding)
             {
@@ -178,6 +226,7 @@ namespace Assets.Script.View.Service
             BuildScreen.SelectedItem.SetActive(true);
 
             _isReadyToConstruction = true;
+            _isBuilding = true;
             _isReadyToSelect = false;
             _isReadyToAccept = false;
         }
