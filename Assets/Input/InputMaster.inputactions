@@ -6,6 +6,14 @@
             "id": "de14ebf8-ba8f-4b89-99ca-681af0287c57",
             "actions": [
                 {
+                    "name": "Toggle Menu Screen",
+                    "type": "Button",
+                    "id": "affe604e-a2fc-4f98-8038-f428b1c9f1f6",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
                     "name": "Toggle Build Screen",
                     "type": "Button",
                     "id": "7b1ea71f-90a2-463b-9f08-e8e616a132b8",
@@ -22,7 +30,7 @@
                     "interactions": ""
                 },
                 {
-                    "name": "Toggle Machine Screen",
+                    "name": "Escape Machine Screen",
                     "type": "Button",
                     "id": "65df057e-2351-470c-a6f2-c021f414b561",
                     "expectedControlType": "Button",
@@ -56,49 +64,22 @@
                 {
                     "name": "",
                     "id": "085c1c62-ba80-4805-9233-7347c9e22fb7",
-                    "path": "<Mouse>/leftButton",
+                    "path": "<Keyboard>/escape",
                     "interactions": "Press(behavior=1)",
                     "processors": "",
                     "groups": "Keyboard & Mouse",
-                    "action": "Toggle Machine Screen",
+                    "action": "Escape Machine Screen",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
-                    "id": "c1a75953-4b77-4a07-ac8c-af75617f5066",
+                    "id": "0ab1be56-3c13-40a7-88d2-ff93e3ded23d",
                     "path": "<Keyboard>/escape",
                     "interactions": "Press",
                     "processors": "",
                     "groups": "Keyboard & Mouse",
-                    "action": "Toggle Machine Screen",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                }
-            ]
-        },
-        {
-            "name": "ToastTest",
-            "id": "6f576464-1abd-43ca-bfdc-0b3fdfbf501b",
-            "actions": [
-                {
-                    "name": "ShowToast",
-                    "type": "Button",
-                    "id": "c5cdb34a-ba61-4abb-a9a8-c520bfb08eb0",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": ""
-                }
-            ],
-            "bindings": [
-                {
-                    "name": "",
-                    "id": "a95a1c00-0a57-448b-b207-7d8b41b2dfd2",
-                    "path": "<Keyboard>/x",
-                    "interactions": "Press",
-                    "processors": "",
-                    "groups": "Keyboard & Mouse",
-                    "action": "ShowToast",
+                    "action": "Toggle Menu Screen",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
@@ -126,6 +107,96 @@
                     "processors": "",
                     "groups": "Keyboard & Mouse",
                     "action": "Toggle Console",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "Player",
+            "id": "c0864925-abf2-449f-9708-f60853523919",
+            "actions": [
+                {
+                    "name": "Movement",
+                    "type": "Value",
+                    "id": "919d575b-7e20-4914-8158-7a6f9f6c9e90",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "Inventory",
+                    "type": "Button",
+                    "id": "fd870bcf-7d90-4a8e-9f8b-a04f160f6486",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "WASD",
+                    "id": "20ca4e05-560d-4b3d-a298-bfc5e9252921",
+                    "path": "2DVector",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Movement",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "up",
+                    "id": "9dc6fae3-62dc-4584-a81d-6013f9db9890",
+                    "path": "<Keyboard>/w",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard & Mouse",
+                    "action": "Movement",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "down",
+                    "id": "0b2fe890-26f3-4cac-8cc0-4c71cc7614bf",
+                    "path": "<Keyboard>/s",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard & Mouse",
+                    "action": "Movement",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "left",
+                    "id": "1acb2c56-3b38-442c-820b-49e49d78a63c",
+                    "path": "<Keyboard>/a",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard & Mouse",
+                    "action": "Movement",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "right",
+                    "id": "65275efe-027e-4313-879a-2eef7c16605d",
+                    "path": "<Keyboard>/d",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard & Mouse",
+                    "action": "Movement",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "e7844b47-3e73-4d69-ad3c-4ef4cd46fcc8",
+                    "path": "<Keyboard>/tab",
+                    "interactions": "Press(behavior=1)",
+                    "processors": "",
+                    "groups": "Keyboard & Mouse",
+                    "action": "Inventory",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

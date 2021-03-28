@@ -74,14 +74,13 @@
     <Compile Include="Assets\Script\Data\Enum\ToastType.cs" />
     <Compile Include="Assets\Script\Data\GameHandler.cs" />
     <Compile Include="Assets\Script\Data\Lib\CameraFollow.cs" />
-    <Compile Include="Assets\Script\Data\Lib\PlayerData.cs" />
     <Compile Include="Assets\Script\Data\Lib\ToastControl.cs" />
     <Compile Include="Assets\Script\Data\Model\CategoryItemModel.cs" />
     <Compile Include="Assets\Script\Data\Model\GasModel.cs" />
     <Compile Include="Assets\Script\Data\Model\GeneratorModel.cs" />
     <Compile Include="Assets\Script\Data\Model\MachineModel.cs" />
     <Compile Include="Assets\Script\Data\Model\WireModel.cs" />
-    <Compile Include="Assets\Script\Data\Service.cs" />
+    <Compile Include="Assets\Script\Data\PlayerHandler.cs" />
     <Compile Include="Assets\Script\Data\Service\GasService.cs" />
     <Compile Include="Assets\Script\Data\Service\GeneratorService.cs" />
     <Compile Include="Assets\Script\Data\Service\MachineService.cs" />

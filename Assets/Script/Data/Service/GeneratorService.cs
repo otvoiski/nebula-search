@@ -5,6 +5,7 @@ using Assets.Script.View;
 using Assets.Script.View.Model;
 using System;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public interface IMachine
 {
@@ -82,37 +83,29 @@ public class GeneratorService : MonoBehaviour, IMachine
     {
         try
         {
-            var ray = Utilities.GetRaycastHitFromScreenPoint();
+            var ray = Utilities.GetMousePositionInRaycastHit();
             if (ray.HasValue)
             {
                 if (ray.GetValueOrDefault().collider.name.Contains(Title))
                 {
-                    if (Input.GetKeyDown(KeyCode.Mouse0) && !_viewHandler.GetWindowsMachine().activeSelf)
+                    if (Mouse.current.leftButton.wasPressedThisFrame)
                     {
-                        _viewHandler.GetWindowsMachine().SetActive(true);
+                        _viewHandler.ShowInterfaceMachine();
                     }
                 }
             }
 
-            if (Input.GetKeyDown(KeyCode.Escape) && _viewHandler.GetWindowsMachine().activeSelf)
+            _viewHandler.UpdateInterfaceMachine(new WindowsMachineItemModel
             {
-                _viewHandler.CloseInterfaceMachine();
-            }
-
-            if (_viewHandler.GetWindowsMachine().activeSelf)
-            {
-                _viewHandler.ShowInterfaceMachine(new WindowsMachineItemModel
-                {
-                    buffer = Buffer,
-                    maxBuffer = MaxBuffer,
-                    maxProcessTime = MaxProcessTime,
-                    powerGenerator = PowerGenerator,
-                    processTime = ProcessTime,
-                    title = Title,
-                    InputAmount = Inputs.Length,
-                    OutputAmount = 1
-                });
-            }
+                buffer = Buffer,
+                maxBuffer = MaxBuffer,
+                maxProcessTime = MaxProcessTime,
+                powerGenerator = PowerGenerator,
+                processTime = ProcessTime,
+                title = Title,
+                InputAmount = Inputs.Length,
+                OutputAmount = 1
+            });
         }
         catch (Exception ex)
         {

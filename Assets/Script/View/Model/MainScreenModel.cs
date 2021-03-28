@@ -10,5 +10,6 @@ namespace Assets.Script.View.Model
         public WindowsMachineModel WindowsMachine { get; set; }
         public BuildScreenModel BuildScreen { get; set; }
         public DeveloperConsoleModel DeveloperConsole { get; internal set; }
+        public Transform MenuScreen { get; set; }
     }
 }

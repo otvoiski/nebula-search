@@ -19,6 +19,14 @@ public class @InputMaster : IInputActionCollection, IDisposable
             ""id"": ""de14ebf8-ba8f-4b89-99ca-681af0287c57"",
             ""actions"": [
                 {
+                    ""name"": ""Toggle Menu Screen"",
+                    ""type"": ""Button"",
+                    ""id"": ""affe604e-a2fc-4f98-8038-f428b1c9f1f6"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
                     ""name"": ""Toggle Build Screen"",
                     ""type"": ""Button"",
                     ""id"": ""7b1ea71f-90a2-463b-9f08-e8e616a132b8"",
@@ -35,7 +43,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""interactions"": """"
                 },
                 {
-                    ""name"": ""Toggle Machine Screen"",
+                    ""name"": ""Escape Machine Screen"",
                     ""type"": ""Button"",
                     ""id"": ""65df057e-2351-470c-a6f2-c021f414b561"",
                     ""expectedControlType"": ""Button"",
@@ -69,49 +77,22 @@ public class @InputMaster : IInputActionCollection, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""085c1c62-ba80-4805-9233-7347c9e22fb7"",
-                    ""path"": ""<Mouse>/leftButton"",
+                    ""path"": ""<Keyboard>/escape"",
                     ""interactions"": ""Press(behavior=1)"",
                     ""processors"": """",
                     ""groups"": ""Keyboard & Mouse"",
-                    ""action"": ""Toggle Machine Screen"",
+                    ""action"": ""Escape Machine Screen"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
                     ""name"": """",
-                    ""id"": ""c1a75953-4b77-4a07-ac8c-af75617f5066"",
+                    ""id"": ""0ab1be56-3c13-40a7-88d2-ff93e3ded23d"",
                     ""path"": ""<Keyboard>/escape"",
                     ""interactions"": ""Press"",
                     ""processors"": """",
                     ""groups"": ""Keyboard & Mouse"",
-                    ""action"": ""Toggle Machine Screen"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                }
-            ]
-        },
-        {
-            ""name"": ""ToastTest"",
-            ""id"": ""6f576464-1abd-43ca-bfdc-0b3fdfbf501b"",
-            ""actions"": [
-                {
-                    ""name"": ""ShowToast"",
-                    ""type"": ""Button"",
-                    ""id"": ""c5cdb34a-ba61-4abb-a9a8-c520bfb08eb0"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """"
-                }
-            ],
-            ""bindings"": [
-                {
-                    ""name"": """",
-                    ""id"": ""a95a1c00-0a57-448b-b207-7d8b41b2dfd2"",
-                    ""path"": ""<Keyboard>/x"",
-                    ""interactions"": ""Press"",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard & Mouse"",
-                    ""action"": ""ShowToast"",
+                    ""action"": ""Toggle Menu Screen"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -143,6 +124,96 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""Player"",
+            ""id"": ""c0864925-abf2-449f-9708-f60853523919"",
+            ""actions"": [
+                {
+                    ""name"": ""Movement"",
+                    ""type"": ""Value"",
+                    ""id"": ""919d575b-7e20-4914-8158-7a6f9f6c9e90"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Inventory"",
+                    ""type"": ""Button"",
+                    ""id"": ""fd870bcf-7d90-4a8e-9f8b-a04f160f6486"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": ""WASD"",
+                    ""id"": ""20ca4e05-560d-4b3d-a298-bfc5e9252921"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Movement"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""9dc6fae3-62dc-4584-a81d-6013f9db9890"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard & Mouse"",
+                    ""action"": ""Movement"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""0b2fe890-26f3-4cac-8cc0-4c71cc7614bf"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard & Mouse"",
+                    ""action"": ""Movement"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""1acb2c56-3b38-442c-820b-49e49d78a63c"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard & Mouse"",
+                    ""action"": ""Movement"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""65275efe-027e-4313-879a-2eef7c16605d"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard & Mouse"",
+                    ""action"": ""Movement"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e7844b47-3e73-4d69-ad3c-4ef4cd46fcc8"",
+                    ""path"": ""<Keyboard>/tab"",
+                    ""interactions"": ""Press(behavior=1)"",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard & Mouse"",
+                    ""action"": ""Inventory"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": [
@@ -166,15 +237,17 @@ public class @InputMaster : IInputActionCollection, IDisposable
 }");
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
+        m_UI_ToggleMenuScreen = m_UI.FindAction("Toggle Menu Screen", throwIfNotFound: true);
         m_UI_ToggleBuildScreen = m_UI.FindAction("Toggle Build Screen", throwIfNotFound: true);
         m_UI_EscapeBuildScreen = m_UI.FindAction("Escape Build Screen", throwIfNotFound: true);
-        m_UI_ToggleMachineScreen = m_UI.FindAction("Toggle Machine Screen", throwIfNotFound: true);
-        // ToastTest
-        m_ToastTest = asset.FindActionMap("ToastTest", throwIfNotFound: true);
-        m_ToastTest_ShowToast = m_ToastTest.FindAction("ShowToast", throwIfNotFound: true);
+        m_UI_EscapeMachineScreen = m_UI.FindAction("Escape Machine Screen", throwIfNotFound: true);
         // Developer
         m_Developer = asset.FindActionMap("Developer", throwIfNotFound: true);
         m_Developer_ToggleConsole = m_Developer.FindAction("Toggle Console", throwIfNotFound: true);
+        // Player
+        m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
+        m_Player_Movement = m_Player.FindAction("Movement", throwIfNotFound: true);
+        m_Player_Inventory = m_Player.FindAction("Inventory", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -224,16 +297,18 @@ public class @InputMaster : IInputActionCollection, IDisposable
     // UI
     private readonly InputActionMap m_UI;
     private IUIActions m_UIActionsCallbackInterface;
+    private readonly InputAction m_UI_ToggleMenuScreen;
     private readonly InputAction m_UI_ToggleBuildScreen;
     private readonly InputAction m_UI_EscapeBuildScreen;
-    private readonly InputAction m_UI_ToggleMachineScreen;
+    private readonly InputAction m_UI_EscapeMachineScreen;
     public struct UIActions
     {
         private @InputMaster m_Wrapper;
         public UIActions(@InputMaster wrapper) { m_Wrapper = wrapper; }
+        public InputAction @ToggleMenuScreen => m_Wrapper.m_UI_ToggleMenuScreen;
         public InputAction @ToggleBuildScreen => m_Wrapper.m_UI_ToggleBuildScreen;
         public InputAction @EscapeBuildScreen => m_Wrapper.m_UI_EscapeBuildScreen;
-        public InputAction @ToggleMachineScreen => m_Wrapper.m_UI_ToggleMachineScreen;
+        public InputAction @EscapeMachineScreen => m_Wrapper.m_UI_EscapeMachineScreen;
         public InputActionMap Get() { return m_Wrapper.m_UI; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -243,65 +318,38 @@ public class @InputMaster : IInputActionCollection, IDisposable
         {
             if (m_Wrapper.m_UIActionsCallbackInterface != null)
             {
+                @ToggleMenuScreen.started -= m_Wrapper.m_UIActionsCallbackInterface.OnToggleMenuScreen;
+                @ToggleMenuScreen.performed -= m_Wrapper.m_UIActionsCallbackInterface.OnToggleMenuScreen;
+                @ToggleMenuScreen.canceled -= m_Wrapper.m_UIActionsCallbackInterface.OnToggleMenuScreen;
                 @ToggleBuildScreen.started -= m_Wrapper.m_UIActionsCallbackInterface.OnToggleBuildScreen;
                 @ToggleBuildScreen.performed -= m_Wrapper.m_UIActionsCallbackInterface.OnToggleBuildScreen;
                 @ToggleBuildScreen.canceled -= m_Wrapper.m_UIActionsCallbackInterface.OnToggleBuildScreen;
                 @EscapeBuildScreen.started -= m_Wrapper.m_UIActionsCallbackInterface.OnEscapeBuildScreen;
                 @EscapeBuildScreen.performed -= m_Wrapper.m_UIActionsCallbackInterface.OnEscapeBuildScreen;
                 @EscapeBuildScreen.canceled -= m_Wrapper.m_UIActionsCallbackInterface.OnEscapeBuildScreen;
-                @ToggleMachineScreen.started -= m_Wrapper.m_UIActionsCallbackInterface.OnToggleMachineScreen;
-                @ToggleMachineScreen.performed -= m_Wrapper.m_UIActionsCallbackInterface.OnToggleMachineScreen;
-                @ToggleMachineScreen.canceled -= m_Wrapper.m_UIActionsCallbackInterface.OnToggleMachineScreen;
+                @EscapeMachineScreen.started -= m_Wrapper.m_UIActionsCallbackInterface.OnEscapeMachineScreen;
+                @EscapeMachineScreen.performed -= m_Wrapper.m_UIActionsCallbackInterface.OnEscapeMachineScreen;
+                @EscapeMachineScreen.canceled -= m_Wrapper.m_UIActionsCallbackInterface.OnEscapeMachineScreen;
             }
             m_Wrapper.m_UIActionsCallbackInterface = instance;
             if (instance != null)
             {
+                @ToggleMenuScreen.started += instance.OnToggleMenuScreen;
+                @ToggleMenuScreen.performed += instance.OnToggleMenuScreen;
+                @ToggleMenuScreen.canceled += instance.OnToggleMenuScreen;
                 @ToggleBuildScreen.started += instance.OnToggleBuildScreen;
                 @ToggleBuildScreen.performed += instance.OnToggleBuildScreen;
                 @ToggleBuildScreen.canceled += instance.OnToggleBuildScreen;
                 @EscapeBuildScreen.started += instance.OnEscapeBuildScreen;
                 @EscapeBuildScreen.performed += instance.OnEscapeBuildScreen;
                 @EscapeBuildScreen.canceled += instance.OnEscapeBuildScreen;
-                @ToggleMachineScreen.started += instance.OnToggleMachineScreen;
-                @ToggleMachineScreen.performed += instance.OnToggleMachineScreen;
-                @ToggleMachineScreen.canceled += instance.OnToggleMachineScreen;
+                @EscapeMachineScreen.started += instance.OnEscapeMachineScreen;
+                @EscapeMachineScreen.performed += instance.OnEscapeMachineScreen;
+                @EscapeMachineScreen.canceled += instance.OnEscapeMachineScreen;
             }
         }
     }
     public UIActions @UI => new UIActions(this);
-
-    // ToastTest
-    private readonly InputActionMap m_ToastTest;
-    private IToastTestActions m_ToastTestActionsCallbackInterface;
-    private readonly InputAction m_ToastTest_ShowToast;
-    public struct ToastTestActions
-    {
-        private @InputMaster m_Wrapper;
-        public ToastTestActions(@InputMaster wrapper) { m_Wrapper = wrapper; }
-        public InputAction @ShowToast => m_Wrapper.m_ToastTest_ShowToast;
-        public InputActionMap Get() { return m_Wrapper.m_ToastTest; }
-        public void Enable() { Get().Enable(); }
-        public void Disable() { Get().Disable(); }
-        public bool enabled => Get().enabled;
-        public static implicit operator InputActionMap(ToastTestActions set) { return set.Get(); }
-        public void SetCallbacks(IToastTestActions instance)
-        {
-            if (m_Wrapper.m_ToastTestActionsCallbackInterface != null)
-            {
-                @ShowToast.started -= m_Wrapper.m_ToastTestActionsCallbackInterface.OnShowToast;
-                @ShowToast.performed -= m_Wrapper.m_ToastTestActionsCallbackInterface.OnShowToast;
-                @ShowToast.canceled -= m_Wrapper.m_ToastTestActionsCallbackInterface.OnShowToast;
-            }
-            m_Wrapper.m_ToastTestActionsCallbackInterface = instance;
-            if (instance != null)
-            {
-                @ShowToast.started += instance.OnShowToast;
-                @ShowToast.performed += instance.OnShowToast;
-                @ShowToast.canceled += instance.OnShowToast;
-            }
-        }
-    }
-    public ToastTestActions @ToastTest => new ToastTestActions(this);
 
     // Developer
     private readonly InputActionMap m_Developer;
@@ -335,6 +383,47 @@ public class @InputMaster : IInputActionCollection, IDisposable
         }
     }
     public DeveloperActions @Developer => new DeveloperActions(this);
+
+    // Player
+    private readonly InputActionMap m_Player;
+    private IPlayerActions m_PlayerActionsCallbackInterface;
+    private readonly InputAction m_Player_Movement;
+    private readonly InputAction m_Player_Inventory;
+    public struct PlayerActions
+    {
+        private @InputMaster m_Wrapper;
+        public PlayerActions(@InputMaster wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Movement => m_Wrapper.m_Player_Movement;
+        public InputAction @Inventory => m_Wrapper.m_Player_Inventory;
+        public InputActionMap Get() { return m_Wrapper.m_Player; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(PlayerActions set) { return set.Get(); }
+        public void SetCallbacks(IPlayerActions instance)
+        {
+            if (m_Wrapper.m_PlayerActionsCallbackInterface != null)
+            {
+                @Movement.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMovement;
+                @Movement.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMovement;
+                @Movement.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMovement;
+                @Inventory.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnInventory;
+                @Inventory.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnInventory;
+                @Inventory.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnInventory;
+            }
+            m_Wrapper.m_PlayerActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @Movement.started += instance.OnMovement;
+                @Movement.performed += instance.OnMovement;
+                @Movement.canceled += instance.OnMovement;
+                @Inventory.started += instance.OnInventory;
+                @Inventory.performed += instance.OnInventory;
+                @Inventory.canceled += instance.OnInventory;
+            }
+        }
+    }
+    public PlayerActions @Player => new PlayerActions(this);
     private int m_KeyboardMouseSchemeIndex = -1;
     public InputControlScheme KeyboardMouseScheme
     {
@@ -346,16 +435,18 @@ public class @InputMaster : IInputActionCollection, IDisposable
     }
     public interface IUIActions
     {
+        void OnToggleMenuScreen(InputAction.CallbackContext context);
         void OnToggleBuildScreen(InputAction.CallbackContext context);
         void OnEscapeBuildScreen(InputAction.CallbackContext context);
-        void OnToggleMachineScreen(InputAction.CallbackContext context);
-    }
-    public interface IToastTestActions
-    {
-        void OnShowToast(InputAction.CallbackContext context);
+        void OnEscapeMachineScreen(InputAction.CallbackContext context);
     }
     public interface IDeveloperActions
     {
         void OnToggleConsole(InputAction.CallbackContext context);
+    }
+    public interface IPlayerActions
+    {
+        void OnMovement(InputAction.CallbackContext context);
+        void OnInventory(InputAction.CallbackContext context);
     }
 }

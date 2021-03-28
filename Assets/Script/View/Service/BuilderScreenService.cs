@@ -57,10 +57,14 @@ namespace Assets.Script.View.Service
         /// <summary>
         /// Togle building variable
         /// </summary>
-        public bool ToggleBuildMenu()
+        public bool ToggleBuildMenu(bool isBuilding)
         {
-            IsBuilding = !IsBuilding;
-            return IsBuilding;
+            IsBuilding = isBuilding;
+
+            return isBuilding;
+
+            //IsBuilding = !IsBuilding;
+            //return IsBuilding;
         }
 
         /// <summary>
@@ -86,7 +90,7 @@ namespace Assets.Script.View.Service
         {
             if (IsBuilding && IsReadyToConstruction && BuildScreen.SelectedItem != null)
             {
-                BuildScreen.SelectedItem.transform.position = Utilities.GetPositionGridFromScreenPoint(1);
+                BuildScreen.SelectedItem.transform.position = Utilities.GetMousePositionInGridPosition(1);
             }
         }
 
@@ -113,7 +117,7 @@ namespace Assets.Script.View.Service
         {
             var kb = InputSystem.GetDevice<Keyboard>();
 
-            if (Input.GetKeyDown(KeyCode.Mouse0) && IsBuilding && IsReadyToConstruction)
+            if (Mouse.current.leftButton.wasPressedThisFrame && IsBuilding && IsReadyToConstruction)
             {
                 if (!CanConstruct())
                 {
@@ -193,7 +197,7 @@ namespace Assets.Script.View.Service
         /// Update screen to build list
         /// </summary>
         /// <param name="enumerator"></param>
-        public void ToggleBuildList(CategoryItemEnum enumerator)
+        public bool ToggleBuildList(CategoryItemEnum enumerator)
         {
             IsReadyToSelect = !IsReadyToSelect;
             IsReadyToAccept = false;
@@ -213,7 +217,7 @@ namespace Assets.Script.View.Service
                 switch (enumerator)
                 {
                     case CategoryItemEnum.Generator:
-                        foreach (var item in GameHandler.Itens[$"{enumerator}"] as IList<GeneratorService>)
+                        foreach (var item in (IList<GeneratorService>)GameHandler.Itens[$"{enumerator}"])
                         {
                             var button = FillItemBuildList(item.type, Instantiate(buildListItem, list));
                             button.onClick.AddListener(delegate { ItemSelectedToBuild(item.gameObject); });
@@ -221,7 +225,7 @@ namespace Assets.Script.View.Service
                         break;
 
                     case CategoryItemEnum.Machine:
-                        foreach (var item in GameHandler.Itens[$"{enumerator}"] as IList<MachineService>)
+                        foreach (var item in (IList<MachineService>)GameHandler.Itens[$"{enumerator}"])
                         {
                             var button = FillItemBuildList(item.type, Instantiate(buildListItem, list));
                             button.onClick.AddListener(delegate { ItemSelectedToBuild(item.gameObject); });
@@ -229,14 +233,18 @@ namespace Assets.Script.View.Service
                         break;
 
                     case CategoryItemEnum.Wire:
-                        foreach (var item in GameHandler.Itens[$"{enumerator}"] as IList<WireService>)
+                        foreach (var item in (IList<WireService>)GameHandler.Itens[$"{enumerator}"])
                         {
+                            var button = FillItemBuildList(item.type, Instantiate(buildListItem, list));
+                            button.onClick.AddListener(delegate { ItemSelectedToBuild(item.gameObject); });
                         }
                         break;
 
                     case CategoryItemEnum.Gas:
-                        foreach (var item in GameHandler.Itens[$"{enumerator}"] as IList<GasService>)
+                        foreach (var item in (IList<GasService>)GameHandler.Itens[$"{enumerator}"])
                         {
+                            var button = FillItemBuildList(item.type, Instantiate(buildListItem, list));
+                            button.onClick.AddListener(delegate { ItemSelectedToBuild(item.gameObject); });
                         }
                         break;
 
@@ -259,6 +267,7 @@ namespace Assets.Script.View.Service
 
                 return default;
             }
+            return IsReadyToSelect;
         }
     }
 }
