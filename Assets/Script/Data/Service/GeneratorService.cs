@@ -83,7 +83,7 @@ public class GeneratorService : MonoBehaviour, IMachine
     {
         try
         {
-            var ray = Utilities.GetRaycastHitFromScreenPoint();
+            var ray = Utilities.GetMousePositionInRaycastHit();
             if (ray.HasValue)
             {
                 if (ray.GetValueOrDefault().collider.name.Contains(Title))

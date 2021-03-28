@@ -7,6 +7,7 @@ public class WireService : MonoBehaviour
 {
     private const float DISTANCE_HIT_COLLIDER = 1.0f;
     private SpriteRenderer sprite;
+    public WireModel type;
 
     private void Start()
     {

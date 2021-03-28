@@ -7,12 +7,12 @@ using UnityEngine;
 
 public class GameHandler : MonoBehaviour
 {
-    public InputMaster _input;
+    public InputMaster Input;
     public static IDictionary<string, IList> Itens;
 
     private void Awake()
     {
-        _input = new InputMaster();
+        Input = new InputMaster();
     }
 
     private void Start()
@@ -73,11 +73,11 @@ public class GameHandler : MonoBehaviour
 
     private void OnEnable()
     {
-        _input.Enable();
+        Input.Enable();
     }
 
     private void OnDisable()
     {
-        _input.Disable();
+        Input.Disable();
     }
 }

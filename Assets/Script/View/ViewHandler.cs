@@ -14,8 +14,9 @@ namespace Assets.Script.View
 {
     public class ViewHandler : MonoBehaviour
     {
-        [Header("UI")] public static int LimitTextConsoleItem;
+        public const string NAME = "VIEW HANDLER";
 
+        [Header("UI")] public static int LimitTextConsoleItem;
         public WindowsMachineService WindowsMachineService { get; private set; }
         public DeveloperConsoleBehaviour DeveloperConsoleBehaviour { get; private set; }
         public BuilderScreenService BuilderScreenService { get; private set; }
@@ -27,6 +28,8 @@ namespace Assets.Script.View
 
         private void Awake()
         {
+            gameObject.name = NAME;
+
             LimitTextConsoleItem = 100;
 
             #region Input
@@ -37,7 +40,7 @@ namespace Assets.Script.View
 
             #region General
 
-            var viewHandler = GameObject.Find("VIEW HANDLER")
+            var viewHandler = GameObject.Find(NAME)
                 .GetComponent<ViewHandler>();
 
             var mainScreen = viewHandler.transform.Find("MainScreen");
@@ -103,6 +106,11 @@ namespace Assets.Script.View
             Input.Developer.ToggleConsole.performed += ShowDeveloperConsole;
         }
 
+        private void OnDisable()
+        {
+            Input.Disable();
+        }
+
         private void ToggleMenuScreen(CallbackContext obj)
         {
             if (!MainScreen.MenuScreen.gameObject.activeSelf && !_isOpen)
@@ -118,11 +126,6 @@ namespace Assets.Script.View
                     MainScreen.MenuScreen.gameObject.SetActive(false);
                 }
             }
-        }
-
-        private void OnDisable()
-        {
-            Input.Disable();
         }
 
         private void EscapeMachineScreen(CallbackContext context)
@@ -212,6 +215,11 @@ namespace Assets.Script.View
                 MainScreen.BottomBar.GetComponentInChildren<Text>().text = VersionIncrementor.version;
 
             BuilderScreenService.ToggleWindowsBuild();
+        }
+
+        public void ToggleInventory()
+        {
+            throw new NotImplementedException();
         }
     }
 }

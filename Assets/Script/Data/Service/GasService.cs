@@ -6,6 +6,7 @@ public class GasService : MonoBehaviour
 {
     private const float DISTANCE_HIT_COLLIDER = 1.0f;
     private SpriteRenderer sprite;
+    public GasModel type;
 
     private void Start()
     {
