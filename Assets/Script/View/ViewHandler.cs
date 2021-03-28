@@ -16,7 +16,7 @@ namespace Assets.Script.View
     {
         public const string NAME = "VIEW HANDLER";
 
-        [Header("UI")] public static int LimitTextConsoleItem;
+        public static int LimitTextConsoleItem;
         public WindowsMachineService WindowsMachineService { get; private set; }
         public DeveloperConsoleBehaviour DeveloperConsoleBehaviour { get; private set; }
         public BuilderScreenService BuilderScreenService { get; private set; }
