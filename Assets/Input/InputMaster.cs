@@ -27,14 +27,6 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""interactions"": """"
                 },
                 {
-                    ""name"": ""Toggle Build Screen"",
-                    ""type"": ""Button"",
-                    ""id"": ""7b1ea71f-90a2-463b-9f08-e8e616a132b8"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """"
-                },
-                {
                     ""name"": ""Escape Build Screen"",
                     ""type"": ""Button"",
                     ""id"": ""f540ec94-46a9-4ddb-a8b9-c780ce6a5c18"",
@@ -52,17 +44,6 @@ public class @InputMaster : IInputActionCollection, IDisposable
                 }
             ],
             ""bindings"": [
-                {
-                    ""name"": """",
-                    ""id"": ""edaa0626-b16a-4823-8c2c-5d04d45011a8"",
-                    ""path"": ""<Keyboard>/b"",
-                    ""interactions"": ""Press"",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard & Mouse"",
-                    ""action"": ""Toggle Build Screen"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
                 {
                     ""name"": """",
                     ""id"": ""a2c15bcf-5ba4-4d89-84bd-b554418d7eb5"",
@@ -214,6 +195,71 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""BuildMode"",
+            ""id"": ""b461159a-ff9c-4e6c-9569-52ca5804e2c4"",
+            ""actions"": [
+                {
+                    ""name"": ""Toggle Build Menu"",
+                    ""type"": ""Button"",
+                    ""id"": ""b8f90ab2-82ad-448a-b206-c4df3221d4f9"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Escape Build Menu"",
+                    ""type"": ""Button"",
+                    ""id"": ""ff660156-aaa5-4d1a-bb04-e6cba812f2b2"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Click To Contruct"",
+                    ""type"": ""Button"",
+                    ""id"": ""7ff678e0-e732-445e-bf16-4f3df274f5d2"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""3fe7af2e-be7b-4a9c-bb20-27a399757025"",
+                    ""path"": ""<Keyboard>/b"",
+                    ""interactions"": ""Press"",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard & Mouse"",
+                    ""action"": ""Toggle Build Menu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""22399d30-dcaf-4a16-921b-1f080205c417"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": ""Press"",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard & Mouse"",
+                    ""action"": ""Escape Build Menu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1c09d36d-db46-46a4-bacd-a5ae375852be"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": ""Press(behavior=2)"",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard & Mouse"",
+                    ""action"": ""Click To Contruct"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": [
@@ -238,7 +284,6 @@ public class @InputMaster : IInputActionCollection, IDisposable
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_ToggleMenuScreen = m_UI.FindAction("Toggle Menu Screen", throwIfNotFound: true);
-        m_UI_ToggleBuildScreen = m_UI.FindAction("Toggle Build Screen", throwIfNotFound: true);
         m_UI_EscapeBuildScreen = m_UI.FindAction("Escape Build Screen", throwIfNotFound: true);
         m_UI_EscapeMachineScreen = m_UI.FindAction("Escape Machine Screen", throwIfNotFound: true);
         // Developer
@@ -248,6 +293,11 @@ public class @InputMaster : IInputActionCollection, IDisposable
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
         m_Player_Movement = m_Player.FindAction("Movement", throwIfNotFound: true);
         m_Player_Inventory = m_Player.FindAction("Inventory", throwIfNotFound: true);
+        // BuildMode
+        m_BuildMode = asset.FindActionMap("BuildMode", throwIfNotFound: true);
+        m_BuildMode_ToggleBuildMenu = m_BuildMode.FindAction("Toggle Build Menu", throwIfNotFound: true);
+        m_BuildMode_EscapeBuildMenu = m_BuildMode.FindAction("Escape Build Menu", throwIfNotFound: true);
+        m_BuildMode_ClickToContruct = m_BuildMode.FindAction("Click To Contruct", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -298,7 +348,6 @@ public class @InputMaster : IInputActionCollection, IDisposable
     private readonly InputActionMap m_UI;
     private IUIActions m_UIActionsCallbackInterface;
     private readonly InputAction m_UI_ToggleMenuScreen;
-    private readonly InputAction m_UI_ToggleBuildScreen;
     private readonly InputAction m_UI_EscapeBuildScreen;
     private readonly InputAction m_UI_EscapeMachineScreen;
     public struct UIActions
@@ -306,7 +355,6 @@ public class @InputMaster : IInputActionCollection, IDisposable
         private @InputMaster m_Wrapper;
         public UIActions(@InputMaster wrapper) { m_Wrapper = wrapper; }
         public InputAction @ToggleMenuScreen => m_Wrapper.m_UI_ToggleMenuScreen;
-        public InputAction @ToggleBuildScreen => m_Wrapper.m_UI_ToggleBuildScreen;
         public InputAction @EscapeBuildScreen => m_Wrapper.m_UI_EscapeBuildScreen;
         public InputAction @EscapeMachineScreen => m_Wrapper.m_UI_EscapeMachineScreen;
         public InputActionMap Get() { return m_Wrapper.m_UI; }
@@ -321,9 +369,6 @@ public class @InputMaster : IInputActionCollection, IDisposable
                 @ToggleMenuScreen.started -= m_Wrapper.m_UIActionsCallbackInterface.OnToggleMenuScreen;
                 @ToggleMenuScreen.performed -= m_Wrapper.m_UIActionsCallbackInterface.OnToggleMenuScreen;
                 @ToggleMenuScreen.canceled -= m_Wrapper.m_UIActionsCallbackInterface.OnToggleMenuScreen;
-                @ToggleBuildScreen.started -= m_Wrapper.m_UIActionsCallbackInterface.OnToggleBuildScreen;
-                @ToggleBuildScreen.performed -= m_Wrapper.m_UIActionsCallbackInterface.OnToggleBuildScreen;
-                @ToggleBuildScreen.canceled -= m_Wrapper.m_UIActionsCallbackInterface.OnToggleBuildScreen;
                 @EscapeBuildScreen.started -= m_Wrapper.m_UIActionsCallbackInterface.OnEscapeBuildScreen;
                 @EscapeBuildScreen.performed -= m_Wrapper.m_UIActionsCallbackInterface.OnEscapeBuildScreen;
                 @EscapeBuildScreen.canceled -= m_Wrapper.m_UIActionsCallbackInterface.OnEscapeBuildScreen;
@@ -337,9 +382,6 @@ public class @InputMaster : IInputActionCollection, IDisposable
                 @ToggleMenuScreen.started += instance.OnToggleMenuScreen;
                 @ToggleMenuScreen.performed += instance.OnToggleMenuScreen;
                 @ToggleMenuScreen.canceled += instance.OnToggleMenuScreen;
-                @ToggleBuildScreen.started += instance.OnToggleBuildScreen;
-                @ToggleBuildScreen.performed += instance.OnToggleBuildScreen;
-                @ToggleBuildScreen.canceled += instance.OnToggleBuildScreen;
                 @EscapeBuildScreen.started += instance.OnEscapeBuildScreen;
                 @EscapeBuildScreen.performed += instance.OnEscapeBuildScreen;
                 @EscapeBuildScreen.canceled += instance.OnEscapeBuildScreen;
@@ -424,6 +466,55 @@ public class @InputMaster : IInputActionCollection, IDisposable
         }
     }
     public PlayerActions @Player => new PlayerActions(this);
+
+    // BuildMode
+    private readonly InputActionMap m_BuildMode;
+    private IBuildModeActions m_BuildModeActionsCallbackInterface;
+    private readonly InputAction m_BuildMode_ToggleBuildMenu;
+    private readonly InputAction m_BuildMode_EscapeBuildMenu;
+    private readonly InputAction m_BuildMode_ClickToContruct;
+    public struct BuildModeActions
+    {
+        private @InputMaster m_Wrapper;
+        public BuildModeActions(@InputMaster wrapper) { m_Wrapper = wrapper; }
+        public InputAction @ToggleBuildMenu => m_Wrapper.m_BuildMode_ToggleBuildMenu;
+        public InputAction @EscapeBuildMenu => m_Wrapper.m_BuildMode_EscapeBuildMenu;
+        public InputAction @ClickToContruct => m_Wrapper.m_BuildMode_ClickToContruct;
+        public InputActionMap Get() { return m_Wrapper.m_BuildMode; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(BuildModeActions set) { return set.Get(); }
+        public void SetCallbacks(IBuildModeActions instance)
+        {
+            if (m_Wrapper.m_BuildModeActionsCallbackInterface != null)
+            {
+                @ToggleBuildMenu.started -= m_Wrapper.m_BuildModeActionsCallbackInterface.OnToggleBuildMenu;
+                @ToggleBuildMenu.performed -= m_Wrapper.m_BuildModeActionsCallbackInterface.OnToggleBuildMenu;
+                @ToggleBuildMenu.canceled -= m_Wrapper.m_BuildModeActionsCallbackInterface.OnToggleBuildMenu;
+                @EscapeBuildMenu.started -= m_Wrapper.m_BuildModeActionsCallbackInterface.OnEscapeBuildMenu;
+                @EscapeBuildMenu.performed -= m_Wrapper.m_BuildModeActionsCallbackInterface.OnEscapeBuildMenu;
+                @EscapeBuildMenu.canceled -= m_Wrapper.m_BuildModeActionsCallbackInterface.OnEscapeBuildMenu;
+                @ClickToContruct.started -= m_Wrapper.m_BuildModeActionsCallbackInterface.OnClickToContruct;
+                @ClickToContruct.performed -= m_Wrapper.m_BuildModeActionsCallbackInterface.OnClickToContruct;
+                @ClickToContruct.canceled -= m_Wrapper.m_BuildModeActionsCallbackInterface.OnClickToContruct;
+            }
+            m_Wrapper.m_BuildModeActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @ToggleBuildMenu.started += instance.OnToggleBuildMenu;
+                @ToggleBuildMenu.performed += instance.OnToggleBuildMenu;
+                @ToggleBuildMenu.canceled += instance.OnToggleBuildMenu;
+                @EscapeBuildMenu.started += instance.OnEscapeBuildMenu;
+                @EscapeBuildMenu.performed += instance.OnEscapeBuildMenu;
+                @EscapeBuildMenu.canceled += instance.OnEscapeBuildMenu;
+                @ClickToContruct.started += instance.OnClickToContruct;
+                @ClickToContruct.performed += instance.OnClickToContruct;
+                @ClickToContruct.canceled += instance.OnClickToContruct;
+            }
+        }
+    }
+    public BuildModeActions @BuildMode => new BuildModeActions(this);
     private int m_KeyboardMouseSchemeIndex = -1;
     public InputControlScheme KeyboardMouseScheme
     {
@@ -436,7 +527,6 @@ public class @InputMaster : IInputActionCollection, IDisposable
     public interface IUIActions
     {
         void OnToggleMenuScreen(InputAction.CallbackContext context);
-        void OnToggleBuildScreen(InputAction.CallbackContext context);
         void OnEscapeBuildScreen(InputAction.CallbackContext context);
         void OnEscapeMachineScreen(InputAction.CallbackContext context);
     }
@@ -448,5 +538,11 @@ public class @InputMaster : IInputActionCollection, IDisposable
     {
         void OnMovement(InputAction.CallbackContext context);
         void OnInventory(InputAction.CallbackContext context);
+    }
+    public interface IBuildModeActions
+    {
+        void OnToggleBuildMenu(InputAction.CallbackContext context);
+        void OnEscapeBuildMenu(InputAction.CallbackContext context);
+        void OnClickToContruct(InputAction.CallbackContext context);
     }
 }
