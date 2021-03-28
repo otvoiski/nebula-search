@@ -36,6 +36,8 @@ namespace Assets.Script.Data
         private void Start()
         {
             _cameraOffset = Camera.main.transform.position - transform.position;
+            _cameraFollow = true;
+            _cameraLookAtPlayer = true;
         }
 
         private void Update()
