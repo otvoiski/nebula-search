@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 namespace Assets.Script.View.Service
@@ -27,16 +26,23 @@ namespace Assets.Script.View.Service
             _input = new InputMaster();
 
             _input.BuildMode.ClickToContruct.performed += _ => ClickToConstruct();
+            _input.BuildMode.EscapeBuildMenu.performed += _ => EscapeFromBuildMode();
         }
 
-        public void OnEnable()
+        private void EscapeFromBuildMode()
         {
-            _input.BuildMode.Enable();
-        }
+            if (_isBuilding)
+            {
+                if (BuildScreen.SelectedItem != null && _isReadyToConstruction)
+                    Destroy(BuildScreen.SelectedItem);
 
-        public void OnDisable()
-        {
-            _input.BuildMode.Disable();
+                BuildScreen.SelectedItem = null;
+
+                _isReadyToConstruction = false;
+                _isReadyToSelect = false;
+                _isReadyToAccept = false;
+                _isBuilding = false;
+            }
         }
 
         /// <summary>
@@ -151,53 +157,6 @@ namespace Assets.Script.View.Service
                 _isReadyToConstruction = false;
                 _isReadyToAccept = false;
                 _isReadyToSelect = false;
-            }
-        }
-
-        /// <summary>
-        /// Key commands
-        /// </summary>
-        private void KeyCommands()
-        {
-            var kb = InputSystem.GetDevice<Keyboard>();
-
-            //if (Mouse.current.leftButton.wasPressedThisFrame && _isBuilding && _isReadyToConstruction)
-            //{
-            //    if (!CanConstruct())
-            //    {
-            //        Toast.Message(
-            //            ToastType.Error,
-            //            Locate.Translate["BuildMode"]["CantConstructTitle"],
-            //            Locate.Translate["BuildMode"]["CantConstruct"]);
-            //        return;
-            //    }
-
-            //    // TODO: Remove necessary items from inventory of player.
-
-            //    Instantiate(BuildScreen.SelectedItem, GameObject.Find("Map").transform)
-            //        .SetActive(true);
-
-            //    if (BuildScreen.SelectedItem != null && _isReadyToConstruction)
-            //        Destroy(BuildScreen.SelectedItem);
-
-            //    BuildScreen.SelectedItem = null;
-
-            //    _isReadyToConstruction = false;
-            //    _isReadyToAccept = false;
-            //    _isReadyToSelect = false;
-            //}
-
-            if (kb.escapeKey.wasPressedThisFrame && _isBuilding)
-            {
-                if (BuildScreen.SelectedItem != null && _isReadyToConstruction)
-                    Destroy(BuildScreen.SelectedItem);
-
-                BuildScreen.SelectedItem = null;
-
-                _isReadyToConstruction = false;
-                _isReadyToSelect = false;
-                _isReadyToAccept = false;
-                _isBuilding = false;
             }
         }
 
@@ -316,6 +275,16 @@ namespace Assets.Script.View.Service
                 return default;
             }
             return _isReadyToSelect;
+        }
+
+        public void OnEnable()
+        {
+            _input.BuildMode.Enable();
+        }
+
+        public void OnDisable()
+        {
+            _input.BuildMode.Disable();
         }
     }
 }
