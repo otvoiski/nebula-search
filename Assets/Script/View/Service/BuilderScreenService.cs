@@ -15,10 +15,29 @@ namespace Assets.Script.View.Service
     public class BuilderScreenService : MonoBehaviour
     {
         public BuildScreenModel BuildScreen { get; private set; }
-        [SerializeField] private bool IsReadyToSelect;
-        [SerializeField] private bool IsReadyToAccept;
-        [SerializeField] private bool IsReadyToConstruction;
-        [SerializeField] private bool IsBuilding;
+        [SerializeField] private bool _isReadyToSelect;
+        [SerializeField] private bool _isReadyToAccept;
+        [SerializeField] private bool _isReadyToConstruction;
+        [SerializeField] private bool _isBuilding;
+
+        private InputMaster _input;
+
+        public void Awake()
+        {
+            _input = new InputMaster();
+
+            _input.BuildMode.ClickToContruct.performed += _ => ClickToConstruct();
+        }
+
+        public void OnEnable()
+        {
+            _input.BuildMode.Enable();
+        }
+
+        public void OnDisable()
+        {
+            _input.BuildMode.Disable();
+        }
 
         /// <summary>
         /// Setup BuildScreenService
@@ -28,10 +47,10 @@ namespace Assets.Script.View.Service
         {
             BuildScreen = buildScreen;
 
-            IsReadyToAccept = false;
-            IsReadyToConstruction = false;
-            IsReadyToSelect = false;
-            IsBuilding = false;
+            _isReadyToAccept = false;
+            _isReadyToConstruction = false;
+            _isReadyToSelect = false;
+            _isBuilding = false;
 
             LoadingMenuList();
         }
@@ -55,22 +74,18 @@ namespace Assets.Script.View.Service
         }
 
         /// <summary>
-        /// Togle building variable
+        /// Toggle building variable
         /// </summary>
         public bool ToggleBuildMenu(bool isBuilding)
         {
-            IsBuilding = isBuilding;
+            _isBuilding = isBuilding;
 
             return isBuilding;
-
-            //IsBuilding = !IsBuilding;
-            //return IsBuilding;
         }
 
         /// <summary>
         /// When the player press B
         /// </summary>
-        /// <param name="isBuilding"></param>
         public void ToggleWindowsBuild()
         {
             // Open and close windows
@@ -88,7 +103,7 @@ namespace Assets.Script.View.Service
         /// </summary>
         private void MovementItem()
         {
-            if (IsBuilding && IsReadyToConstruction && BuildScreen.SelectedItem != null)
+            if (_isBuilding && _isReadyToConstruction && BuildScreen.SelectedItem != null)
             {
                 BuildScreen.SelectedItem.transform.position = Utilities.GetMousePositionInGridPosition(1);
             }
@@ -100,14 +115,43 @@ namespace Assets.Script.View.Service
         private void ToggleWindows()
         {
             // BuildMenu
-            BuildScreen.gameObject.SetActive(IsBuilding);
-            BuildScreen.BuildMenu.gameObject.SetActive(IsBuilding);
+            BuildScreen.gameObject.SetActive(_isBuilding);
+            BuildScreen.BuildMenu.gameObject.SetActive(_isBuilding);
 
             //BuildList
-            BuildScreen.BuildList.gameObject.SetActive(IsBuilding && IsReadyToSelect);
+            BuildScreen.BuildList.gameObject.SetActive(_isBuilding && _isReadyToSelect);
 
             //InfoScreen
-            BuildScreen.InfoScreen.gameObject.SetActive(IsBuilding && IsReadyToSelect && IsReadyToAccept);
+            BuildScreen.InfoScreen.gameObject.SetActive(_isBuilding && _isReadyToSelect && _isReadyToAccept);
+        }
+
+        private void ClickToConstruct()
+        {
+            if (_isReadyToConstruction)
+            {
+                if (!CanConstruct())
+                {
+                    Toast.Message(
+                        ToastType.Error,
+                        Locate.Translate["BuildMode"]["CantConstructTitle"],
+                        Locate.Translate["BuildMode"]["CantConstruct"]);
+                    return;
+                }
+
+                // TODO: Remove necessary items from inventory of player.
+
+                Instantiate(BuildScreen.SelectedItem, GameObject.Find("Map").transform)
+                    .SetActive(true);
+
+                if (BuildScreen.SelectedItem != null && _isReadyToConstruction)
+                    Destroy(BuildScreen.SelectedItem);
+
+                BuildScreen.SelectedItem = null;
+
+                _isReadyToConstruction = false;
+                _isReadyToAccept = false;
+                _isReadyToSelect = false;
+            }
         }
 
         /// <summary>
@@ -117,40 +161,43 @@ namespace Assets.Script.View.Service
         {
             var kb = InputSystem.GetDevice<Keyboard>();
 
-            if (Mouse.current.leftButton.wasPressedThisFrame && IsBuilding && IsReadyToConstruction)
+            //if (Mouse.current.leftButton.wasPressedThisFrame && _isBuilding && _isReadyToConstruction)
+            //{
+            //    if (!CanConstruct())
+            //    {
+            //        Toast.Message(
+            //            ToastType.Error,
+            //            Locate.Translate["BuildMode"]["CantConstructTitle"],
+            //            Locate.Translate["BuildMode"]["CantConstruct"]);
+            //        return;
+            //    }
+
+            //    // TODO: Remove necessary items from inventory of player.
+
+            //    Instantiate(BuildScreen.SelectedItem, GameObject.Find("Map").transform)
+            //        .SetActive(true);
+
+            //    if (BuildScreen.SelectedItem != null && _isReadyToConstruction)
+            //        Destroy(BuildScreen.SelectedItem);
+
+            //    BuildScreen.SelectedItem = null;
+
+            //    _isReadyToConstruction = false;
+            //    _isReadyToAccept = false;
+            //    _isReadyToSelect = false;
+            //}
+
+            if (kb.escapeKey.wasPressedThisFrame && _isBuilding)
             {
-                if (!CanConstruct())
-                {
-                    Toast.Message(ToastType.Error, "Falha ao construir", "Você não pode construir aqui!");
-                    return;
-                }
-
-                // TODO: Remove necessary itens from inventory of player.
-
-                Instantiate(BuildScreen.SelectedItem, GameObject.Find("Map").transform)
-                    .SetActive(true);
-
-                if (BuildScreen.SelectedItem != null && IsReadyToConstruction)
+                if (BuildScreen.SelectedItem != null && _isReadyToConstruction)
                     Destroy(BuildScreen.SelectedItem);
 
                 BuildScreen.SelectedItem = null;
 
-                IsReadyToConstruction = false;
-                IsReadyToAccept = false;
-                IsReadyToSelect = false;
-            }
-
-            if (kb.escapeKey.wasPressedThisFrame && IsBuilding)
-            {
-                if (BuildScreen.SelectedItem != null && IsReadyToConstruction)
-                    Destroy(BuildScreen.SelectedItem);
-
-                BuildScreen.SelectedItem = null;
-
-                IsReadyToConstruction = false;
-                IsReadyToSelect = false;
-                IsReadyToAccept = false;
-                IsBuilding = false;
+                _isReadyToConstruction = false;
+                _isReadyToSelect = false;
+                _isReadyToAccept = false;
+                _isBuilding = false;
             }
         }
 
@@ -178,9 +225,10 @@ namespace Assets.Script.View.Service
             BuildScreen.SelectedItem = Instantiate(BuildScreen.SelectedItem, GameObject.Find("GAME HANDLER").transform);
             BuildScreen.SelectedItem.SetActive(true);
 
-            IsReadyToConstruction = true;
-            IsReadyToSelect = false;
-            IsReadyToAccept = false;
+            _isReadyToConstruction = true;
+            _isBuilding = true;
+            _isReadyToSelect = false;
+            _isReadyToAccept = false;
         }
 
         /// <summary>
@@ -189,7 +237,7 @@ namespace Assets.Script.View.Service
         /// <param name="gameObject"></param>
         public void ItemSelectedToBuild(GameObject gameObject)
         {
-            IsReadyToAccept = !IsReadyToAccept;
+            _isReadyToAccept = !_isReadyToAccept;
             BuildScreen.SelectedItem = gameObject;
         }
 
@@ -199,8 +247,8 @@ namespace Assets.Script.View.Service
         /// <param name="enumerator"></param>
         public bool ToggleBuildList(CategoryItemEnum enumerator)
         {
-            IsReadyToSelect = !IsReadyToSelect;
-            IsReadyToAccept = false;
+            _isReadyToSelect = !_isReadyToSelect;
+            _isReadyToAccept = false;
 
             var list = BuildScreen.BuildList.transform.GetChild(0); // <-- List
             var buildListItem = Resources.Load<GameObject>("Prefabs/UI/MainScreen/BuildScreen/BuildList/BuildListItem");
@@ -212,7 +260,7 @@ namespace Assets.Script.View.Service
                     Destroy(child.gameObject);
             }
 
-            if (IsReadyToSelect)
+            if (_isReadyToSelect)
             {
                 switch (enumerator)
                 {
@@ -253,7 +301,7 @@ namespace Assets.Script.View.Service
                 }
             }
 
-            list.gameObject.SetActive(IsReadyToSelect);
+            list.gameObject.SetActive(_isReadyToSelect);
             Button FillItemBuildList(CategoryItemModel item, GameObject i)
             {
                 if (item != null)
@@ -267,7 +315,7 @@ namespace Assets.Script.View.Service
 
                 return default;
             }
-            return IsReadyToSelect;
+            return _isReadyToSelect;
         }
     }
 }

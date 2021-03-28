@@ -100,7 +100,7 @@ namespace Assets.Script.View
         private void OnEnable()
         {
             Input.Enable();
-            Input.UI.ToggleBuildScreen.performed += ToggleBuildMenu;
+            Input.BuildMode.ToggleBuildMenu.performed += ToggleBuildMenu;
             Input.UI.EscapeMachineScreen.performed += EscapeMachineScreen;
             Input.UI.ToggleMenuScreen.performed += ToggleMenuScreen;
             Input.Developer.ToggleConsole.performed += ShowDeveloperConsole;
