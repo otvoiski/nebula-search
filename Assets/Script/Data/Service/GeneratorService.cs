@@ -57,7 +57,7 @@ public class GeneratorService : MonoBehaviour, IMachine
 
         sprite = GetComponentInChildren<SpriteRenderer>();
 
-        Amount = 1;
+        Amount = 0;
     }
 
     public void Update()
