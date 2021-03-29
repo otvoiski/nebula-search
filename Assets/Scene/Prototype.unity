@@ -1302,8 +1302,8 @@ Camera:
   m_GameObject: {fileID: 963194225}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 1
-  m_BackGroundColor: {r: 1, g: 1, b: 1, a: 0}
+  m_ClearFlags: 2
+  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 1}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -2171,7 +2171,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1387646749}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -7141,30 +7141,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 3559883550805775466}
     m_Modifications:
-    - target: {fileID: 2337026593834247502, guid: 00c1a95d6c82efb4e837794d2592113b,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4919810591031449141, guid: 00c1a95d6c82efb4e837794d2592113b,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4919810591943123973, guid: 00c1a95d6c82efb4e837794d2592113b,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 3559883550915117031}
     - target: {fileID: 5698129083006187020, guid: 00c1a95d6c82efb4e837794d2592113b,
         type: 3}
       propertyPath: m_Name
       value: BuildScreen
-      objectReference: {fileID: 0}
-    - target: {fileID: 5698129083006187020, guid: 00c1a95d6c82efb4e837794d2592113b,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6989801480678718260, guid: 00c1a95d6c82efb4e837794d2592113b,
         type: 3}

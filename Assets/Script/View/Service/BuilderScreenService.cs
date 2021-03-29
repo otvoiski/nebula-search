@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.UI;
 
 namespace Assets.Script.View.Service
@@ -63,6 +64,12 @@ namespace Assets.Script.View.Service
         /// </summary>
         public void ToggleBuildMenu()
         {
+            if (_isReadyToConstruction)
+            {
+                _isBuilding = true;
+                BuildScreen.BuildMenu.gameObject.SetActive(true);
+            }
+
             if (!BuildScreen.BuildMenu.gameObject.activeSelf && !ViewHandler.IsOpen)
             {
                 _isBuilding = true;
@@ -81,17 +88,8 @@ namespace Assets.Script.View.Service
             {
                 if (BuildScreen.BuildMenu.gameObject.activeSelf && ViewHandler.IsOpen)
                 {
-                    _isBuilding = false;
-
-                    _isReadyToSelect = false;
-                    _isReadyToAccept = false;
-                    _isReadyToConstruction = false;
-
                     ViewHandler.IsOpen = false;
-                    BuildScreen.BuildMenu.gameObject.SetActive(false);
-
-                    BuildScreen.BuildList.gameObject.SetActive(false);
-                    BuildScreen.InfoScreen.gameObject.SetActive(false);
+                    EscapeFromBuildMode();
                 }
             }
         }
@@ -101,22 +99,19 @@ namespace Assets.Script.View.Service
         /// </summary>
         private void EscapeFromBuildMode()
         {
-            if (_isBuilding || _isReadyToConstruction || _isReadyToSelect || _isReadyToAccept)
-            {
-                if (BuildScreen.SelectedItem != null && _isReadyToConstruction)
-                    Destroy(BuildScreen.SelectedItem);
+            if (BuildScreen.SelectedItem != null && _isReadyToConstruction)
+                Destroy(BuildScreen.SelectedItem);
 
-                BuildScreen.SelectedItem = null;
+            BuildScreen.SelectedItem = null;
 
-                _isReadyToConstruction = false;
-                _isReadyToSelect = false;
-                _isReadyToAccept = false;
-                _isBuilding = false;
+            _isReadyToConstruction = false;
+            _isReadyToSelect = false;
+            _isReadyToAccept = false;
+            _isBuilding = false;
 
-                BuildScreen.BuildMenu.gameObject.SetActive(false);
-                BuildScreen.BuildList.gameObject.SetActive(false);
-                BuildScreen.InfoScreen.gameObject.SetActive(false);
-            }
+            BuildScreen.BuildMenu.gameObject.SetActive(false);
+            BuildScreen.BuildList.gameObject.SetActive(false);
+            BuildScreen.InfoScreen.gameObject.SetActive(false);
         }
 
         /// <summary>
@@ -142,7 +137,7 @@ namespace Assets.Script.View.Service
         /// </summary>
         private void MovementItem()
         {
-            if (_isBuilding && _isReadyToConstruction && BuildScreen.SelectedItem != null)
+            if (_isReadyToConstruction && BuildScreen.SelectedItem != null)
             {
                 BuildScreen.SelectedItem.transform.position = Utilities.GetMousePositionInGridPosition(1);
             }
@@ -168,15 +163,6 @@ namespace Assets.Script.View.Service
 
                 Instantiate(BuildScreen.SelectedItem, GameObject.Find("Map").transform)
                     .SetActive(true);
-
-                if (BuildScreen.SelectedItem != null && _isReadyToConstruction)
-                    Destroy(BuildScreen.SelectedItem);
-
-                BuildScreen.SelectedItem = null;
-
-                _isReadyToConstruction = false;
-                _isReadyToAccept = false;
-                _isReadyToSelect = false;
             }
         }
 
@@ -187,7 +173,7 @@ namespace Assets.Script.View.Service
         private bool CanConstruct()
         {
             var r = true;
-            foreach (var item in Utilities.GetItemsFromRayCast<GameObject>(BuildScreen.SelectedItem.transform, .10f))
+            foreach (var item in Utilities.GetItemsFromRayCast<GameObject>(BuildScreen.SelectedItem?.transform, .10f))
             {
                 if (item != null)
                 {
@@ -207,8 +193,12 @@ namespace Assets.Script.View.Service
             BuildScreen.SelectedItem = Instantiate(BuildScreen.SelectedItem, GameObject.Find("GAME HANDLER").transform);
             BuildScreen.SelectedItem.SetActive(true);
 
+            BuildScreen.BuildMenu.gameObject.SetActive(false);
+            BuildScreen.BuildList.gameObject.SetActive(false);
+            BuildScreen.InfoScreen.gameObject.SetActive(false);
+
             _isReadyToConstruction = true;
-            _isBuilding = true;
+            _isBuilding = false;
             _isReadyToSelect = false;
             _isReadyToAccept = false;
         }
