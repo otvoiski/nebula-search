@@ -14,6 +14,7 @@ namespace Assets.Script.View.Service
     public class BuilderScreenService : MonoBehaviour
     {
         public BuildScreenModel BuildScreen { get; private set; }
+
         [SerializeField] private bool _isReadyToSelect;
         [SerializeField] private bool _isReadyToAccept;
         [SerializeField] private bool _isReadyToConstruction;
@@ -27,22 +28,7 @@ namespace Assets.Script.View.Service
 
             _input.BuildMode.ClickToContruct.performed += _ => ClickToConstruct();
             _input.BuildMode.EscapeBuildMenu.performed += _ => EscapeFromBuildMode();
-        }
-
-        private void EscapeFromBuildMode()
-        {
-            if (_isBuilding)
-            {
-                if (BuildScreen.SelectedItem != null && _isReadyToConstruction)
-                    Destroy(BuildScreen.SelectedItem);
-
-                BuildScreen.SelectedItem = null;
-
-                _isReadyToConstruction = false;
-                _isReadyToSelect = false;
-                _isReadyToAccept = false;
-                _isBuilding = false;
-            }
+            _input.BuildMode.ToggleBuildMenu.performed += _ => ToggleBuildMenu();
         }
 
         /// <summary>
@@ -59,6 +45,78 @@ namespace Assets.Script.View.Service
             _isBuilding = false;
 
             LoadingMenuList();
+        }
+
+        public void Update()
+        {
+            //BuildList
+            BuildScreen.BuildList.gameObject.SetActive(_isBuilding && _isReadyToSelect);
+
+            //InfoScreen
+            BuildScreen.InfoScreen.gameObject.SetActive(_isBuilding && _isReadyToSelect && _isReadyToAccept);
+
+            MovementItem();
+        }
+
+        /// <summary>
+        /// Toggle building variable
+        /// </summary>
+        public void ToggleBuildMenu()
+        {
+            if (!BuildScreen.BuildMenu.gameObject.activeSelf && !ViewHandler.IsOpen)
+            {
+                _isBuilding = true;
+
+                _isReadyToSelect = false;
+                _isReadyToAccept = false;
+                _isReadyToConstruction = false;
+
+                ViewHandler.IsOpen = true;
+                BuildScreen.BuildMenu.gameObject.SetActive(true);
+
+                BuildScreen.BuildList.gameObject.SetActive(false);
+                BuildScreen.InfoScreen.gameObject.SetActive(false);
+            }
+            else
+            {
+                if (BuildScreen.BuildMenu.gameObject.activeSelf && ViewHandler.IsOpen)
+                {
+                    _isBuilding = false;
+
+                    _isReadyToSelect = false;
+                    _isReadyToAccept = false;
+                    _isReadyToConstruction = false;
+
+                    ViewHandler.IsOpen = false;
+                    BuildScreen.BuildMenu.gameObject.SetActive(false);
+
+                    BuildScreen.BuildList.gameObject.SetActive(false);
+                    BuildScreen.InfoScreen.gameObject.SetActive(false);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Escape of Build mode
+        /// </summary>
+        private void EscapeFromBuildMode()
+        {
+            if (_isBuilding || _isReadyToConstruction || _isReadyToSelect || _isReadyToAccept)
+            {
+                if (BuildScreen.SelectedItem != null && _isReadyToConstruction)
+                    Destroy(BuildScreen.SelectedItem);
+
+                BuildScreen.SelectedItem = null;
+
+                _isReadyToConstruction = false;
+                _isReadyToSelect = false;
+                _isReadyToAccept = false;
+                _isBuilding = false;
+
+                BuildScreen.BuildMenu.gameObject.SetActive(false);
+                BuildScreen.BuildList.gameObject.SetActive(false);
+                BuildScreen.InfoScreen.gameObject.SetActive(false);
+            }
         }
 
         /// <summary>
@@ -80,31 +138,6 @@ namespace Assets.Script.View.Service
         }
 
         /// <summary>
-        /// Toggle building variable
-        /// </summary>
-        public bool ToggleBuildMenu(bool isBuilding)
-        {
-            _isBuilding = isBuilding;
-
-            return isBuilding;
-        }
-
-        /// <summary>
-        /// When the player press B
-        /// </summary>
-        public void ToggleWindowsBuild()
-        {
-            // Open and close windows
-            ToggleWindows();
-
-            // Key commands of this interface
-            KeyCommands();
-
-            // Movement of transform item when user select item
-            MovementItem();
-        }
-
-        /// <summary>
         /// Move item selected
         /// </summary>
         private void MovementItem()
@@ -116,21 +149,8 @@ namespace Assets.Script.View.Service
         }
 
         /// <summary>
-        /// Manager windows if open or not
+        /// When user click for instance item
         /// </summary>
-        private void ToggleWindows()
-        {
-            // BuildMenu
-            BuildScreen.gameObject.SetActive(_isBuilding);
-            BuildScreen.BuildMenu.gameObject.SetActive(_isBuilding);
-
-            //BuildList
-            BuildScreen.BuildList.gameObject.SetActive(_isBuilding && _isReadyToSelect);
-
-            //InfoScreen
-            BuildScreen.InfoScreen.gameObject.SetActive(_isBuilding && _isReadyToSelect && _isReadyToAccept);
-        }
-
         private void ClickToConstruct()
         {
             if (_isReadyToConstruction)
@@ -160,6 +180,10 @@ namespace Assets.Script.View.Service
             }
         }
 
+        /// <summary>
+        /// Check collision, impossibility to construct
+        /// </summary>
+        /// <returns></returns>
         private bool CanConstruct()
         {
             var r = true;
@@ -176,9 +200,8 @@ namespace Assets.Script.View.Service
         }
 
         /// <summary>
-        /// When player click the buton on BuildList
+        /// When player click the Button on BuildList
         /// </summary>
-        /// <param name="gameObject"></param>
         public void AcceptToBuildMoveTransformSelectedItem()
         {
             BuildScreen.SelectedItem = Instantiate(BuildScreen.SelectedItem, GameObject.Find("GAME HANDLER").transform);
@@ -193,11 +216,11 @@ namespace Assets.Script.View.Service
         /// <summary>
         /// Create item in world later user accept to created
         /// </summary>
-        /// <param name="gameObject"></param>
-        public void ItemSelectedToBuild(GameObject gameObject)
+        /// <param name="instance"></param>
+        public void ItemSelectedToBuild(GameObject instance)
         {
             _isReadyToAccept = !_isReadyToAccept;
-            BuildScreen.SelectedItem = gameObject;
+            BuildScreen.SelectedItem = instance;
         }
 
         /// <summary>
@@ -212,7 +235,7 @@ namespace Assets.Script.View.Service
             var list = BuildScreen.BuildList.transform.GetChild(0); // <-- List
             var buildListItem = Resources.Load<GameObject>("Prefabs/UI/MainScreen/BuildScreen/BuildList/BuildListItem");
 
-            // reset childs
+            // reset child
             foreach (Transform child in list.transform)
             {
                 if (child != null)
@@ -261,6 +284,7 @@ namespace Assets.Script.View.Service
             }
 
             list.gameObject.SetActive(_isReadyToSelect);
+
             Button FillItemBuildList(CategoryItemModel item, GameObject i)
             {
                 if (item != null)

@@ -27,14 +27,6 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""interactions"": """"
                 },
                 {
-                    ""name"": ""Escape Build Screen"",
-                    ""type"": ""Button"",
-                    ""id"": ""f540ec94-46a9-4ddb-a8b9-c780ce6a5c18"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """"
-                },
-                {
                     ""name"": ""Escape Machine Screen"",
                     ""type"": ""Button"",
                     ""id"": ""65df057e-2351-470c-a6f2-c021f414b561"",
@@ -44,17 +36,6 @@ public class @InputMaster : IInputActionCollection, IDisposable
                 }
             ],
             ""bindings"": [
-                {
-                    ""name"": """",
-                    ""id"": ""a2c15bcf-5ba4-4d89-84bd-b554418d7eb5"",
-                    ""path"": ""<Keyboard>/escape"",
-                    ""interactions"": ""Press"",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard & Mouse"",
-                    ""action"": ""Escape Build Screen"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
                 {
                     ""name"": """",
                     ""id"": ""085c1c62-ba80-4805-9233-7347c9e22fb7"",
@@ -284,7 +265,6 @@ public class @InputMaster : IInputActionCollection, IDisposable
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_ToggleMenuScreen = m_UI.FindAction("Toggle Menu Screen", throwIfNotFound: true);
-        m_UI_EscapeBuildScreen = m_UI.FindAction("Escape Build Screen", throwIfNotFound: true);
         m_UI_EscapeMachineScreen = m_UI.FindAction("Escape Machine Screen", throwIfNotFound: true);
         // Developer
         m_Developer = asset.FindActionMap("Developer", throwIfNotFound: true);
@@ -348,14 +328,12 @@ public class @InputMaster : IInputActionCollection, IDisposable
     private readonly InputActionMap m_UI;
     private IUIActions m_UIActionsCallbackInterface;
     private readonly InputAction m_UI_ToggleMenuScreen;
-    private readonly InputAction m_UI_EscapeBuildScreen;
     private readonly InputAction m_UI_EscapeMachineScreen;
     public struct UIActions
     {
         private @InputMaster m_Wrapper;
         public UIActions(@InputMaster wrapper) { m_Wrapper = wrapper; }
         public InputAction @ToggleMenuScreen => m_Wrapper.m_UI_ToggleMenuScreen;
-        public InputAction @EscapeBuildScreen => m_Wrapper.m_UI_EscapeBuildScreen;
         public InputAction @EscapeMachineScreen => m_Wrapper.m_UI_EscapeMachineScreen;
         public InputActionMap Get() { return m_Wrapper.m_UI; }
         public void Enable() { Get().Enable(); }
@@ -369,9 +347,6 @@ public class @InputMaster : IInputActionCollection, IDisposable
                 @ToggleMenuScreen.started -= m_Wrapper.m_UIActionsCallbackInterface.OnToggleMenuScreen;
                 @ToggleMenuScreen.performed -= m_Wrapper.m_UIActionsCallbackInterface.OnToggleMenuScreen;
                 @ToggleMenuScreen.canceled -= m_Wrapper.m_UIActionsCallbackInterface.OnToggleMenuScreen;
-                @EscapeBuildScreen.started -= m_Wrapper.m_UIActionsCallbackInterface.OnEscapeBuildScreen;
-                @EscapeBuildScreen.performed -= m_Wrapper.m_UIActionsCallbackInterface.OnEscapeBuildScreen;
-                @EscapeBuildScreen.canceled -= m_Wrapper.m_UIActionsCallbackInterface.OnEscapeBuildScreen;
                 @EscapeMachineScreen.started -= m_Wrapper.m_UIActionsCallbackInterface.OnEscapeMachineScreen;
                 @EscapeMachineScreen.performed -= m_Wrapper.m_UIActionsCallbackInterface.OnEscapeMachineScreen;
                 @EscapeMachineScreen.canceled -= m_Wrapper.m_UIActionsCallbackInterface.OnEscapeMachineScreen;
@@ -382,9 +357,6 @@ public class @InputMaster : IInputActionCollection, IDisposable
                 @ToggleMenuScreen.started += instance.OnToggleMenuScreen;
                 @ToggleMenuScreen.performed += instance.OnToggleMenuScreen;
                 @ToggleMenuScreen.canceled += instance.OnToggleMenuScreen;
-                @EscapeBuildScreen.started += instance.OnEscapeBuildScreen;
-                @EscapeBuildScreen.performed += instance.OnEscapeBuildScreen;
-                @EscapeBuildScreen.canceled += instance.OnEscapeBuildScreen;
                 @EscapeMachineScreen.started += instance.OnEscapeMachineScreen;
                 @EscapeMachineScreen.performed += instance.OnEscapeMachineScreen;
                 @EscapeMachineScreen.canceled += instance.OnEscapeMachineScreen;
@@ -527,7 +499,6 @@ public class @InputMaster : IInputActionCollection, IDisposable
     public interface IUIActions
     {
         void OnToggleMenuScreen(InputAction.CallbackContext context);
-        void OnEscapeBuildScreen(InputAction.CallbackContext context);
         void OnEscapeMachineScreen(InputAction.CallbackContext context);
     }
     public interface IDeveloperActions

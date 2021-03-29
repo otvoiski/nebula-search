@@ -14,14 +14,6 @@
                     "interactions": ""
                 },
                 {
-                    "name": "Escape Build Screen",
-                    "type": "Button",
-                    "id": "f540ec94-46a9-4ddb-a8b9-c780ce6a5c18",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": ""
-                },
-                {
                     "name": "Escape Machine Screen",
                     "type": "Button",
                     "id": "65df057e-2351-470c-a6f2-c021f414b561",
@@ -31,17 +23,6 @@
                 }
             ],
             "bindings": [
-                {
-                    "name": "",
-                    "id": "a2c15bcf-5ba4-4d89-84bd-b554418d7eb5",
-                    "path": "<Keyboard>/escape",
-                    "interactions": "Press",
-                    "processors": "",
-                    "groups": "Keyboard & Mouse",
-                    "action": "Escape Build Screen",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
                 {
                     "name": "",
                     "id": "085c1c62-ba80-4805-9233-7347c9e22fb7",
