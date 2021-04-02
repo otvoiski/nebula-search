@@ -1,28 +1,27 @@
-﻿using Assets.Script.Enumerator;
-using Assets.Script.Util;
+﻿using Assets.Script.Util;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class WireService : MonoBehaviour
 {
-    private const float DISTANCE_HIT_COLLIDER = 1.0f;
-    private SpriteRenderer sprite;
+    private const float DistanceHitCollider = 2f;
+    private SpriteRenderer _sprite;
     public WireModel type;
 
     private void Start()
     {
-        sprite = GetComponentInChildren<SpriteRenderer>();
+        _sprite = GetComponentInChildren<SpriteRenderer>();
     }
 
     public void SpriteColor(bool active)
     {
-        if (sprite != null)
-            sprite.color = active ? new Color(0, 1, 0, .200f) : new Color(1, 0, 0, .200f);
+        if (_sprite != null)
+            _sprite.color = active ? new Color(0, 1, 0, .200f) : new Color(1, 0, 0, .200f);
     }
 
     public WireService Next(List<string> last)
     {
-        var wires = Utilities.GetItemsFromRayCast<WireService>(transform, DISTANCE_HIT_COLLIDER);
+        var wires = Utilities.GetItemsFromRayCast<WireService>(transform, DistanceHitCollider);
         foreach (var wire in wires)
         {
             if (last.Contains(wire.name)) continue;
