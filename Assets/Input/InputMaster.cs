@@ -15,7 +15,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
     ""name"": ""InputMaster"",
     ""maps"": [
         {
-            ""name"": ""UI"",
+            ""name"": ""Menu"",
             ""id"": ""de14ebf8-ba8f-4b89-99ca-681af0287c57"",
             ""actions"": [
                 {
@@ -25,28 +25,9 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
-                },
-                {
-                    ""name"": ""Escape Machine Screen"",
-                    ""type"": ""Button"",
-                    ""id"": ""65df057e-2351-470c-a6f2-c021f414b561"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
-                {
-                    ""name"": """",
-                    ""id"": ""085c1c62-ba80-4805-9233-7347c9e22fb7"",
-                    ""path"": ""<Keyboard>/escape"",
-                    ""interactions"": ""Press(behavior=1)"",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard & Mouse"",
-                    ""action"": ""Escape Machine Screen"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
                 {
                     ""name"": """",
                     ""id"": ""0ab1be56-3c13-40a7-88d2-ff93e3ded23d"",
@@ -233,10 +214,56 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""name"": """",
                     ""id"": ""1c09d36d-db46-46a4-bacd-a5ae375852be"",
                     ""path"": ""<Mouse>/leftButton"",
-                    ""interactions"": ""Press(behavior=2)"",
+                    ""interactions"": ""Press"",
                     ""processors"": """",
                     ""groups"": ""Keyboard & Mouse"",
                     ""action"": ""Click To Contruct"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
+        },
+        {
+            ""name"": ""MachineScreen"",
+            ""id"": ""f9164149-132c-4be5-8180-4cb5203a003c"",
+            ""actions"": [
+                {
+                    ""name"": ""Click Machine"",
+                    ""type"": ""Button"",
+                    ""id"": ""8a7ff586-880e-4121-aea8-2f7f7e198c07"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Escape Machine Screen"",
+                    ""type"": ""Button"",
+                    ""id"": ""575828f5-75c2-4311-862f-466e5a96cce3"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""56aca803-825e-428f-a67c-61baa4888c95"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": ""Press"",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard & Mouse"",
+                    ""action"": ""Click Machine"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""dde01ba0-2688-4933-a1e4-9832988cda5b"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": ""Press(behavior=1)"",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard & Mouse"",
+                    ""action"": ""Escape Machine Screen"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -262,10 +289,9 @@ public class @InputMaster : IInputActionCollection, IDisposable
         }
     ]
 }");
-        // UI
-        m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
-        m_UI_ToggleMenuScreen = m_UI.FindAction("Toggle Menu Screen", throwIfNotFound: true);
-        m_UI_EscapeMachineScreen = m_UI.FindAction("Escape Machine Screen", throwIfNotFound: true);
+        // Menu
+        m_Menu = asset.FindActionMap("Menu", throwIfNotFound: true);
+        m_Menu_ToggleMenuScreen = m_Menu.FindAction("Toggle Menu Screen", throwIfNotFound: true);
         // Developer
         m_Developer = asset.FindActionMap("Developer", throwIfNotFound: true);
         m_Developer_ToggleConsole = m_Developer.FindAction("Toggle Console", throwIfNotFound: true);
@@ -278,6 +304,10 @@ public class @InputMaster : IInputActionCollection, IDisposable
         m_BuildMode_ToggleBuildMenu = m_BuildMode.FindAction("Toggle Build Menu", throwIfNotFound: true);
         m_BuildMode_EscapeBuildMenu = m_BuildMode.FindAction("Escape Build Menu", throwIfNotFound: true);
         m_BuildMode_ClickToContruct = m_BuildMode.FindAction("Click To Contruct", throwIfNotFound: true);
+        // MachineScreen
+        m_MachineScreen = asset.FindActionMap("MachineScreen", throwIfNotFound: true);
+        m_MachineScreen_ClickMachine = m_MachineScreen.FindAction("Click Machine", throwIfNotFound: true);
+        m_MachineScreen_EscapeMachineScreen = m_MachineScreen.FindAction("Escape Machine Screen", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -324,46 +354,38 @@ public class @InputMaster : IInputActionCollection, IDisposable
         asset.Disable();
     }
 
-    // UI
-    private readonly InputActionMap m_UI;
-    private IUIActions m_UIActionsCallbackInterface;
-    private readonly InputAction m_UI_ToggleMenuScreen;
-    private readonly InputAction m_UI_EscapeMachineScreen;
-    public struct UIActions
+    // Menu
+    private readonly InputActionMap m_Menu;
+    private IMenuActions m_MenuActionsCallbackInterface;
+    private readonly InputAction m_Menu_ToggleMenuScreen;
+    public struct MenuActions
     {
         private @InputMaster m_Wrapper;
-        public UIActions(@InputMaster wrapper) { m_Wrapper = wrapper; }
-        public InputAction @ToggleMenuScreen => m_Wrapper.m_UI_ToggleMenuScreen;
-        public InputAction @EscapeMachineScreen => m_Wrapper.m_UI_EscapeMachineScreen;
-        public InputActionMap Get() { return m_Wrapper.m_UI; }
+        public MenuActions(@InputMaster wrapper) { m_Wrapper = wrapper; }
+        public InputAction @ToggleMenuScreen => m_Wrapper.m_Menu_ToggleMenuScreen;
+        public InputActionMap Get() { return m_Wrapper.m_Menu; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
         public bool enabled => Get().enabled;
-        public static implicit operator InputActionMap(UIActions set) { return set.Get(); }
-        public void SetCallbacks(IUIActions instance)
+        public static implicit operator InputActionMap(MenuActions set) { return set.Get(); }
+        public void SetCallbacks(IMenuActions instance)
         {
-            if (m_Wrapper.m_UIActionsCallbackInterface != null)
+            if (m_Wrapper.m_MenuActionsCallbackInterface != null)
             {
-                @ToggleMenuScreen.started -= m_Wrapper.m_UIActionsCallbackInterface.OnToggleMenuScreen;
-                @ToggleMenuScreen.performed -= m_Wrapper.m_UIActionsCallbackInterface.OnToggleMenuScreen;
-                @ToggleMenuScreen.canceled -= m_Wrapper.m_UIActionsCallbackInterface.OnToggleMenuScreen;
-                @EscapeMachineScreen.started -= m_Wrapper.m_UIActionsCallbackInterface.OnEscapeMachineScreen;
-                @EscapeMachineScreen.performed -= m_Wrapper.m_UIActionsCallbackInterface.OnEscapeMachineScreen;
-                @EscapeMachineScreen.canceled -= m_Wrapper.m_UIActionsCallbackInterface.OnEscapeMachineScreen;
+                @ToggleMenuScreen.started -= m_Wrapper.m_MenuActionsCallbackInterface.OnToggleMenuScreen;
+                @ToggleMenuScreen.performed -= m_Wrapper.m_MenuActionsCallbackInterface.OnToggleMenuScreen;
+                @ToggleMenuScreen.canceled -= m_Wrapper.m_MenuActionsCallbackInterface.OnToggleMenuScreen;
             }
-            m_Wrapper.m_UIActionsCallbackInterface = instance;
+            m_Wrapper.m_MenuActionsCallbackInterface = instance;
             if (instance != null)
             {
                 @ToggleMenuScreen.started += instance.OnToggleMenuScreen;
                 @ToggleMenuScreen.performed += instance.OnToggleMenuScreen;
                 @ToggleMenuScreen.canceled += instance.OnToggleMenuScreen;
-                @EscapeMachineScreen.started += instance.OnEscapeMachineScreen;
-                @EscapeMachineScreen.performed += instance.OnEscapeMachineScreen;
-                @EscapeMachineScreen.canceled += instance.OnEscapeMachineScreen;
             }
         }
     }
-    public UIActions @UI => new UIActions(this);
+    public MenuActions @Menu => new MenuActions(this);
 
     // Developer
     private readonly InputActionMap m_Developer;
@@ -487,6 +509,47 @@ public class @InputMaster : IInputActionCollection, IDisposable
         }
     }
     public BuildModeActions @BuildMode => new BuildModeActions(this);
+
+    // MachineScreen
+    private readonly InputActionMap m_MachineScreen;
+    private IMachineScreenActions m_MachineScreenActionsCallbackInterface;
+    private readonly InputAction m_MachineScreen_ClickMachine;
+    private readonly InputAction m_MachineScreen_EscapeMachineScreen;
+    public struct MachineScreenActions
+    {
+        private @InputMaster m_Wrapper;
+        public MachineScreenActions(@InputMaster wrapper) { m_Wrapper = wrapper; }
+        public InputAction @ClickMachine => m_Wrapper.m_MachineScreen_ClickMachine;
+        public InputAction @EscapeMachineScreen => m_Wrapper.m_MachineScreen_EscapeMachineScreen;
+        public InputActionMap Get() { return m_Wrapper.m_MachineScreen; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(MachineScreenActions set) { return set.Get(); }
+        public void SetCallbacks(IMachineScreenActions instance)
+        {
+            if (m_Wrapper.m_MachineScreenActionsCallbackInterface != null)
+            {
+                @ClickMachine.started -= m_Wrapper.m_MachineScreenActionsCallbackInterface.OnClickMachine;
+                @ClickMachine.performed -= m_Wrapper.m_MachineScreenActionsCallbackInterface.OnClickMachine;
+                @ClickMachine.canceled -= m_Wrapper.m_MachineScreenActionsCallbackInterface.OnClickMachine;
+                @EscapeMachineScreen.started -= m_Wrapper.m_MachineScreenActionsCallbackInterface.OnEscapeMachineScreen;
+                @EscapeMachineScreen.performed -= m_Wrapper.m_MachineScreenActionsCallbackInterface.OnEscapeMachineScreen;
+                @EscapeMachineScreen.canceled -= m_Wrapper.m_MachineScreenActionsCallbackInterface.OnEscapeMachineScreen;
+            }
+            m_Wrapper.m_MachineScreenActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @ClickMachine.started += instance.OnClickMachine;
+                @ClickMachine.performed += instance.OnClickMachine;
+                @ClickMachine.canceled += instance.OnClickMachine;
+                @EscapeMachineScreen.started += instance.OnEscapeMachineScreen;
+                @EscapeMachineScreen.performed += instance.OnEscapeMachineScreen;
+                @EscapeMachineScreen.canceled += instance.OnEscapeMachineScreen;
+            }
+        }
+    }
+    public MachineScreenActions @MachineScreen => new MachineScreenActions(this);
     private int m_KeyboardMouseSchemeIndex = -1;
     public InputControlScheme KeyboardMouseScheme
     {
@@ -496,10 +559,9 @@ public class @InputMaster : IInputActionCollection, IDisposable
             return asset.controlSchemes[m_KeyboardMouseSchemeIndex];
         }
     }
-    public interface IUIActions
+    public interface IMenuActions
     {
         void OnToggleMenuScreen(InputAction.CallbackContext context);
-        void OnEscapeMachineScreen(InputAction.CallbackContext context);
     }
     public interface IDeveloperActions
     {
@@ -515,5 +577,10 @@ public class @InputMaster : IInputActionCollection, IDisposable
         void OnToggleBuildMenu(InputAction.CallbackContext context);
         void OnEscapeBuildMenu(InputAction.CallbackContext context);
         void OnClickToContruct(InputAction.CallbackContext context);
+    }
+    public interface IMachineScreenActions
+    {
+        void OnClickMachine(InputAction.CallbackContext context);
+        void OnEscapeMachineScreen(InputAction.CallbackContext context);
     }
 }

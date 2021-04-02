@@ -14,7 +14,7 @@ public interface IMachine
 
 public class GeneratorService : MonoBehaviour, IMachine
 {
-    public GeneratorModel type;
+    public GeneratorModel Type;
 
     #region type
 
@@ -30,72 +30,54 @@ public class GeneratorService : MonoBehaviour, IMachine
 
     #endregion type
 
-    private SpriteRenderer sprite;
-    private float timer;
+    private SpriteRenderer _sprite;
+    private float _timer;
     private ViewHandler _viewHandler;
+    private InputMaster _input;
 
     private void Awake()
     {
+        _input = new InputMaster();
+        _input.MachineScreen.ClickMachine.performed += _ => GeneratorInterface();
+
         _viewHandler = GameObject.Find("VIEW HANDLER")
             .GetComponent<ViewHandler>();
     }
 
+    private void Enable()
+    {
+        _input.MachineScreen.Enable();
+    }
+
+    private void Disable()
+    {
+        _input.MachineScreen.Disable();
+    }
+
     public void Start()
     {
-        if (type != null)
+        if (Type != null)
         {
-            name = type.title;
+            name = Type.title;
 
-            Title = type.title;
-            MaxBuffer = type.maxBuffer;
-            PowerGenerator = type.powerGenerator;
-            Title = type.title;
-            MaxProcessTime = type.maxProcessTime;
-            Inputs = type.inputs;
-            Output = type.outputs[0];
+            Title = Type.title;
+            MaxBuffer = Type.maxBuffer;
+            PowerGenerator = Type.powerGenerator;
+            Title = Type.title;
+            MaxProcessTime = Type.maxProcessTime;
+            Inputs = Type.inputs;
+            Output = Type.outputs[0];
         }
 
-        sprite = GetComponentInChildren<SpriteRenderer>();
+        _sprite = GetComponentInChildren<SpriteRenderer>();
 
-        Amount = 0;
+        Amount = 2;
     }
 
     public void Update()
     {
-        GeneratorInterface();
-    }
-
-    private void FixedUpdate()
-    {
-        if (TimerRun.Run(1f, ref timer))
-        {
-            Consume();
-            Powered();
-
-            BateryLight();
-        }
-
-        if (Buffer < 0) Buffer = 0;
-        if (Buffer > MaxBuffer) Buffer = MaxBuffer;
-    }
-
-    private void GeneratorInterface()
-    {
-        try
-        {
-            var ray = Utilities.GetMousePositionInRaycastHit();
-            if (ray.HasValue)
-            {
-                if (ray.GetValueOrDefault().collider.name.Contains(Title))
-                {
-                    if (Mouse.current.leftButton.wasPressedThisFrame)
-                    {
-                        _viewHandler.ShowInterfaceMachine();
-                    }
-                }
-            }
-
-            _viewHandler.UpdateInterfaceMachine(new WindowsMachineItemModel
+        if (_viewHandler.MainScreen.WindowsMachine.gameObject.activeSelf)
+            _viewHandler.WindowsMachineService.UpdateInterfaceMachine(new WindowsMachineItemModel
             {
                 buffer = Buffer,
                 maxBuffer = MaxBuffer,
@@ -106,11 +88,35 @@ public class GeneratorService : MonoBehaviour, IMachine
                 InputAmount = Inputs.Length,
                 OutputAmount = 1
             });
-        }
-        catch (Exception ex)
+    }
+
+    private void FixedUpdate()
+    {
+        if (TimerRun.Run(1f, ref _timer))
         {
-            Toast.Message(ToastType.Error, "Exception", ex.Message);
-            Debug.LogException(ex);
+            Consume();
+            Powered();
+
+            BatteryLight();
+        }
+
+        if (Buffer < 0) Buffer = 0;
+        if (Buffer > MaxBuffer) Buffer = MaxBuffer;
+    }
+
+    private void GeneratorInterface()
+    {
+        var ray = Utilities.GetMousePositionInRaycastHit();
+        if (ray.HasValue)
+        {
+            if (ray.GetValueOrDefault().collider.name.Contains(Title))
+            {
+                if (!ViewHandler.IsOpen)
+                {
+                    _viewHandler.MainScreen.WindowsMachine.gameObject.SetActive(true);
+                    ViewHandler.IsOpen = true;
+                }
+            }
         }
     }
 
@@ -124,9 +130,9 @@ public class GeneratorService : MonoBehaviour, IMachine
         else return 0;
     }
 
-    private void BateryLight()
+    private void BatteryLight()
     {
-        sprite.color = Buffer > 0
+        _sprite.color = Buffer > 0
             ? new Color(0, 1, 0, .200f)
             : new Color(1, 0, 0, .200f);
     }
@@ -154,6 +160,6 @@ public class GeneratorService : MonoBehaviour, IMachine
 
     CategoryItemModel IMachine.GetType()
     {
-        return type;
+        return Type;
     }
 }

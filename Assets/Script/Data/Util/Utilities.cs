@@ -68,28 +68,7 @@ namespace Assets.Script.Util
             }
         }
 
-        public static int GetTransferenceRateFromTier(Tier tier)
-        {
-            switch (tier)
-            {
-                case Tier.Low:
-                    return 12;
-
-                case Tier.Normal:
-                    return 12 * 2;
-
-                case Tier.Hight:
-                    return 12 * 3;
-
-                case Tier.Ultra:
-                    return 12 * 4;
-
-                default:
-                    return 0;
-            }
-        }
-
-        public static List<Vector3> GetWindRoseDirection()
+        private static List<Vector3> GetWindRoseDirection()
         {
             #region Position Raycast Start
 
@@ -133,7 +112,28 @@ namespace Assets.Script.Util
             #endregion Position Raycast Start
         }
 
-        public static List<Vector3> GetCrossDirection()
+        public static List<T> GetItemsFromRayCast<T>(Transform transform, float distance = 1)
+        {
+            var list = new List<T>();
+
+            foreach (var coord in GetCrossDirection())
+            {
+                if (Physics.Raycast(new Vector3(transform.position.x, 1, transform.position.z), coord, out RaycastHit hit, distance))
+                {
+                    Debug.DrawRay(transform.position, coord, Color.white, distance);
+
+#pragma warning disable UNT0014 // Invalid type for call to GetComponent
+                    var t = hit.transform.GetComponent<T>();
+#pragma warning restore UNT0014 // Invalid type for call to GetComponent
+                    if (t != null)
+                        list.Add(t);
+                }
+            }
+
+            return list;
+        }
+
+        private static List<Vector3> GetCrossDirection()
         {
             #region Position Raycast Start
 
@@ -163,45 +163,6 @@ namespace Assets.Script.Util
             };
 
             #endregion Position Raycast Start
-        }
-
-        public static List<T> GetItemsFromRayCast<T>(Transform transform, float distance = 1)
-        {
-            var list = new List<T>();
-
-            foreach (var coord in GetCrossDirection())
-            {
-                if (Physics.Raycast(new Vector3(transform.position.x, 0.5f, transform.position.z), coord, out RaycastHit hit, distance))
-                {
-                    Debug.DrawRay(transform.position, coord, Color.white, distance);
-
-#pragma warning disable UNT0014 // Invalid type for call to GetComponent
-                    var t = hit.transform.GetComponent<T>();
-#pragma warning restore UNT0014 // Invalid type for call to GetComponent
-                    if (t != null)
-                        list.Add(t);
-                }
-            }
-
-            return list;
-        }
-
-        [Obsolete]
-        public static List<T> GetListItemFromRayCast<T>(Transform transform, float distance = 1) where T : MonoBehaviour
-        {
-            var hit = Physics.OverlapSphere(transform.position, distance);
-
-            var itens = new List<T>();
-            for (var i = 0; i < hit.Length; i++)
-            {
-                Debug.DrawRay(transform.position, transform.position, Color.white, distance);
-
-                var item = hit[i].gameObject.GetComponent<T>();
-                if (item != null)
-                    itens.Add(item);
-            }
-
-            return itens;
         }
     }
 }
