@@ -88,7 +88,7 @@
     <Compile Include="Assets\Script\Data\Util\DeveloperConsole\ConsoleCommand.cs" />
     <Compile Include="Assets\Script\Data\Util\DeveloperConsole\DeveloperConsole.cs" />
     <Compile Include="Assets\Script\Data\Util\DeveloperConsole\DeveloperConsoleBehaviour.cs" />
-    <Compile Include="Assets\Script\Data\Util\Locate.cs" />
+    <Compile Include="Assets\Script\Data\Util\Locale.cs" />
     <Compile Include="Assets\Script\Data\Util\TimerRun.cs" />
     <Compile Include="Assets\Script\Data\Util\Toast.cs" />
     <Compile Include="Assets\Script\Data\Util\Utilities.cs" />

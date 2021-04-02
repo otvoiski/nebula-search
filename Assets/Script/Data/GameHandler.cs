@@ -19,7 +19,7 @@ namespace Assets.Script.Data
 
         private void Start()
         {
-            Locate.LoadLocate(Language.BR);
+            Locale.LoadLocate(Language.BR);
 
             LoadItems();
 

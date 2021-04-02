@@ -10,7 +10,7 @@ public class Toast : MonoBehaviour
 {
     public static void Exception(Exception ex)
     {
-        Message(ToastType.Error, Locate.Translate["General"]["Exception"].ToString(), ex.Message);
+        Message(ToastType.Error, Locale.Translate["General"]["Exception"].ToString(), ex.Message);
     }
 
     public static void Message(ToastType toastType, string title, string message)
