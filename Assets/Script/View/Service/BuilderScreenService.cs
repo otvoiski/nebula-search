@@ -5,7 +5,10 @@ using Assets.Script.Util;
 using Assets.Script.View.Model;
 using System.Collections.Generic;
 using System.Linq;
+using Assets.Script.Data;
+using Assets.Script.Data.Service;
 using TMPro;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
@@ -161,8 +164,10 @@ namespace Assets.Script.View.Service
 
                 // TODO: Remove necessary items from inventory of player.
 
-                Instantiate(BuildScreen.SelectedItem, GameObject.Find("Map").transform)
-                    .SetActive(true);
+                var item = Instantiate(BuildScreen.SelectedItem, GameObject.Find("Map").transform);
+
+                item.SetActive(true);
+                item.name = GUID.Generate().ToString();
             }
         }
 
@@ -173,7 +178,7 @@ namespace Assets.Script.View.Service
         private bool CanConstruct()
         {
             var r = true;
-            foreach (var item in Utilities.GetItemsFromRayCast<GameObject>(BuildScreen.SelectedItem?.transform, .10f))
+            foreach (var item in Utilities.GetItemsFromRayCast<GameObject>(BuildScreen.SelectedItem.transform, .10f))
             {
                 if (item != null)
                 {
@@ -239,7 +244,7 @@ namespace Assets.Script.View.Service
                     case CategoryItemEnum.Generator:
                         foreach (var item in (IList<GeneratorService>)GameHandler.Itens[$"{enumerator}"])
                         {
-                            var button = FillItemBuildList(item.type, Instantiate(buildListItem, list));
+                            var button = FillItemBuildList(item.Type, Instantiate(buildListItem, list));
                             button.onClick.AddListener(delegate { ItemSelectedToBuild(item.gameObject); });
                         }
                         break;
@@ -247,7 +252,7 @@ namespace Assets.Script.View.Service
                     case CategoryItemEnum.Machine:
                         foreach (var item in (IList<MachineService>)GameHandler.Itens[$"{enumerator}"])
                         {
-                            var button = FillItemBuildList(item.type, Instantiate(buildListItem, list));
+                            var button = FillItemBuildList(item.Type, Instantiate(buildListItem, list));
                             button.onClick.AddListener(delegate { ItemSelectedToBuild(item.gameObject); });
                         }
                         break;

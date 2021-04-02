@@ -70,7 +70,6 @@
     <Compile Include="Assets\Script\Data\Enum\CategoryItemEnum.cs" />
     <Compile Include="Assets\Script\Data\Enum\Language.cs" />
     <Compile Include="Assets\Script\Data\Enum\Material.cs" />
-    <Compile Include="Assets\Script\Data\Enum\Tier.cs" />
     <Compile Include="Assets\Script\Data\Enum\ToastType.cs" />
     <Compile Include="Assets\Script\Data\GameHandler.cs" />
     <Compile Include="Assets\Script\Data\Lib\CameraFollow.cs" />

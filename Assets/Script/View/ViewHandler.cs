@@ -18,7 +18,6 @@ namespace Assets.Script.View
 
         public static int LimitTextConsoleItem;
         public WindowsMachineService WindowsMachineService { get; private set; }
-        public DeveloperConsoleBehaviour DeveloperConsoleBehaviour { get; private set; }
         public BuilderScreenService BuilderScreenService { get; private set; }
         public MainScreenModel MainScreen { get; private set; }
 
@@ -35,6 +34,8 @@ namespace Assets.Script.View
             #region Input
 
             Input = new InputMaster();
+            Input.Menu.ToggleMenuScreen.performed += ToggleMenuScreen;
+            Input.Developer.ToggleConsole.performed += ShowDeveloperConsole;
 
             #endregion Input
 
@@ -86,8 +87,8 @@ namespace Assets.Script.View
                 .GetComponent<BuilderScreenService>();
             WindowsMachineService = MainScreen.WindowsMachine.gameObject
                 .AddComponent<WindowsMachineService>();
-            DeveloperConsoleBehaviour = MainScreen.DeveloperConsole.gameObject
-                .GetComponent<DeveloperConsoleBehaviour>();
+            //DeveloperConsoleBehaviour = MainScreen.DeveloperConsole.gameObject
+            //    .GetComponent<DeveloperConsoleBehaviour>();
 
             BuilderScreenService.Setup(MainScreen.BuildScreen);
             WindowsMachineService.Setup(MainScreen.WindowsMachine);
@@ -100,9 +101,6 @@ namespace Assets.Script.View
         private void OnEnable()
         {
             Input.Enable();
-            Input.UI.EscapeMachineScreen.performed += EscapeMachineScreen;
-            Input.UI.ToggleMenuScreen.performed += ToggleMenuScreen;
-            Input.Developer.ToggleConsole.performed += ShowDeveloperConsole;
         }
 
         private void OnDisable()
@@ -127,11 +125,6 @@ namespace Assets.Script.View
             }
         }
 
-        private void EscapeMachineScreen(CallbackContext context)
-        {
-            CloseInterfaceMachine();
-        }
-
         private void ShowDeveloperConsole(CallbackContext context)
         {
             if (!context.action.triggered) { return; }
@@ -150,21 +143,6 @@ namespace Assets.Script.View
                     MainScreen.DeveloperConsole.gameObject.SetActive(false);
                     IsOpen = false;
                 }
-            }
-        }
-
-        public void UpdateInterfaceMachine(WindowsMachineItemModel windowsMachineItemModel)
-        {
-            if (MainScreen.WindowsMachine.gameObject.activeSelf)
-                WindowsMachineService.UpdateInterfaceMachine(windowsMachineItemModel);
-        }
-
-        public void ShowInterfaceMachine()
-        {
-            if (!IsOpen)
-            {
-                IsOpen = true;
-                MainScreen.WindowsMachine.gameObject.SetActive(true);
             }
         }
 
