@@ -6,10 +6,10 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
-public class Locate : MonoBehaviour
+public class Locale : MonoBehaviour
 {
     public static IniData Translate { get; private set; }
-    private const string LOCATE_PATH = @".\Assets\Resources\Locate\";
+    private const string LOCALE_PATH = @".\Assets\Resources\Locale\";
 
     public static void LoadLocate(Language language)
     {
@@ -43,6 +43,6 @@ public class Locate : MonoBehaviour
     private static IniData ReadIni(string path)
     {
         var parser = new FileIniDataParser();
-        return parser.ReadFile($"{LOCATE_PATH}{path}.ini");
+        return parser.ReadFile($"{LOCALE_PATH}{path}.ini");
     }
 }

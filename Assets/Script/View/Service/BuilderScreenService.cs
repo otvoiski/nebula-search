@@ -157,8 +157,8 @@ namespace Assets.Script.View.Service
                 {
                     Toast.Message(
                         ToastType.Error,
-                        Locate.Translate["BuildMode"]["CantConstructTitle"],
-                        Locate.Translate["BuildMode"]["CantConstruct"]);
+                        Locale.Translate["BuildMode"]["CantConstructTitle"],
+                        Locale.Translate["BuildMode"]["CantConstruct"]);
                     return;
                 }
 

@@ -156,9 +156,9 @@ namespace Assets.Script.View.Service
                 var timer = windowsMachine.Info.Find("ProcessTime");
                 var consume = windowsMachine.Info.Find("PowerConsume");
 
-                Change(energy, Locate.Translate["WindowsMachine"]["Energy"], $"{ windowsMachineItemModelStatic.buffer}/{windowsMachineItemModelStatic.maxBuffer}");
-                Change(timer, Locate.Translate["WindowsMachine"]["ProcessTime"], $"{ windowsMachineItemModelStatic.processTime}/{windowsMachineItemModelStatic.maxProcessTime}");
-                Change(consume, Locate.Translate["WindowsMachine"]["PowerConsume"], $"{ windowsMachineItemModelStatic.powerGenerator}");
+                Change(energy, Locale.Translate["WindowsMachine"]["Energy"], $"{ windowsMachineItemModelStatic.buffer}/{windowsMachineItemModelStatic.maxBuffer}");
+                Change(timer, Locale.Translate["WindowsMachine"]["ProcessTime"], $"{ windowsMachineItemModelStatic.processTime}/{windowsMachineItemModelStatic.maxProcessTime}");
+                Change(consume, Locale.Translate["WindowsMachine"]["PowerConsume"], $"{ windowsMachineItemModelStatic.powerGenerator}");
 
                 void Change(Transform transform, string title, string value)
                 {
