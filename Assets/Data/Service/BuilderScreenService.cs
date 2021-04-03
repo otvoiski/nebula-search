@@ -237,12 +237,12 @@ namespace Assets.Data.Service
             if (machine.ResourcesToBuild == null || machine.ResourcesToBuild.Count == 0)
                 ConsoleCommand.PrintOnConsole($"Fail to load Resources To Build", Color.red);
             else
-                foreach (var material in machine._resourcesToBuildSize)
+                foreach (var material in machine.ResourcesToBuild)
                 {
                     var item = Instantiate(resourceItem, resources.transform);
-                    item.name = $"{material.Key}";
-                    item.transform.Find("Title").GetComponent<Text>().text = $"{material.Key}";
-                    item.transform.Find("Value").GetComponent<Text>().text = $"{material.Value}";
+                    item.name = $"{material.Material}";
+                    item.transform.Find("Title").GetComponent<Text>().text = $"{material.Material}";
+                    item.transform.Find("Amount").GetComponent<Text>().text = $"{material.Amount}";
                 }
         }
 

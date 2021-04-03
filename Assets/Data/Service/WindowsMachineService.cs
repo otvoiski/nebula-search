@@ -163,7 +163,7 @@ namespace Assets.Data.Service
                 void Change(Transform transform, string title, string value)
                 {
                     transform.Find("Title").GetComponent<Text>().text = title;
-                    transform.Find("Value").GetComponent<Text>().text = value;
+                    transform.Find("Amount").GetComponent<Text>().text = value;
                 }
             }
 
@@ -185,7 +185,7 @@ namespace Assets.Data.Service
                 void Change(Transform transform)
                 {
                     transform.Find("Title").GetComponent<Text>().text = string.Empty;
-                    transform.Find("Value").GetComponent<Text>().text = string.Empty;
+                    transform.Find("Amount").GetComponent<Text>().text = string.Empty;
                 }
             }
 

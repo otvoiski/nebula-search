@@ -17,26 +17,15 @@ namespace Assets.Data.Model
         public Sprite Icon;
         public GameObject Prefab;
         [TextArea] public string Description;
-        [SerializeField] public List<ResourcesToBuildObject> _resourcesToBuildSize;
-        public IDictionary<Material, int> ResourcesToBuild;
+        public List<ResourcesToBuildObject> ResourcesToBuild;
         public Material[] Inputs;
         public Material[] Outputs;
 
         [Serializable]
         public class ResourcesToBuildObject
         {
-            public Material Key;
-            public int Value;
-        }
-
-        public MachineModel()
-        {
-            _resourcesToBuildSize = new List<ResourcesToBuildObject>();
-            ResourcesToBuild = new Dictionary<Material, int>();
-            foreach (var entry in _resourcesToBuildSize)
-            {
-                ResourcesToBuild.Add(entry.Key, entry.Value);
-            }
+            public Material Material;
+            public int Amount;
         }
     }
 }
