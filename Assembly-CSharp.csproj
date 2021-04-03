@@ -76,8 +76,6 @@
     <Compile Include="Assets\Data\Enum\ToastType.cs" />
     <Compile Include="Assets\Data\Enum\WindowsMachineEnum.cs" />
     <Compile Include="Assets\Data\GameHandler.cs" />
-    <Compile Include="Assets\Data\Lib\CameraFollow.cs" />
-    <Compile Include="Assets\Data\Lib\ToastControl.cs" />
     <Compile Include="Assets\Data\Model\BuildScreenModel.cs" />
     <Compile Include="Assets\Data\Model\DeveloperConsoleModel.cs" />
     <Compile Include="Assets\Data\Model\MachineModel.cs" />
@@ -88,6 +86,7 @@
     <Compile Include="Assets\Data\Service\BuilderScreenService.cs" />
     <Compile Include="Assets\Data\Service\MachineService.cs" />
     <Compile Include="Assets\Data\Service\WindowsMachineService.cs" />
+    <Compile Include="Assets\Data\Util\CameraFollow.cs" />
     <Compile Include="Assets\Data\Util\DeveloperConsole\Commands\LogCommand.cs" />
     <Compile Include="Assets\Data\Util\DeveloperConsole\ConsoleCommand.cs" />
     <Compile Include="Assets\Data\Util\DeveloperConsole\DeveloperConsole.cs" />
@@ -95,6 +94,7 @@
     <Compile Include="Assets\Data\Util\Locale.cs" />
     <Compile Include="Assets\Data\Util\TimerRun.cs" />
     <Compile Include="Assets\Data\Util\Toast.cs" />
+    <Compile Include="Assets\Data\Util\ToastControl.cs" />
     <Compile Include="Assets\Data\Util\Utilities.cs" />
     <Compile Include="Assets\Data\ViewHandler.cs" />
     <Compile Include="Assets\Input\InputMaster.cs" />

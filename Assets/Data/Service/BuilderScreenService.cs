@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Assets.Data.Enum;
 using Assets.Data.Model;
+using Assets.Data.Util.DeveloperConsole;
 using TMPro;
 using UnityEditor;
 using UnityEngine;
@@ -18,6 +19,7 @@ namespace Assets.Data.Service
         [SerializeField] private bool _isReadyToAccept;
         [SerializeField] private bool _isReadyToConstruction;
         [SerializeField] private bool _isBuilding;
+        [SerializeField] private bool _isOpen;
 
         private InputMaster _input;
 
@@ -42,6 +44,7 @@ namespace Assets.Data.Service
             _isReadyToConstruction = false;
             _isReadyToSelect = false;
             _isBuilding = false;
+            _isOpen = false;
 
             LoadingMenuList();
         }
@@ -55,6 +58,8 @@ namespace Assets.Data.Service
             BuildScreen.InfoScreen.gameObject.SetActive(_isBuilding && _isReadyToSelect && _isReadyToAccept);
 
             MovementItem();
+
+            _isOpen = ViewHandler.IsOpen;
         }
 
         /// <summary>
@@ -97,19 +102,23 @@ namespace Assets.Data.Service
         /// </summary>
         private void EscapeFromBuildMode()
         {
-            if (BuildScreen.SelectedItem != null && _isReadyToConstruction)
-                Destroy(BuildScreen.SelectedItem);
+            if (BuildScreen.BuildMenu.gameObject.activeSelf)
+            {
+                if (BuildScreen.SelectedItem != null && _isReadyToConstruction)
+                    Destroy(BuildScreen.SelectedItem);
 
-            BuildScreen.SelectedItem = null;
+                BuildScreen.SelectedItem = null;
 
-            _isReadyToConstruction = false;
-            _isReadyToSelect = false;
-            _isReadyToAccept = false;
-            _isBuilding = false;
+                _isReadyToConstruction = false;
+                _isReadyToSelect = false;
+                _isReadyToAccept = false;
+                _isBuilding = false;
+                ViewHandler.IsOpen = false;
 
-            BuildScreen.BuildMenu.gameObject.SetActive(false);
-            BuildScreen.BuildList.gameObject.SetActive(false);
-            BuildScreen.InfoScreen.gameObject.SetActive(false);
+                BuildScreen.BuildMenu.gameObject.SetActive(false);
+                BuildScreen.BuildList.gameObject.SetActive(false);
+                BuildScreen.InfoScreen.gameObject.SetActive(false);
+            }
         }
 
         /// <summary>
@@ -213,6 +222,28 @@ namespace Assets.Data.Service
 
             BuildScreen.InfoScreen.Find("Info").GetComponentInChildren<Text>()
                 .text = machine.Description;
+
+            // Add resources needed
+            BuildScreen.InfoScreen.Find("Top").Find("Resources");
+
+            var resources = BuildScreen.InfoScreen.Find("Top").Find("Resources");
+            Utilities.ResetChildTransform(resources);
+
+            var pathItem = "Prefabs/UI/MainScreen/BuildScreen/InfoScreen/Top/Resources/Item";
+            var resourceItem = Resources.Load<GameObject>(pathItem);
+
+            if (resourceItem == null)
+                ConsoleCommand.PrintOnConsole($"Fail to load to {pathItem}", Color.red);
+            if (machine.ResourcesToBuild == null || machine.ResourcesToBuild.Count == 0)
+                ConsoleCommand.PrintOnConsole($"Fail to load Resources To Build", Color.red);
+            else
+                foreach (var material in machine._resourcesToBuildSize)
+                {
+                    var item = Instantiate(resourceItem, resources.transform);
+                    item.name = $"{material.Key}";
+                    item.transform.Find("Title").GetComponent<Text>().text = $"{material.Key}";
+                    item.transform.Find("Value").GetComponent<Text>().text = $"{material.Value}";
+                }
         }
 
         /// <summary>
@@ -227,12 +258,7 @@ namespace Assets.Data.Service
             var list = BuildScreen.BuildList.transform.GetChild(0); // <-- List
             var buildListItem = Resources.Load<GameObject>("Prefabs/UI/MainScreen/BuildScreen/BuildList/BuildListItem");
 
-            // reset child
-            foreach (Transform child in list.transform)
-            {
-                if (child != null)
-                    Destroy(child.gameObject);
-            }
+            Utilities.ResetChildTransform(list);
 
             if (_isReadyToSelect)
             {

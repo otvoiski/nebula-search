@@ -2,6 +2,7 @@
 {
     public enum MainScreenEnum
     {
+        GUI,
         BottomBar,
         Toast,
         WindowsMachine,

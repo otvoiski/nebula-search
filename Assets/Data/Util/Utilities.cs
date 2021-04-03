@@ -162,5 +162,18 @@ namespace Assets.Data.Util
 
             #endregion Position Raycast Start
         }
+
+        /// <summary>
+        /// This Reset all children's of transform
+        /// </summary>
+        public static void ResetChildTransform(Transform transform)
+        {
+            // reset child
+            foreach (Transform child in transform)
+            {
+                if (child != null)
+                    Destroy(child.gameObject);
+            }
+        }
     }
 }

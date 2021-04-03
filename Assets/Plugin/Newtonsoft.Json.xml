@@ -9511,7 +9511,7 @@
             Initializes a new instance of the <see cref="T:Newtonsoft.Json.Serialization.CamelCaseNamingStrategy" /> class.
             </summary>
             <param name="processDictionaryKeys">
-            A flag indicating whether dictionary keys should be processed.
+            A flag indicating whether dictionary2 keys should be processed.
             </param>
             <param name="overrideSpecifiedNames">
             A flag indicating whether explicitly specified property names should be processed,
@@ -9523,7 +9523,7 @@
             Initializes a new instance of the <see cref="T:Newtonsoft.Json.Serialization.CamelCaseNamingStrategy" /> class.
             </summary>
             <param name="processDictionaryKeys">
-            A flag indicating whether dictionary keys should be processed.
+            A flag indicating whether dictionary2 keys should be processed.
             </param>
             <param name="overrideSpecifiedNames">
             A flag indicating whether explicitly specified property names should be processed,
@@ -9624,9 +9624,9 @@
         </member>
         <member name="P:Newtonsoft.Json.Serialization.DefaultContractResolver.NamingStrategy">
             <summary>
-            Gets or sets the naming strategy used to resolve how property names and dictionary keys are serialized.
+            Gets or sets the naming strategy used to resolve how property names and dictionary2 keys are serialized.
             </summary>
-            <value>The naming strategy used to resolve how property names and dictionary keys are serialized.</value>
+            <value>The naming strategy used to resolve how property names and dictionary2 keys are serialized.</value>
         </member>
         <member name="M:Newtonsoft.Json.Serialization.DefaultContractResolver.#ctor">
             <summary>
@@ -9772,10 +9772,10 @@
         </member>
         <member name="M:Newtonsoft.Json.Serialization.DefaultContractResolver.ResolveDictionaryKey(System.String)">
             <summary>
-            Resolves the key of the dictionary. By default <see cref="M:Newtonsoft.Json.Serialization.DefaultContractResolver.ResolvePropertyName(System.String)" /> is used to resolve dictionary keys.
+            Resolves the key of the dictionary2. By default <see cref="M:Newtonsoft.Json.Serialization.DefaultContractResolver.ResolvePropertyName(System.String)" /> is used to resolve dictionary2 keys.
             </summary>
-            <param name="dictionaryKey">Key of the dictionary.</param>
-            <returns>Resolved key of the dictionary.</returns>
+            <param name="dictionaryKey">Key of the dictionary2.</param>
+            <returns>Resolved key of the dictionary2.</returns>
         </member>
         <member name="M:Newtonsoft.Json.Serialization.DefaultContractResolver.GetResolvedPropertyName(System.String)">
             <summary>
@@ -9786,7 +9786,7 @@
         </member>
         <member name="T:Newtonsoft.Json.Serialization.DefaultNamingStrategy">
             <summary>
-            The default naming strategy. Property names and dictionary keys are unchanged.
+            The default naming strategy. Property names and dictionary2 keys are unchanged.
             </summary>
         </member>
         <member name="M:Newtonsoft.Json.Serialization.DefaultNamingStrategy.ResolvePropertyName(System.String)">
@@ -10276,21 +10276,21 @@
         </member>
         <member name="P:Newtonsoft.Json.Serialization.JsonDictionaryContract.DictionaryKeyResolver">
             <summary>
-            Gets or sets the dictionary key resolver.
+            Gets or sets the dictionary2 key resolver.
             </summary>
-            <value>The dictionary key resolver.</value>
+            <value>The dictionary2 key resolver.</value>
         </member>
         <member name="P:Newtonsoft.Json.Serialization.JsonDictionaryContract.DictionaryKeyType">
             <summary>
-            Gets the <see cref="T:System.Type" /> of the dictionary keys.
+            Gets the <see cref="T:System.Type" /> of the dictionary2 keys.
             </summary>
-            <value>The <see cref="T:System.Type" /> of the dictionary keys.</value>
+            <value>The <see cref="T:System.Type" /> of the dictionary2 keys.</value>
         </member>
         <member name="P:Newtonsoft.Json.Serialization.JsonDictionaryContract.DictionaryValueType">
             <summary>
-            Gets the <see cref="T:System.Type" /> of the dictionary values.
+            Gets the <see cref="T:System.Type" /> of the dictionary2 values.
             </summary>
-            <value>The <see cref="T:System.Type" /> of the dictionary values.</value>
+            <value>The <see cref="T:System.Type" /> of the dictionary2 values.</value>
         </member>
         <member name="P:Newtonsoft.Json.Serialization.JsonDictionaryContract.OverrideCreator">
             <summary>
@@ -10300,9 +10300,9 @@
         </member>
         <member name="P:Newtonsoft.Json.Serialization.JsonDictionaryContract.HasParameterizedCreator">
             <summary>
-            Gets a value indicating whether the creator has a parameter with the dictionary values.
+            Gets a value indicating whether the creator has a parameter with the dictionary2 values.
             </summary>
-            <value><c>true</c> if the creator has a parameter with the dictionary values; otherwise, <c>false</c>.</value>
+            <value><c>true</c> if the creator has a parameter with the dictionary2 values; otherwise, <c>false</c>.</value>
         </member>
         <member name="M:Newtonsoft.Json.Serialization.JsonDictionaryContract.#ctor(System.Type)">
             <summary>
@@ -10713,7 +10713,7 @@
             Initializes a new instance of the <see cref="T:Newtonsoft.Json.Serialization.KebabCaseNamingStrategy" /> class.
             </summary>
             <param name="processDictionaryKeys">
-            A flag indicating whether dictionary keys should be processed.
+            A flag indicating whether dictionary2 keys should be processed.
             </param>
             <param name="overrideSpecifiedNames">
             A flag indicating whether explicitly specified property names should be processed,
@@ -10725,7 +10725,7 @@
             Initializes a new instance of the <see cref="T:Newtonsoft.Json.Serialization.KebabCaseNamingStrategy" /> class.
             </summary>
             <param name="processDictionaryKeys">
-            A flag indicating whether dictionary keys should be processed.
+            A flag indicating whether dictionary2 keys should be processed.
             </param>
             <param name="overrideSpecifiedNames">
             A flag indicating whether explicitly specified property names should be processed,
@@ -10792,12 +10792,12 @@
         </member>
         <member name="T:Newtonsoft.Json.Serialization.NamingStrategy">
             <summary>
-            A base class for resolving how property names and dictionary keys are serialized.
+            A base class for resolving how property names and dictionary2 keys are serialized.
             </summary>
         </member>
         <member name="P:Newtonsoft.Json.Serialization.NamingStrategy.ProcessDictionaryKeys">
             <summary>
-            A flag indicating whether dictionary keys should be processed.
+            A flag indicating whether dictionary2 keys should be processed.
             Defaults to <c>false</c>.
             </summary>
         </member>
@@ -10831,10 +10831,10 @@
         </member>
         <member name="M:Newtonsoft.Json.Serialization.NamingStrategy.GetDictionaryKey(System.String)">
             <summary>
-            Gets the serialized key for a given dictionary key.
+            Gets the serialized key for a given dictionary2 key.
             </summary>
-            <param name="key">The initial dictionary key.</param>
-            <returns>The serialized dictionary key.</returns>
+            <param name="key">The initial dictionary2 key.</param>
+            <returns>The serialized dictionary2 key.</returns>
         </member>
         <member name="M:Newtonsoft.Json.Serialization.NamingStrategy.ResolvePropertyName(System.String)">
             <summary>
@@ -10935,7 +10935,7 @@
             Initializes a new instance of the <see cref="T:Newtonsoft.Json.Serialization.SnakeCaseNamingStrategy" /> class.
             </summary>
             <param name="processDictionaryKeys">
-            A flag indicating whether dictionary keys should be processed.
+            A flag indicating whether dictionary2 keys should be processed.
             </param>
             <param name="overrideSpecifiedNames">
             A flag indicating whether explicitly specified property names should be processed,
@@ -10947,7 +10947,7 @@
             Initializes a new instance of the <see cref="T:Newtonsoft.Json.Serialization.SnakeCaseNamingStrategy" /> class.
             </summary>
             <param name="processDictionaryKeys">
-            A flag indicating whether dictionary keys should be processed.
+            A flag indicating whether dictionary2 keys should be processed.
             </param>
             <param name="overrideSpecifiedNames">
             A flag indicating whether explicitly specified property names should be processed,
