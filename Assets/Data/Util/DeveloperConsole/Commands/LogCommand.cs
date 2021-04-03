@@ -11,15 +11,13 @@ namespace Assets.Data.Util.DeveloperConsole
 
             if (string.IsNullOrEmpty(text))
             {
-                var t = PrintOnConsole(text);
-                t.text = $"You dont said nothing!";
-                t.color = Color.red;
+                PrintOnConsole($"You dont said nothing!", Color.red);
 
                 return false;
             }
             else
             {
-                PrintOnConsole(text).text = $"You said: {text}";
+                PrintOnConsole($"You said: {text}", Color.green);
                 return true;
             }
         }

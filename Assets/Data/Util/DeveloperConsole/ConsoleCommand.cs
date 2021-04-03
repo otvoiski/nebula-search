@@ -18,7 +18,7 @@ namespace Assets.Data.Util.DeveloperConsole
 
         public abstract bool Process(string[] args);
 
-        public Text PrintOnConsole(string text)
+        public static void PrintOnConsole(string text, Color color)
         {
             var scrollview = GameObject
                     .Find("VIEW HANDLER").transform
@@ -31,7 +31,7 @@ namespace Assets.Data.Util.DeveloperConsole
                     .Find("Content").transform;
 
             var item = Instantiate(
-                Resources.Load<GameObject>("Prefabs/UI/MainScreen/DevelopperConsole/Scroll View/Viewport/Content/Text"),
+                Resources.Load<GameObject>("Prefabs/UI/MainScreen/DeveloperConsole/Scroll View/Viewport/Content/Text"),
                 context);
 
             if (context.childCount > ViewHandler.LimitTextConsoleItem)
@@ -41,11 +41,14 @@ namespace Assets.Data.Util.DeveloperConsole
 
             item.name = text.Length.ToString();
 
+            var txt = item.GetComponent<Text>();
+
+            txt.text = text;
+            txt.color = color;
+
             Canvas.ForceUpdateCanvases();
             scrollview.GetComponent<ScrollRect>().verticalScrollbar.value = 0f;
             Canvas.ForceUpdateCanvases();
-
-            return item.GetComponent<Text>();
         }
     }
 }

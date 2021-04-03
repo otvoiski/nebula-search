@@ -206,11 +206,13 @@ namespace Assets.Data.Service
         /// <summary>
         /// Create item in world later user accept to created
         /// </summary>
-        /// <param name="instance"></param>
-        public void ItemSelectedToBuild(GameObject instance)
+        public void ItemSelectedToBuild(MachineModel machine)
         {
             _isReadyToAccept = !_isReadyToAccept;
-            BuildScreen.SelectedItem = instance;
+            BuildScreen.SelectedItem = machine.Prefab;
+
+            BuildScreen.InfoScreen.Find("Info").GetComponentInChildren<Text>()
+                .text = machine.Description;
         }
 
         /// <summary>
@@ -234,48 +236,16 @@ namespace Assets.Data.Service
 
             if (_isReadyToSelect)
             {
-                switch (enumerator)
+                foreach (var item in GameHandler.Items[$"{enumerator}"])
                 {
-                    case CategoryItemEnum.Generator:
-                        foreach (var item in (IList<GeneratorService>)GameHandler.Items[$"{enumerator}"])
-                        {
-                            var button = FillItemBuildList(item.Type, Instantiate(buildListItem, list));
-                            button.onClick.AddListener(delegate { ItemSelectedToBuild(item.gameObject); });
-                        }
-                        break;
-
-                    case CategoryItemEnum.Machine:
-                        foreach (var item in (IList<MachineService>)GameHandler.Items[$"{enumerator}"])
-                        {
-                            var button = FillItemBuildList(item.Type, Instantiate(buildListItem, list));
-                            button.onClick.AddListener(delegate { ItemSelectedToBuild(item.gameObject); });
-                        }
-                        break;
-
-                    case CategoryItemEnum.Wire:
-                        foreach (var item in (IList<WireService>)GameHandler.Items[$"{enumerator}"])
-                        {
-                            var button = FillItemBuildList(item.type, Instantiate(buildListItem, list));
-                            button.onClick.AddListener(delegate { ItemSelectedToBuild(item.gameObject); });
-                        }
-                        break;
-
-                    case CategoryItemEnum.Gas:
-                        foreach (var item in (IList<GasService>)GameHandler.Items[$"{enumerator}"])
-                        {
-                            var button = FillItemBuildList(item.type, Instantiate(buildListItem, list));
-                            button.onClick.AddListener(delegate { ItemSelectedToBuild(item.gameObject); });
-                        }
-                        break;
-
-                    default:
-                        break;
+                    var button = FillItemBuildList(item, Instantiate(buildListItem, list));
+                    button.onClick.AddListener(delegate { ItemSelectedToBuild(item); });
                 }
             }
 
             list.gameObject.SetActive(_isReadyToSelect);
 
-            Button FillItemBuildList(CategoryItemModel item, GameObject i)
+            Button FillItemBuildList(MachineModel item, GameObject i)
             {
                 if (item != null)
                 {

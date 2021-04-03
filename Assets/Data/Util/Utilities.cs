@@ -66,7 +66,7 @@ namespace Assets.Data.Util
             }
         }
 
-        private static List<Vector3> GetWindRoseDirection()
+        private static IList<Vector3> GetWindRoseDirection()
         {
             #region Position Raycast Start
 
@@ -110,7 +110,7 @@ namespace Assets.Data.Util
             #endregion Position Raycast Start
         }
 
-        public static List<T> GetItemsFromRayCast<T>(Transform transform, float distance = 1)
+        public static IList<T> GetItemsFromRayCast<T>(Transform transform, float distance = 1)
         {
             var list = new List<T>();
 
@@ -131,7 +131,7 @@ namespace Assets.Data.Util
             return list;
         }
 
-        private static List<Vector3> GetCrossDirection()
+        private static IList<Vector3> GetCrossDirection()
         {
             #region Position Raycast Start
 

@@ -154,11 +154,11 @@ namespace Assets.Data.Service
             {
                 var energy = _windowsMachine.Info.Find("Energy");
                 var timer = _windowsMachine.Info.Find("ProcessTime");
-                var consume = _windowsMachine.Info.Find("PowerConsume");
+                var consume = _windowsMachine.Info.Find("Power");
 
                 Change(energy, Locale.Translate["WindowsMachine"]["Energy"], $"{ _windowsMachineItemModelStatic.buffer}/{_windowsMachineItemModelStatic.maxBuffer}");
                 Change(timer, Locale.Translate["WindowsMachine"]["ProcessTime"], $"{ _windowsMachineItemModelStatic.processTime}/{_windowsMachineItemModelStatic.maxProcessTime}");
-                Change(consume, Locale.Translate["WindowsMachine"]["PowerConsume"], $"{ _windowsMachineItemModelStatic.powerGenerator}");
+                Change(consume, Locale.Translate["WindowsMachine"]["Power"], $"{ _windowsMachineItemModelStatic.Power}");
 
                 void Change(Transform transform, string title, string value)
                 {
@@ -176,7 +176,7 @@ namespace Assets.Data.Service
             {
                 var energy = _windowsMachine.Info.Find("Energy");
                 var timer = _windowsMachine.Info.Find("ProcessTime");
-                var consume = _windowsMachine.Info.Find("PowerConsume");
+                var consume = _windowsMachine.Info.Find("Power");
 
                 Change(energy);
                 Change(timer);

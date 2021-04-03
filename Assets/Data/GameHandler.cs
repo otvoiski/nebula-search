@@ -1,21 +1,19 @@
-﻿using Assets.Data.Service;
+﻿using Assets.Data.Enum;
+using Assets.Data.Service;
 using Assets.Data.Util;
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using Assets.Data.Enum;
+using System.Linq;
+using Assets.Data.Model;
+using Assets.Data.Util.DeveloperConsole;
 using UnityEngine;
 
 namespace Assets.Data
 {
     public class GameHandler : MonoBehaviour
     {
-        public InputMaster Input;
-        public static IDictionary<string, IList> Items;
-
-        private void Awake()
-        {
-            Input = new InputMaster();
-        }
+        public static IDictionary<string, IList<MachineModel>> Items;
 
         private void Start()
         {
@@ -26,44 +24,42 @@ namespace Assets.Data
             DontDestroyOnLoad(gameObject);
         }
 
-        private void LoadItems()
+        private static void LoadItems()
         {
-            Items = new Dictionary<string, IList>();
+            Items = new Dictionary<string, IList<MachineModel>>();
 
-            var items = Resources.LoadAll<GameObject>("Items") as GameObject[];
+            var items = Resources.LoadAll<MachineModel>("Items");
 
-            var generators = new List<GeneratorService>();
-            var machines = new List<MachineService>();
-            var wires = new List<WireService>();
-            var gases = new List<GasService>();
-            foreach (var item in items)
+            var generators = new List<MachineModel>();
+            var machines = new List<MachineModel>();
+            var wires = new List<MachineModel>();
+            var gases = new List<MachineModel>();
+
+            foreach (var machine in items)
             {
-                var generator = item.GetComponent<GeneratorService>();
-                if (generator != null)
-                {
-                    generators.Add(item.GetComponent<GeneratorService>());
-                    continue;
-                }
-
-                var machine = item.GetComponent<MachineService>();
                 if (machine != null)
                 {
-                    machines.Add(item.GetComponent<MachineService>());
-                    continue;
-                }
+                    switch (machine.Category)
+                    {
+                        case CategoryItemEnum.Generator:
+                            generators.Add(machine);
+                            break;
 
-                var wire = item.GetComponent<WireService>();
-                if (wire != null)
-                {
-                    wires.Add(item.GetComponent<WireService>());
-                    continue;
-                }
+                        case CategoryItemEnum.Machine:
+                            machines.Add(machine);
+                            break;
 
-                var gas = item.GetComponent<GasService>();
-                if (gas != null)
-                {
-                    gases.Add(item.GetComponent<GasService>());
-                    continue;
+                        case CategoryItemEnum.Wire:
+                            wires.Add(machine);
+                            break;
+
+                        case CategoryItemEnum.Gas:
+                            gases.Add(machine);
+                            break;
+
+                        default:
+                            throw new ArgumentOutOfRangeException();
+                    }
                 }
             }
 
@@ -71,16 +67,8 @@ namespace Assets.Data
             Items.Add($"{CategoryItemEnum.Machine}", machines);
             Items.Add($"{CategoryItemEnum.Wire}", wires);
             Items.Add($"{CategoryItemEnum.Gas}", gases);
-        }
 
-        private void OnEnable()
-        {
-            Input.Enable();
-        }
-
-        private void OnDisable()
-        {
-            Input.Disable();
+            if (!Items.Any()) ConsoleCommand.PrintOnConsole("Game Items can't loaded!", Color.red);
         }
     }
 }

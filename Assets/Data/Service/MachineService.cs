@@ -1,6 +1,9 @@
-﻿using Assets.Data.Model;
-using System.Collections.Generic;
+﻿using Assets.Data.Enum;
+using Assets.Data.Model;
 using Assets.Data.Util;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Material = Assets.Data.Enum.Material;
 
@@ -8,22 +11,17 @@ namespace Assets.Data.Service
 {
     public class MachineService : MonoBehaviour
     {
-        public const float CONNECTION = 1.5f;
+        public const float CONNECTION_MACHINES = 1.5f;
+        public const float CONNECTION_PIPES = 1.5f;
 
         public MachineModel Type;
 
-        public string Title { get; private set; }
-        public int MaxBuffer { get; private set; }
-        public int PowerConsume { get; private set; }
-        public int Buffer { get; private set; }
-        public int MaxProcessTime { get; private set; }
-        public int ProcessTime { get; private set; }
-        public IList<Material> Outputs { get; private set; }
-        public IList<Material> Inputs { get; private set; }
+        public float ProcessTime;
+        public int Buffer;
+        public int Amount;
 
         private SpriteRenderer _sprite;
-        private IList<GasService> _gases;
-        private IList<WireService> _wires;
+
         private bool _isNecessaryEnergy;
         private bool _isNecessaryOxygen;
 
@@ -55,21 +53,10 @@ namespace Assets.Data.Service
         {
             _sprite = GetComponentInChildren<SpriteRenderer>();
 
-            if (Type != null)
-            {
-                name = Type.Title;
-                Title = Type.Title;
-
-                MaxBuffer = Type.maxBuffer;
-                PowerConsume = Type.powerConsume;
-                MaxProcessTime = Type.maxProcessTime;
-                Outputs = Type.Outputs;
-                Inputs = Type.Inputs;
-
-                Buffer = 0;
-                _isNecessaryEnergy = Inputs.Contains(Material.Energy);
-                _isNecessaryOxygen = Inputs.Contains(Material.Oxygen);
-            }
+            name = Type.Title;
+            Buffer = 0;
+            _isNecessaryEnergy = Type.Inputs.Contains(Material.Energy);
+            _isNecessaryOxygen = Type.Inputs.Contains(Material.Oxygen);
         }
 
         public void Update()
@@ -78,44 +65,76 @@ namespace Assets.Data.Service
                 _viewHandler.WindowsMachineService.UpdateInterfaceMachine(new WindowsMachineItemModel
                 {
                     buffer = Buffer,
-                    maxBuffer = MaxBuffer,
-                    maxProcessTime = MaxProcessTime,
-                    powerGenerator = PowerConsume,
-                    processTime = ProcessTime,
-                    title = Title,
-                    InputAmount = Inputs.Count,
-                    OutputAmount = Outputs.Count
+                    maxBuffer = Type.MaxBuffer,
+                    Power = Type.Power,
+                    processTime = (int)ProcessTime,
+                    maxProcessTime = Type.MaxProcessTime,
+                    title = name,
+                    InputAmount = Type.Inputs.Length,
+                    OutputAmount = Type.Outputs.Length
                 });
         }
 
         private void FixedUpdate()
         {
             if (Buffer < 0) Buffer = 0;
-            if (Buffer > MaxBuffer) Buffer = MaxBuffer;
+            if (Buffer > Type.MaxBuffer) Buffer = Type.MaxBuffer;
 
+            switch (Type.Category)
+            {
+                case CategoryItemEnum.Generator:
+                    GeneratorProcessor();
+                    break;
+
+                case CategoryItemEnum.Machine:
+                    MachineProcessor();
+                    break;
+
+                case CategoryItemEnum.Wire:
+                    break;
+
+                case CategoryItemEnum.Gas:
+                    break;
+
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
+            SpriteColor();
+        }
+
+        private void GeneratorProcessor()
+        {
+            if (TimerRun.Run(1f, ref ProcessTime))
+            {
+                Consume();
+                Powered();
+            }
+        }
+
+        private void MachineProcessor()
+        {
             if (TimerRun.Run(1f, ref _oneSecondProcessTimerRunner))
             {
-                if (Buffer >= PowerConsume)
+                if (Buffer >= Type.Power)
                     ProcessTime++;
 
                 if (_isNecessaryEnergy)
                 {
-                    ConnectionToWire();
+                    ConnectionToPipe(CategoryItemEnum.Wire);
                 }
 
                 if (_isNecessaryOxygen)
                 {
-                    ConnectionToGas();
+                    ConnectionToPipe(CategoryItemEnum.Gas);
                 }
             }
 
-            if (TimerRun.Run(MaxProcessTime, ref _maxProcessTimeRunner) && Buffer >= PowerConsume)
+            if (TimerRun.Run(Type.MaxProcessTime, ref _maxProcessTimeRunner) && Buffer >= Type.Power)
             {
-                Buffer -= PowerConsume;
+                Buffer -= Type.Power;
                 ProcessTime = 0;
             }
-
-            SpriteColor();
         }
 
         private void MachineInterface()
@@ -123,7 +142,7 @@ namespace Assets.Data.Service
             var ray = Utilities.GetMousePositionInRaycastHit();
             if (ray.HasValue)
             {
-                if (ray.GetValueOrDefault().collider.name.Contains(Title))
+                if (ray.GetValueOrDefault().collider.name.Contains(Type.Title))
                 {
                     Debug.Log($"Machine Name: {ray.GetValueOrDefault().collider.name}");
                     if (!ViewHandler.IsOpen)
@@ -135,81 +154,141 @@ namespace Assets.Data.Service
             }
         }
 
-        private bool VerifyPathToEnergyGenerator(WireService wire, List<string> list)
+        public void SpriteColor(bool active)
         {
-            var nextWire = wire.Next(last: list);
-            if (nextWire != null)
-            {
-                var result = VerifyPathToEnergyGenerator(nextWire, list);
-                nextWire.SpriteColor(result);
-                return result;
-            }
-            else if (Utilities.GetItemsFromRayCast<GeneratorService>(wire.transform, CONNECTION).Count != 0)
-            {
-                foreach (var generator in Utilities.GetItemsFromRayCast<GeneratorService>(wire.transform, CONNECTION))
-                {
-                    if (Inputs.Contains(generator.Output) && Buffer < MaxBuffer)
-                        Buffer += generator.GetBufferFromRate(PowerConsume);
-                }
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            if (_sprite != null)
+                _sprite.color = active ? new Color(0, 1, 0, .200f) : new Color(1, 0, 0, .200f);
         }
 
-        private bool VerifyPathToEnergyGenerator(GasService gas, List<string> list)
+        private bool VerifyPathToEnergyGenerator(CategoryItemEnum category, MachineService item,
+            List<string> list)
         {
-            var nextGas = gas.Next(last: list);
-            if (nextGas != null)
+            MachineService next;
+
+            switch (category)
             {
-                var result = VerifyPathToEnergyGenerator(nextGas, list);
-                nextGas.SpriteColor(result);
+                case CategoryItemEnum.Wire:
+                    {
+                        next = item.NextWire(last: list);
+                        break;
+                    }
+                case CategoryItemEnum.Gas:
+                    {
+                        next = item.NextGas(last: list);
+                        break;
+                    }
+                default:
+                    return false;
+            }
+
+            if (next != null)
+            {
+                var result = VerifyPathToEnergyGenerator(category, next, list);
+                next.SpriteColor(result);
                 return result;
             }
-            else if (Utilities.GetItemsFromRayCast<GeneratorService>(gas.transform, CONNECTION).Count != 0)
+
+            var generators = Utilities.GetItemsFromRayCast<MachineService>(item.transform, CONNECTION_PIPES)
+                .Where(x => x.Type.Category == CategoryItemEnum.Generator);
+
+            if (generators.Count() != 0)
             {
-                foreach (var generator in Utilities.GetItemsFromRayCast<GeneratorService>(gas.transform, CONNECTION))
+                foreach (var generator in Utilities.GetItemsFromRayCast<MachineService>(item.transform, CONNECTION_PIPES))
                 {
-                    if (Inputs.Contains(generator.Output))
-                        Buffer += generator.GetBufferFromRate(PowerConsume);
+                    foreach (var material in generator.Type.Outputs)
+                    {
+                        if (Type.Inputs.Contains(material) && Buffer < Type.MaxBuffer)
+                            Buffer += generator.GetBufferFromPowerConsume(Type.Power);
+                    }
                 }
+
                 return true;
             }
-            else
-            {
-                return false;
-            }
+
+            return false;
         }
 
-        private void ConnectionToWire()
+        private void ConnectionToPipe(CategoryItemEnum category)
         {
-            _wires = Utilities.GetItemsFromRayCast<WireService>(transform, 10f);
+            var pipes = Utilities.GetItemsFromRayCast<MachineService>(transform, CONNECTION_PIPES)
+                .Where(x => x.Type.Category == category)
+                .ToList();
 
             var list = new List<string>();
-            foreach (var wire in _wires)
+            foreach (var wire in pipes)
             {
                 list.Add(wire.name);
-                wire.SpriteColor(VerifyPathToEnergyGenerator(wire, list));
-            }
-        }
-
-        private void ConnectionToGas()
-        {
-            _gases = Utilities.GetItemsFromRayCast<GasService>(transform);
-
-            var list = new List<string>();
-            foreach (var gas in _gases)
-            {
-                list.Add(gas.name);
-                gas.SpriteColor(VerifyPathToEnergyGenerator(gas, list));
+                wire.SpriteColor(VerifyPathToEnergyGenerator(category, wire, list));
             }
         }
 
         private void SpriteColor()
         {
-            _sprite.color = Buffer > PowerConsume ? new Color(0, 1, 0, .200f) : new Color(1, 0, 0, .200f);
+            _sprite.color = Buffer > Type.Power ? new Color(0, 1, 0, .200f) : new Color(1, 0, 0, .200f);
+        }
+
+        public int GetBufferFromPowerConsume(int powerConsume)
+        {
+            if (Buffer - powerConsume >= 0)
+            {
+                Buffer -= powerConsume;
+                return powerConsume;
+            }
+            else return 0;
+        }
+
+        private void Powered()
+        {
+            if (ProcessTime > 0 && Buffer < Type.MaxBuffer)
+            {
+                ProcessTime--;
+
+                Buffer += Type.Power;
+                if (Buffer >= Type.MaxBuffer)
+                    Buffer = Type.MaxBuffer;
+            }
+        }
+
+        private void Consume()
+        {
+            if (ProcessTime == 0 && Amount != 0)
+            {
+                Amount--;
+                ProcessTime = 1 * Type.MaxProcessTime;
+            }
+        }
+
+        public MachineService NextWire(List<string> last)
+        {
+            var wires = Utilities
+                .GetItemsFromRayCast<MachineService>(transform, 1.5f)
+                .Where(x => x.Type.Category == CategoryItemEnum.Wire);
+
+            return FindMachineService(last, wires);
+        }
+
+        public MachineService NextGas(List<string> last)
+        {
+            var gases = Utilities
+                .GetItemsFromRayCast<MachineService>(transform, 1.5f)
+                .Where(x => x.Type.Category == CategoryItemEnum.Gas);
+
+            return FindMachineService(last, gases);
+        }
+
+        private static MachineService FindMachineService(List<string> lastItemsAround, IEnumerable<MachineService> listPipe)
+        {
+            foreach (var wire in listPipe)
+            {
+                if (lastItemsAround.Contains(wire.name)) continue;
+                else
+                {
+                    lastItemsAround.Add(wire.name);
+                    return wire;
+                }
+            }
+
+            return null;
         }
     }
 }

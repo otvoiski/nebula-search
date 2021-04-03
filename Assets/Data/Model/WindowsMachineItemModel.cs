@@ -7,7 +7,7 @@
         public int maxBuffer;
         public int processTime;
         public int maxProcessTime;
-        public int powerGenerator;
+        public int Power;
         public int InputAmount;
         public int OutputAmount;
     }
