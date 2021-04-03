@@ -60,7 +60,7 @@ namespace Assets.Data
 
         private void PlayerRotate()
         {
-            var position = Utilities.GetMousePositionToVector3Grid(1, LayerMask.GetMask("Grid"), true);
+            var position = Utilities.GetMousePositionToVector3Grid(-0.5f, LayerMask.GetMask("Grid"), true);
             transform.LookAt(position);
         }
 
@@ -69,7 +69,7 @@ namespace Assets.Data
             if (move != Vector2.zero)
             {
                 var controller = GetComponent<CharacterController>();
-                controller.Move(new Vector3(x: -move.x, y: 0, z: -move.y) * Time.deltaTime * _speed);
+                controller.Move(new Vector3(x: -move.x, y: -0.5f, z: -move.y) * Time.deltaTime * _speed);
             }
         }
 

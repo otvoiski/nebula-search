@@ -146,7 +146,7 @@ namespace Assets.Data.Service
         {
             if (_isReadyToConstruction && BuildScreen.SelectedItem != null)
             {
-                BuildScreen.SelectedItem.transform.position = Utilities.GetMousePositionInGridPosition(1);
+                BuildScreen.SelectedItem.transform.position = Utilities.GetMousePositionInGridPosition(-0.5f);
             }
         }
 
@@ -224,8 +224,6 @@ namespace Assets.Data.Service
                 .text = machine.Description;
 
             // Add resources needed
-            BuildScreen.InfoScreen.Find("Top").Find("Resources");
-
             var resources = BuildScreen.InfoScreen.Find("Top").Find("Resources");
             Utilities.ResetChildTransform(resources);
 
@@ -244,6 +242,12 @@ namespace Assets.Data.Service
                     item.transform.Find("Material").GetComponentInChildren<Text>().text = $"{material.Material}";
                     item.transform.Find("Amount").GetComponentInChildren<Text>().text = $"{material.Amount}";
                 }
+
+            // set button action
+            BuildScreen.InfoScreen.Find("Top").Find("Panel").Find("Button")
+                .GetComponent<Button>()
+                .onClick
+                .AddListener(AcceptToBuildMoveTransformSelectedItem);
         }
 
         /// <summary>
