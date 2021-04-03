@@ -21,14 +21,10 @@ MonoBehaviour:
   Prefab: {fileID: 3667545186027503144, guid: 3e2b100d02fa89e428f0283f2529cfc8, type: 3}
   Description: "O gerador de carv\xE3o \xE9 bem simples porem gera muito CO\xB2 mas
     at\xE9 que da conta da energia... at\xE9 um certo momento."
-  _resourcesToBuildSize:
-  - Key: 11
-    Value: 1
-  - Key: 14
-    Value: 2
-  - Key: 3
-    Value: 2
-  - Key: 15
-    Value: 5
+  ResourcesToBuild:
+  - Material: 0
+    Amount: 0
+  - Material: 0
+    Amount: 0
   Inputs: 05000000
   Outputs: 00000000

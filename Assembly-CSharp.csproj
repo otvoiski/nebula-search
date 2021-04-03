@@ -86,7 +86,6 @@
     <Compile Include="Assets\Data\Service\BuilderScreenService.cs" />
     <Compile Include="Assets\Data\Service\MachineService.cs" />
     <Compile Include="Assets\Data\Service\WindowsMachineService.cs" />
-    <Compile Include="Assets\Data\Util\CameraFollow.cs" />
     <Compile Include="Assets\Data\Util\DeveloperConsole\Commands\LogCommand.cs" />
     <Compile Include="Assets\Data\Util\DeveloperConsole\ConsoleCommand.cs" />
     <Compile Include="Assets\Data\Util\DeveloperConsole\DeveloperConsole.cs" />

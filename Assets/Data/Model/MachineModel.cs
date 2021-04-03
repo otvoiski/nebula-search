@@ -18,8 +18,8 @@ namespace Assets.Data.Model
         public GameObject Prefab;
         [TextArea] public string Description;
         public List<ResourcesToBuildObject> ResourcesToBuild;
-        public Material[] Inputs;
-        public Material[] Outputs;
+        public List<ResourcesToBuildObject> Inputs;
+        public List<ResourcesToBuildObject> Outputs;
 
         [Serializable]
         public class ResourcesToBuildObject

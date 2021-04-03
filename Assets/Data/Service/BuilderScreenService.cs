@@ -241,8 +241,8 @@ namespace Assets.Data.Service
                 {
                     var item = Instantiate(resourceItem, resources.transform);
                     item.name = $"{material.Material}";
-                    item.transform.Find("Title").GetComponent<Text>().text = $"{material.Material}";
-                    item.transform.Find("Amount").GetComponent<Text>().text = $"{material.Amount}";
+                    item.transform.Find("Material").GetComponentInChildren<Text>().text = $"{material.Material}";
+                    item.transform.Find("Amount").GetComponentInChildren<Text>().text = $"{material.Amount}";
                 }
         }
 

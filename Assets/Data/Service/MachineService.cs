@@ -55,8 +55,8 @@ namespace Assets.Data.Service
 
             name = Type.Title;
             Buffer = 0;
-            _isNecessaryEnergy = Type.Inputs.Contains(Material.Energy);
-            _isNecessaryOxygen = Type.Inputs.Contains(Material.Oxygen);
+            _isNecessaryEnergy = Type.Inputs.Any(x => x.Material == Material.Energy);
+            _isNecessaryOxygen = Type.Inputs.Any(x => x.Material == Material.Oxygen);
         }
 
         public void Update()
@@ -70,8 +70,8 @@ namespace Assets.Data.Service
                     processTime = (int)ProcessTime,
                     maxProcessTime = Type.MaxProcessTime,
                     title = name,
-                    InputAmount = Type.Inputs.Length,
-                    OutputAmount = Type.Outputs.Length
+                    InputAmount = Type.Inputs.Count,
+                    OutputAmount = Type.Outputs.Count
                 });
         }
 
