@@ -13,8 +13,9 @@ namespace Assets.Data.Service
 {
     public class BuilderScreenService : MonoBehaviour
     {
-        public BuildScreenModel BuildScreen { get; private set; }
+        public BuildScreenModel BuildScreen;
 
+        [SerializeField] private MachineModel _lastMachine;
         [SerializeField] private bool _isReadyToSelect;
         [SerializeField] private bool _isReadyToAccept;
         [SerializeField] private bool _isReadyToConstruction;
@@ -102,12 +103,13 @@ namespace Assets.Data.Service
         /// </summary>
         private void EscapeFromBuildMode()
         {
-            if (BuildScreen.BuildMenu.gameObject.activeSelf)
+            if (BuildScreen.BuildMenu.gameObject.activeSelf || _isReadyToConstruction)
             {
                 if (BuildScreen.SelectedItem != null && _isReadyToConstruction)
                     Destroy(BuildScreen.SelectedItem);
 
                 BuildScreen.SelectedItem = null;
+                _lastMachine = null;
 
                 _isReadyToConstruction = false;
                 _isReadyToSelect = false;
@@ -146,7 +148,7 @@ namespace Assets.Data.Service
         {
             if (_isReadyToConstruction && BuildScreen.SelectedItem != null)
             {
-                BuildScreen.SelectedItem.transform.position = Utilities.GetMousePositionInGridPosition(1);
+                BuildScreen.SelectedItem.transform.position = Utilities.GetMousePositionInGridPosition(-0.5f);
             }
         }
 
@@ -172,6 +174,9 @@ namespace Assets.Data.Service
 
                 item.SetActive(true);
                 item.name = GUID.Generate().ToString();
+
+                item.AddComponent<MachineService>()
+                    .Type = _lastMachine;
             }
         }
 
@@ -224,8 +229,6 @@ namespace Assets.Data.Service
                 .text = machine.Description;
 
             // Add resources needed
-            BuildScreen.InfoScreen.Find("Top").Find("Resources");
-
             var resources = BuildScreen.InfoScreen.Find("Top").Find("Resources");
             Utilities.ResetChildTransform(resources);
 
@@ -244,6 +247,14 @@ namespace Assets.Data.Service
                     item.transform.Find("Material").GetComponentInChildren<Text>().text = $"{material.Material}";
                     item.transform.Find("Amount").GetComponentInChildren<Text>().text = $"{material.Amount}";
                 }
+
+            // set button action
+            BuildScreen.InfoScreen.Find("Top").Find("Panel").Find("Button")
+                .GetComponent<Button>()
+                .onClick
+                .AddListener(AcceptToBuildMoveTransformSelectedItem);
+
+            _lastMachine = machine;
         }
 
         /// <summary>

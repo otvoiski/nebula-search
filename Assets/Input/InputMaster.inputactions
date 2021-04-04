@@ -215,7 +215,7 @@
             "id": "f9164149-132c-4be5-8180-4cb5203a003c",
             "actions": [
                 {
-                    "name": "Click Machine",
+                    "name": "Open Machine Screen",
                     "type": "Button",
                     "id": "8a7ff586-880e-4121-aea8-2f7f7e198c07",
                     "expectedControlType": "Button",
@@ -234,23 +234,34 @@
             "bindings": [
                 {
                     "name": "",
-                    "id": "56aca803-825e-428f-a67c-61baa4888c95",
-                    "path": "<Mouse>/leftButton",
-                    "interactions": "Press",
-                    "processors": "",
-                    "groups": "Keyboard & Mouse",
-                    "action": "Click Machine",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "dde01ba0-2688-4933-a1e4-9832988cda5b",
                     "path": "<Keyboard>/escape",
                     "interactions": "Press(behavior=1)",
                     "processors": "",
                     "groups": "Keyboard & Mouse",
                     "action": "Escape Machine Screen",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "36f0947d-f861-48ed-8486-521daaaa86ee",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "Press",
+                    "processors": "",
+                    "groups": "Keyboard & Mouse",
+                    "action": "Open Machine Screen",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "0f2397bb-0728-413c-b848-1e55320dc215",
+                    "path": "<Keyboard>/e",
+                    "interactions": "Press",
+                    "processors": "",
+                    "groups": "Keyboard & Mouse",
+                    "action": "Open Machine Screen",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

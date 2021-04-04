@@ -22,9 +22,13 @@ MonoBehaviour:
   Description: "O gerador de carv\xE3o \xE9 bem simples porem gera muito CO\xB2 mas
     at\xE9 que da conta da energia... at\xE9 um certo momento."
   ResourcesToBuild:
+  - Material: 10
+    Amount: 3
+  - Material: 15
+    Amount: 3
+  - Material: 14
+    Amount: 2
+  Inputs:
   - Material: 0
     Amount: 0
-  - Material: 0
-    Amount: 0
-  Inputs: 05000000
-  Outputs: 00000000
+  Outputs: []
