@@ -83,7 +83,7 @@ namespace Assets.Data
             BuilderScreenService = MainScreen.BuildScreen.gameObject
                 .GetComponent<BuilderScreenService>();
             WindowsMachineService = MainScreen.WindowsMachine.gameObject
-                .AddComponent<WindowsMachineService>();
+                .GetComponent<WindowsMachineService>();
 
             BuilderScreenService.Setup(MainScreen.BuildScreen);
             WindowsMachineService.Setup(MainScreen.WindowsMachine);
@@ -101,6 +101,12 @@ namespace Assets.Data
         private void OnDisable()
         {
             Input.Disable();
+        }
+
+        private void FixedUpdate()
+        {
+            if (string.IsNullOrEmpty(MainScreen.BottomBar.GetComponentInChildren<Text>().text))
+                MainScreen.BottomBar.GetComponentInChildren<Text>().text = VersionIncrementor.version;
         }
 
         private void ToggleMenuScreen(CallbackContext obj)
@@ -139,12 +145,6 @@ namespace Assets.Data
                     IsOpen = false;
                 }
             }
-        }
-
-        private void FixedUpdate()
-        {
-            if (string.IsNullOrEmpty(MainScreen.BottomBar.GetComponentInChildren<Text>().text))
-                MainScreen.BottomBar.GetComponentInChildren<Text>().text = VersionIncrementor.version;
         }
 
         public void ToggleInventory()

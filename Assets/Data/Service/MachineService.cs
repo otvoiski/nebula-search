@@ -27,16 +27,18 @@ namespace Assets.Data.Service
 
         private float _oneSecondProcessTimerRunner;
         private float _maxProcessTimeRunner;
+        private bool _windowsMachineIsOpen;
         private ViewHandler _viewHandler;
         private InputMaster _input;
 
         private void Awake()
         {
-            _input = new InputMaster();
-            _input.MachineScreen.ClickMachine.performed += _ => MachineInterface();
-
             _viewHandler = GameObject.Find("VIEW HANDLER")
                 .GetComponent<ViewHandler>();
+
+            _input = new InputMaster();
+            _input.MachineScreen.OpenMachineScreen.performed += _ => MachineInterface();
+            _input.MachineScreen.EscapeMachineScreen.performed += _ => _viewHandler.WindowsMachineService.CloseInterfaceMachine();
         }
 
         private void Enable()
@@ -61,7 +63,7 @@ namespace Assets.Data.Service
 
         public void Update()
         {
-            if (_viewHandler.MainScreen.WindowsMachine.gameObject.activeSelf)
+            if (_viewHandler.MainScreen.WindowsMachine.gameObject.activeSelf && _windowsMachineIsOpen)
                 _viewHandler.WindowsMachineService.UpdateInterfaceMachine(new WindowsMachineItemModel
                 {
                     buffer = Buffer,
@@ -73,6 +75,10 @@ namespace Assets.Data.Service
                     InputAmount = Type.Inputs.Count,
                     OutputAmount = Type.Outputs.Count
                 });
+
+            MachineInterface();
+
+            _windowsMachineIsOpen = ViewHandler.IsOpen;
         }
 
         private void FixedUpdate()
@@ -142,16 +148,17 @@ namespace Assets.Data.Service
 
         private void MachineInterface()
         {
-            var ray = Utilities.GetMousePositionInRaycastHit();
-            if (ray.HasValue)
+            var machine = Utilities.GetGameObjectFromMousePosition();
+            if (machine != null)
             {
-                if (ray.GetValueOrDefault().collider.name.Contains(Type.Title))
+                if (machine.name.Contains(Type.Title))
                 {
-                    Debug.Log($"Machine Name: {ray.GetValueOrDefault().collider.name}");
+                    Debug.Log($"Machine Name: {machine.name}");
                     if (!ViewHandler.IsOpen)
                     {
                         _viewHandler.MainScreen.WindowsMachine.gameObject.SetActive(true);
                         ViewHandler.IsOpen = true;
+                        _windowsMachineIsOpen = true;
                     }
                 }
             }

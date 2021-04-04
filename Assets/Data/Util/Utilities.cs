@@ -175,5 +175,13 @@ namespace Assets.Data.Util
                     Destroy(child.gameObject);
             }
         }
+
+        public static GameObject GetGameObjectFromMousePosition()
+        {
+            return GetMousePositionInRaycastHit()
+                .GetValueOrDefault()
+                .collider
+                .gameObject;
+        }
     }
 }

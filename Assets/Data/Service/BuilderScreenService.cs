@@ -109,6 +109,7 @@ namespace Assets.Data.Service
                     Destroy(BuildScreen.SelectedItem);
 
                 BuildScreen.SelectedItem = null;
+                _lastMachine = null;
 
                 _isReadyToConstruction = false;
                 _isReadyToSelect = false;

@@ -15,19 +15,11 @@ namespace Assets.Data.Service
         private GameObject _defaultImageInputOutput;
         private static WindowsMachineItemModel _windowsMachineItemModelStatic;
         private bool _isShowInfo;
-        private InputMaster _input;
         private const string CloseButton = "Close";
         private const string InfoButton = "Info";
         private const string ProcessItemEnergy = "Process Item - Energy";
         private const string ProcessItemTimer = "Process Item - Time Process";
         private const string TitleText = "Text";
-
-        private void Awake()
-        {
-            _input = new InputMaster();
-
-            _input.MachineScreen.ClickMachine.performed += OpenMachineScreen;
-        }
 
         public void Setup(WindowsMachineModel windowsMachine)
         {
@@ -45,9 +37,9 @@ namespace Assets.Data.Service
             IsOpen = ViewHandler.IsOpen;
         }
 
-        public void OpenMachineScreen(InputAction.CallbackContext obj)
+        public void OpenMachineScreen()
         {
-            Debug.Log("OpenMachineScreen");
+            Debug.Log("IF IT WORKS, IT'S A MIRACLE!");
 
             if (!_windowsMachine.gameObject.activeSelf && !ViewHandler.IsOpen)
             {
@@ -224,16 +216,6 @@ namespace Assets.Data.Service
             }
 
             _windowsMachine.Info.gameObject.SetActive(_isShowInfo);
-        }
-
-        private void Enable()
-        {
-            _input.MachineScreen.Enable();
-        }
-
-        private void Disable()
-        {
-            _input.MachineScreen.Disable();
         }
     }
 }
