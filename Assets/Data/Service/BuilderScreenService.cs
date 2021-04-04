@@ -13,8 +13,9 @@ namespace Assets.Data.Service
 {
     public class BuilderScreenService : MonoBehaviour
     {
-        public BuildScreenModel BuildScreen { get; private set; }
+        public BuildScreenModel BuildScreen;
 
+        [SerializeField] private MachineModel _lastMachine;
         [SerializeField] private bool _isReadyToSelect;
         [SerializeField] private bool _isReadyToAccept;
         [SerializeField] private bool _isReadyToConstruction;
@@ -172,6 +173,9 @@ namespace Assets.Data.Service
 
                 item.SetActive(true);
                 item.name = GUID.Generate().ToString();
+
+                item.AddComponent<MachineService>()
+                    .Type = _lastMachine;
             }
         }
 
@@ -248,6 +252,8 @@ namespace Assets.Data.Service
                 .GetComponent<Button>()
                 .onClick
                 .AddListener(AcceptToBuildMoveTransformSelectedItem);
+
+            _lastMachine = machine;
         }
 
         /// <summary>

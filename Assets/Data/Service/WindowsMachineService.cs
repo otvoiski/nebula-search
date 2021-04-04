@@ -1,56 +1,90 @@
-﻿using Assets.Data.Model;
+﻿using System;
+using Assets.Data.Model;
 using Assets.Data.Util;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 namespace Assets.Data.Service
 {
     public class WindowsMachineService : MonoBehaviour
     {
+        public bool IsOpen;
+
         private WindowsMachineModel _windowsMachine;
-        private GameObject _defaultImageInputOuput;
+        private GameObject _defaultImageInputOutput;
         private static WindowsMachineItemModel _windowsMachineItemModelStatic;
         private bool _isShowInfo;
+        private InputMaster _input;
         private const string CloseButton = "Close";
         private const string InfoButton = "Info";
         private const string ProcessItemEnergy = "Process Item - Energy";
         private const string ProcessItemTimer = "Process Item - Time Process";
         private const string TitleText = "Text";
 
-        public void Setup(WindowsMachineModel windowsMachine)
+        private void Awake()
         {
-            this._windowsMachine = windowsMachine;
-            _defaultImageInputOuput = Resources.Load<GameObject>("Prefabs/UI/MainScreen/WindowsMachine/IO/DefaultImageInputOuput");
-            SetupButtons();
+            _input = new InputMaster();
+
+            _input.MachineScreen.ClickMachine.performed += OpenMachineScreen;
         }
 
-        private void SetupButtons()
+        public void Setup(WindowsMachineModel windowsMachine)
         {
+            _windowsMachine = windowsMachine;
+            _defaultImageInputOutput = Resources.Load<GameObject>("Prefabs/UI/MainScreen/WindowsMachine/IO/DefaultImageInputOutput");
             var closeButton = _windowsMachine.Title.Find(CloseButton).GetComponent<Button>();
             var infoButton = _windowsMachine.Button.Find(InfoButton).GetComponent<Button>();
 
-            closeButton.GetComponent<Button>().onClick.AddListener(delegate
-            {
-                GameObject.Find("VIEW HANDLER").GetComponent<ViewHandler>().CloseInterfaceMachine();
-            });
+            closeButton.GetComponent<Button>().onClick.AddListener(CloseInterfaceMachine);
             infoButton.GetComponent<Button>().onClick.AddListener(ShowInfoMachine);
+        }
+
+        public void Update()
+        {
+            IsOpen = ViewHandler.IsOpen;
+        }
+
+        public void OpenMachineScreen(InputAction.CallbackContext obj)
+        {
+            Debug.Log("OpenMachineScreen");
+
+            if (!_windowsMachine.gameObject.activeSelf && !ViewHandler.IsOpen)
+            {
+                _windowsMachine.gameObject.SetActive(true);
+
+                ChangeTitle();
+                LoadProcess();
+                LoadInputOutput();
+                LoadInventory();
+                LoadInfo();
+
+                ViewHandler.IsOpen = true;
+            }
+        }
+
+        public void CloseInterfaceMachine()
+        {
+            Debug.Log("CloseInterfaceMachine");
+            if (_windowsMachine.gameObject.activeSelf && ViewHandler.IsOpen)
+            {
+                _windowsMachine.gameObject.SetActive(false);
+                _windowsMachineItemModelStatic = null;
+
+                ChangeTitleReset();
+                LoadProcessReset();
+                LoadInputOutputReset();
+                LoadInventoryReset();
+                LoadInfoReset();
+
+                ViewHandler.IsOpen = false;
+            }
         }
 
         private void ShowInfoMachine()
         {
             if (_windowsMachineItemModelStatic != null)
                 _isShowInfo = !_isShowInfo;
-        }
-
-        public void CloseInterfaceMachine()
-        {
-            _windowsMachineItemModelStatic = null;
-
-            ChangeTitleReset();
-            LoadProcessReset();
-            LoadIOReset();
-            LoadInventoryReset();
-            LoadInfoReset();
         }
 
         public void UpdateInterfaceMachine(WindowsMachineItemModel model)
@@ -60,7 +94,7 @@ namespace Assets.Data.Service
             {
                 ChangeTitle();
                 LoadProcess();
-                LoadIO();
+                LoadInputOutput();
                 LoadInventory();
                 LoadInfo();
             }
@@ -108,14 +142,14 @@ namespace Assets.Data.Service
             timer.value = 0;
         }
 
-        private void LoadIO()
+        private void LoadInputOutput()
         {
             var input = _windowsMachine.IO.Find("Input");
             if (input.childCount == 0)
             {
                 for (int i = 0; i < _windowsMachineItemModelStatic.InputAmount; i++)
                 {
-                    Instantiate(_defaultImageInputOuput, input.transform).name = i.ToString();
+                    Instantiate(_defaultImageInputOutput, input.transform).name = i.ToString();
                 }
             }
             var output = _windowsMachine.IO.Find("Output");
@@ -123,12 +157,12 @@ namespace Assets.Data.Service
             {
                 for (int i = 0; i < _windowsMachineItemModelStatic.OutputAmount; i++)
                 {
-                    Instantiate(_defaultImageInputOuput, output.transform).name = i.ToString();
+                    Instantiate(_defaultImageInputOutput, output.transform).name = i.ToString();
                 }
             }
         }
 
-        private void LoadIOReset()
+        private void LoadInputOutputReset()
         {
             foreach (Transform child in _windowsMachine.IO.Find("Input"))
             {
@@ -160,10 +194,10 @@ namespace Assets.Data.Service
                 Change(timer, Locale.Translate["WindowsMachine"]["ProcessTime"], $"{ _windowsMachineItemModelStatic.processTime}/{_windowsMachineItemModelStatic.maxProcessTime}");
                 Change(consume, Locale.Translate["WindowsMachine"]["Power"], $"{ _windowsMachineItemModelStatic.Power}");
 
-                void Change(Transform transform, string title, string value)
+                void Change(Transform t, string title, string value)
                 {
-                    transform.Find("Title").GetComponent<Text>().text = title;
-                    transform.Find("Amount").GetComponent<Text>().text = value;
+                    t.Find("Title").GetComponentInChildren<Text>().text = title;
+                    t.Find("Value").GetComponentInChildren<Text>().text = value;
                 }
             }
 
@@ -182,14 +216,24 @@ namespace Assets.Data.Service
                 Change(timer);
                 Change(consume);
 
-                void Change(Transform transform)
+                void Change(Transform t)
                 {
-                    transform.Find("Title").GetComponent<Text>().text = string.Empty;
-                    transform.Find("Amount").GetComponent<Text>().text = string.Empty;
+                    t.Find("Title").GetComponent<Text>().text = string.Empty;
+                    t.Find("Value").GetComponent<Text>().text = string.Empty;
                 }
             }
 
             _windowsMachine.Info.gameObject.SetActive(_isShowInfo);
+        }
+
+        private void Enable()
+        {
+            _input.MachineScreen.Enable();
+        }
+
+        private void Disable()
+        {
+            _input.MachineScreen.Disable();
         }
     }
 }

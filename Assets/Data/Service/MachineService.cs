@@ -105,7 +105,7 @@ namespace Assets.Data.Service
 
         private void GeneratorProcessor()
         {
-            if (TimerRun.Run(1f, ref ProcessTime))
+            if (TimerRun.Run(1f, ref _oneSecondProcessTimerRunner))
             {
                 Consume();
                 Powered();
@@ -114,26 +114,29 @@ namespace Assets.Data.Service
 
         private void MachineProcessor()
         {
-            if (TimerRun.Run(1f, ref _oneSecondProcessTimerRunner))
+            if (Buffer > Type.Power)
             {
-                if (Buffer >= Type.Power)
-                    ProcessTime++;
-
-                if (_isNecessaryEnergy)
+                if (TimerRun.Run(1f, ref _oneSecondProcessTimerRunner))
                 {
-                    ConnectionToPipe(CategoryItemEnum.Wire);
+                    if (Buffer >= Type.Power)
+                        ProcessTime++;
+
+                    if (_isNecessaryEnergy)
+                    {
+                        ConnectionToPipe(CategoryItemEnum.Wire);
+                    }
+
+                    if (_isNecessaryOxygen)
+                    {
+                        ConnectionToPipe(CategoryItemEnum.Gas);
+                    }
                 }
 
-                if (_isNecessaryOxygen)
+                if (TimerRun.Run(Type.MaxProcessTime, ref _maxProcessTimeRunner) && Buffer >= Type.Power)
                 {
-                    ConnectionToPipe(CategoryItemEnum.Gas);
+                    Buffer -= Type.Power;
+                    ProcessTime = 0;
                 }
-            }
-
-            if (TimerRun.Run(Type.MaxProcessTime, ref _maxProcessTimeRunner) && Buffer >= Type.Power)
-            {
-                Buffer -= Type.Power;
-                ProcessTime = 0;
             }
         }
 
@@ -224,7 +227,8 @@ namespace Assets.Data.Service
 
         private void SpriteColor()
         {
-            _sprite.color = Buffer > Type.Power ? new Color(0, 1, 0, .200f) : new Color(1, 0, 0, .200f);
+            if (_sprite != null)
+                _sprite.color = Buffer > Type.Power ? new Color(0, 1, 0, .200f) : new Color(1, 0, 0, .200f);
         }
 
         public int GetBufferFromPowerConsume(int powerConsume)

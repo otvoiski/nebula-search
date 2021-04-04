@@ -45,31 +45,32 @@ namespace Assets.Data
             // Main Screen
             MainScreen = mainScreen.gameObject
                 .AddComponent<MainScreenModel>();
-            MainScreen.BottomBar = mainScreen.GetChild((int)MainScreenEnum.BottomBar);
-            MainScreen.Toast = mainScreen.GetChild((int)MainScreenEnum.Toast);
+            MainScreen.BottomBar = mainScreen.Find($"{MainScreenEnum.BottomBar}");
+            MainScreen.Toast = mainScreen.Find($"{MainScreenEnum.Toast}");
 
             // Windows Machines
-            MainScreen.WindowsMachine = mainScreen.GetChild((int)MainScreenEnum.WindowsMachine).gameObject
+            MainScreen.WindowsMachine = mainScreen.Find($"{MainScreenEnum.WindowsMachine}").gameObject
                 .AddComponent<WindowsMachineModel>();
-            MainScreen.WindowsMachine.Title = MainScreen.WindowsMachine.transform.GetChild((int)WindowsMachineEnum.Title);
-            MainScreen.WindowsMachine.Inventory = MainScreen.WindowsMachine.transform.GetChild((int)WindowsMachineEnum.Inventory);
-            MainScreen.WindowsMachine.IO = MainScreen.WindowsMachine.transform.GetChild((int)WindowsMachineEnum.IO);
-            MainScreen.WindowsMachine.Button = MainScreen.WindowsMachine.transform.GetChild((int)WindowsMachineEnum.Button);
-            MainScreen.WindowsMachine.ProcessMenu = MainScreen.WindowsMachine.transform.GetChild((int)WindowsMachineEnum.ProcessMenu);
-            MainScreen.WindowsMachine.Info = MainScreen.WindowsMachine.transform.GetChild((int)WindowsMachineEnum.Info);
+
+            MainScreen.WindowsMachine.Title = MainScreen.WindowsMachine.transform.Find("Screen").Find($"{WindowsMachineEnum.Title}");
+            MainScreen.WindowsMachine.Inventory = MainScreen.WindowsMachine.transform.Find("Screen").Find($"{WindowsMachineEnum.Inventory}");
+            MainScreen.WindowsMachine.IO = MainScreen.WindowsMachine.transform.Find("Screen").Find($"{WindowsMachineEnum.IO}");
+            MainScreen.WindowsMachine.Button = MainScreen.WindowsMachine.transform.Find("Screen").Find($"{WindowsMachineEnum.Button}");
+            MainScreen.WindowsMachine.ProcessMenu = MainScreen.WindowsMachine.transform.Find("Screen").Find($"{WindowsMachineEnum.ProcessMenu}");
+            MainScreen.WindowsMachine.Info = MainScreen.WindowsMachine.transform.Find("Screen").Find($"{WindowsMachineEnum.Info}");
 
             // Build Screen
-            MainScreen.BuildScreen = mainScreen.GetChild((int)MainScreenEnum.BuildScreen).gameObject
+            MainScreen.BuildScreen = mainScreen.Find($"{MainScreenEnum.BuildScreen}").gameObject
                 .AddComponent<BuildScreenModel>();
-            MainScreen.BuildScreen.BuildMenu = MainScreen.BuildScreen.transform.GetChild((int)BuildMenuEnum.BuildMenu);
-            MainScreen.BuildScreen.BuildList = MainScreen.BuildScreen.transform.GetChild((int)BuildMenuEnum.BuildList);
-            MainScreen.BuildScreen.InfoScreen = MainScreen.BuildScreen.transform.GetChild((int)BuildMenuEnum.InfoScreen);
+            MainScreen.BuildScreen.BuildMenu = MainScreen.BuildScreen.transform.Find($"{BuildMenuEnum.BuildMenu}");
+            MainScreen.BuildScreen.BuildList = MainScreen.BuildScreen.transform.Find($"{BuildMenuEnum.BuildList}");
+            MainScreen.BuildScreen.InfoScreen = MainScreen.BuildScreen.transform.Find($"{BuildMenuEnum.InfoScreen}");
 
             // Developer Console
-            MainScreen.DeveloperConsole = mainScreen.GetChild((int)MainScreenEnum.DeveloperConsole).gameObject
+            MainScreen.DeveloperConsole = mainScreen.Find($"{MainScreenEnum.DeveloperConsole}").gameObject
                 .AddComponent<DeveloperConsoleModel>();
-            MainScreen.DeveloperConsole.Input = MainScreen.DeveloperConsole.transform.GetChild((int)DeveloperConsoleEnum.Input);
-            MainScreen.DeveloperConsole.ScrollView = MainScreen.DeveloperConsole.transform.GetChild((int)DeveloperConsoleEnum.ScrollView);
+            MainScreen.DeveloperConsole.Input = MainScreen.DeveloperConsole.transform.Find($"{DeveloperConsoleEnum.Input}");
+            MainScreen.DeveloperConsole.ScrollView = MainScreen.DeveloperConsole.transform.Find($"{DeveloperConsoleEnum.ScrollView}");
 
             // Menu Screen
             MainScreen.MenuScreen = mainScreen.Find($"{MainScreenEnum.MenuScreen}");
@@ -83,8 +84,6 @@ namespace Assets.Data
                 .GetComponent<BuilderScreenService>();
             WindowsMachineService = MainScreen.WindowsMachine.gameObject
                 .AddComponent<WindowsMachineService>();
-            //DeveloperConsoleBehaviour = MainScreen.DeveloperConsole.gameObject
-            //    .GetComponent<DeveloperConsoleBehaviour>();
 
             BuilderScreenService.Setup(MainScreen.BuildScreen);
             WindowsMachineService.Setup(MainScreen.WindowsMachine);
@@ -139,17 +138,6 @@ namespace Assets.Data
                     MainScreen.DeveloperConsole.gameObject.SetActive(false);
                     IsOpen = false;
                 }
-            }
-        }
-
-        public void CloseInterfaceMachine()
-        {
-            if (MainScreen.WindowsMachine.gameObject.activeSelf && IsOpen)
-            {
-                MainScreen.WindowsMachine.gameObject.SetActive(false);
-                WindowsMachineService.CloseInterfaceMachine();
-
-                IsOpen = false;
             }
         }
 
