@@ -103,7 +103,7 @@ namespace Assets.Data.Service
         /// </summary>
         private void EscapeFromBuildMode()
         {
-            if (BuildScreen.BuildMenu.gameObject.activeSelf)
+            if (BuildScreen.BuildMenu.gameObject.activeSelf || _isReadyToConstruction)
             {
                 if (BuildScreen.SelectedItem != null && _isReadyToConstruction)
                     Destroy(BuildScreen.SelectedItem);
