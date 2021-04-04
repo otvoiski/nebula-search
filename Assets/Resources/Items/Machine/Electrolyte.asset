@@ -15,11 +15,25 @@ MonoBehaviour:
   MaxBuffer: 250
   Power: 32
   MaxProcessTime: 20
-  Title: 
+  Title: Electrolyte
   Category: 1
   Icon: {fileID: 21300000, guid: e9ca26817e1a4704f8339f118327b1c2, type: 3}
-  Prefab: {fileID: 0}
+  Prefab: {fileID: 1646098253287276108, guid: 134d2b473d53f924a993eb851b0d4fd8, type: 3}
   Description: "Separa o H\xB2O em Oxigenio e Hidrogenio"
-  ResourcesToBuild: []
-  Inputs: 
-  Outputs: 
+  ResourcesToBuild:
+  - Material: 10
+    Amount: 3
+  - Material: 14
+    Amount: 2
+  - Material: 15
+    Amount: 3
+  Inputs:
+  - Material: 0
+    Amount: 32
+  - Material: 1
+    Amount: 30
+  Outputs:
+  - Material: 6
+    Amount: 20
+  - Material: 5
+    Amount: 10

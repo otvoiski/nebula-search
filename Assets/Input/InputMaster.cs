@@ -9,7 +9,6 @@ using UnityEngine.InputSystem.Utilities;
 public class @InputMaster : IInputActionCollection, IDisposable
 {
     public InputActionAsset asset { get; }
-
     public @InputMaster()
     {
         asset = InputActionAsset.FromJson(@"{
@@ -229,7 +228,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
             ""id"": ""f9164149-132c-4be5-8180-4cb5203a003c"",
             ""actions"": [
                 {
-                    ""name"": ""Click Machine"",
+                    ""name"": ""Open Machine Screen"",
                     ""type"": ""Button"",
                     ""id"": ""8a7ff586-880e-4121-aea8-2f7f7e198c07"",
                     ""expectedControlType"": ""Button"",
@@ -248,23 +247,34 @@ public class @InputMaster : IInputActionCollection, IDisposable
             ""bindings"": [
                 {
                     ""name"": """",
-                    ""id"": ""56aca803-825e-428f-a67c-61baa4888c95"",
-                    ""path"": ""<Mouse>/leftButton"",
-                    ""interactions"": ""Press"",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard & Mouse"",
-                    ""action"": ""Click Machine"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""dde01ba0-2688-4933-a1e4-9832988cda5b"",
                     ""path"": ""<Keyboard>/escape"",
                     ""interactions"": ""Press(behavior=1)"",
                     ""processors"": """",
                     ""groups"": ""Keyboard & Mouse"",
                     ""action"": ""Escape Machine Screen"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""36f0947d-f861-48ed-8486-521daaaa86ee"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": ""Press"",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard & Mouse"",
+                    ""action"": ""Open Machine Screen"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0f2397bb-0728-413c-b848-1e55320dc215"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": ""Press"",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard & Mouse"",
+                    ""action"": ""Open Machine Screen"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -307,7 +317,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
         m_BuildMode_ClickToContruct = m_BuildMode.FindAction("Click To Contruct", throwIfNotFound: true);
         // MachineScreen
         m_MachineScreen = asset.FindActionMap("MachineScreen", throwIfNotFound: true);
-        m_MachineScreen_ClickMachine = m_MachineScreen.FindAction("Click Machine", throwIfNotFound: true);
+        m_MachineScreen_OpenMachineScreen = m_MachineScreen.FindAction("Open Machine Screen", throwIfNotFound: true);
         m_MachineScreen_EscapeMachineScreen = m_MachineScreen.FindAction("Escape Machine Screen", throwIfNotFound: true);
     }
 
@@ -357,43 +367,18 @@ public class @InputMaster : IInputActionCollection, IDisposable
 
     // Menu
     private readonly InputActionMap m_Menu;
-
     private IMenuActions m_MenuActionsCallbackInterface;
     private readonly InputAction m_Menu_ToggleMenuScreen;
-
     public struct MenuActions
     {
         private @InputMaster m_Wrapper;
-
-        public MenuActions(@InputMaster wrapper)
-        {
-            m_Wrapper = wrapper;
-        }
-
+        public MenuActions(@InputMaster wrapper) { m_Wrapper = wrapper; }
         public InputAction @ToggleMenuScreen => m_Wrapper.m_Menu_ToggleMenuScreen;
-
-        public InputActionMap Get()
-        {
-            return m_Wrapper.m_Menu;
-        }
-
-        public void Enable()
-        {
-            Get().Enable();
-        }
-
-        public void Disable()
-        {
-            Get().Disable();
-        }
-
+        public InputActionMap Get() { return m_Wrapper.m_Menu; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
         public bool enabled => Get().enabled;
-
-        public static implicit operator InputActionMap(MenuActions set)
-        {
-            return set.Get();
-        }
-
+        public static implicit operator InputActionMap(MenuActions set) { return set.Get(); }
         public void SetCallbacks(IMenuActions instance)
         {
             if (m_Wrapper.m_MenuActionsCallbackInterface != null)
@@ -411,48 +396,22 @@ public class @InputMaster : IInputActionCollection, IDisposable
             }
         }
     }
-
     public MenuActions @Menu => new MenuActions(this);
 
     // Developer
     private readonly InputActionMap m_Developer;
-
     private IDeveloperActions m_DeveloperActionsCallbackInterface;
     private readonly InputAction m_Developer_ToggleConsole;
-
     public struct DeveloperActions
     {
         private @InputMaster m_Wrapper;
-
-        public DeveloperActions(@InputMaster wrapper)
-        {
-            m_Wrapper = wrapper;
-        }
-
+        public DeveloperActions(@InputMaster wrapper) { m_Wrapper = wrapper; }
         public InputAction @ToggleConsole => m_Wrapper.m_Developer_ToggleConsole;
-
-        public InputActionMap Get()
-        {
-            return m_Wrapper.m_Developer;
-        }
-
-        public void Enable()
-        {
-            Get().Enable();
-        }
-
-        public void Disable()
-        {
-            Get().Disable();
-        }
-
+        public InputActionMap Get() { return m_Wrapper.m_Developer; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
         public bool enabled => Get().enabled;
-
-        public static implicit operator InputActionMap(DeveloperActions set)
-        {
-            return set.Get();
-        }
-
+        public static implicit operator InputActionMap(DeveloperActions set) { return set.Get(); }
         public void SetCallbacks(IDeveloperActions instance)
         {
             if (m_Wrapper.m_DeveloperActionsCallbackInterface != null)
@@ -470,50 +429,24 @@ public class @InputMaster : IInputActionCollection, IDisposable
             }
         }
     }
-
     public DeveloperActions @Developer => new DeveloperActions(this);
 
     // Player
     private readonly InputActionMap m_Player;
-
     private IPlayerActions m_PlayerActionsCallbackInterface;
     private readonly InputAction m_Player_Movement;
     private readonly InputAction m_Player_Inventory;
-
     public struct PlayerActions
     {
         private @InputMaster m_Wrapper;
-
-        public PlayerActions(@InputMaster wrapper)
-        {
-            m_Wrapper = wrapper;
-        }
-
+        public PlayerActions(@InputMaster wrapper) { m_Wrapper = wrapper; }
         public InputAction @Movement => m_Wrapper.m_Player_Movement;
         public InputAction @Inventory => m_Wrapper.m_Player_Inventory;
-
-        public InputActionMap Get()
-        {
-            return m_Wrapper.m_Player;
-        }
-
-        public void Enable()
-        {
-            Get().Enable();
-        }
-
-        public void Disable()
-        {
-            Get().Disable();
-        }
-
+        public InputActionMap Get() { return m_Wrapper.m_Player; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
         public bool enabled => Get().enabled;
-
-        public static implicit operator InputActionMap(PlayerActions set)
-        {
-            return set.Get();
-        }
-
+        public static implicit operator InputActionMap(PlayerActions set) { return set.Get(); }
         public void SetCallbacks(IPlayerActions instance)
         {
             if (m_Wrapper.m_PlayerActionsCallbackInterface != null)
@@ -537,52 +470,26 @@ public class @InputMaster : IInputActionCollection, IDisposable
             }
         }
     }
-
     public PlayerActions @Player => new PlayerActions(this);
 
     // BuildMode
     private readonly InputActionMap m_BuildMode;
-
     private IBuildModeActions m_BuildModeActionsCallbackInterface;
     private readonly InputAction m_BuildMode_ToggleBuildMenu;
     private readonly InputAction m_BuildMode_EscapeBuildMenu;
     private readonly InputAction m_BuildMode_ClickToContruct;
-
     public struct BuildModeActions
     {
         private @InputMaster m_Wrapper;
-
-        public BuildModeActions(@InputMaster wrapper)
-        {
-            m_Wrapper = wrapper;
-        }
-
+        public BuildModeActions(@InputMaster wrapper) { m_Wrapper = wrapper; }
         public InputAction @ToggleBuildMenu => m_Wrapper.m_BuildMode_ToggleBuildMenu;
         public InputAction @EscapeBuildMenu => m_Wrapper.m_BuildMode_EscapeBuildMenu;
         public InputAction @ClickToContruct => m_Wrapper.m_BuildMode_ClickToContruct;
-
-        public InputActionMap Get()
-        {
-            return m_Wrapper.m_BuildMode;
-        }
-
-        public void Enable()
-        {
-            Get().Enable();
-        }
-
-        public void Disable()
-        {
-            Get().Disable();
-        }
-
+        public InputActionMap Get() { return m_Wrapper.m_BuildMode; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
         public bool enabled => Get().enabled;
-
-        public static implicit operator InputActionMap(BuildModeActions set)
-        {
-            return set.Get();
-        }
-
+        public static implicit operator InputActionMap(BuildModeActions set) { return set.Get(); }
         public void SetCallbacks(IBuildModeActions instance)
         {
             if (m_Wrapper.m_BuildModeActionsCallbackInterface != null)
@@ -612,57 +519,31 @@ public class @InputMaster : IInputActionCollection, IDisposable
             }
         }
     }
-
     public BuildModeActions @BuildMode => new BuildModeActions(this);
 
     // MachineScreen
     private readonly InputActionMap m_MachineScreen;
-
     private IMachineScreenActions m_MachineScreenActionsCallbackInterface;
-    private readonly InputAction m_MachineScreen_ClickMachine;
+    private readonly InputAction m_MachineScreen_OpenMachineScreen;
     private readonly InputAction m_MachineScreen_EscapeMachineScreen;
-
     public struct MachineScreenActions
     {
         private @InputMaster m_Wrapper;
-
-        public MachineScreenActions(@InputMaster wrapper)
-        {
-            m_Wrapper = wrapper;
-        }
-
-        public InputAction @ClickMachine => m_Wrapper.m_MachineScreen_ClickMachine;
+        public MachineScreenActions(@InputMaster wrapper) { m_Wrapper = wrapper; }
+        public InputAction @OpenMachineScreen => m_Wrapper.m_MachineScreen_OpenMachineScreen;
         public InputAction @EscapeMachineScreen => m_Wrapper.m_MachineScreen_EscapeMachineScreen;
-
-        public InputActionMap Get()
-        {
-            return m_Wrapper.m_MachineScreen;
-        }
-
-        public void Enable()
-        {
-            Get().Enable();
-        }
-
-        public void Disable()
-        {
-            Get().Disable();
-        }
-
+        public InputActionMap Get() { return m_Wrapper.m_MachineScreen; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
         public bool enabled => Get().enabled;
-
-        public static implicit operator InputActionMap(MachineScreenActions set)
-        {
-            return set.Get();
-        }
-
+        public static implicit operator InputActionMap(MachineScreenActions set) { return set.Get(); }
         public void SetCallbacks(IMachineScreenActions instance)
         {
             if (m_Wrapper.m_MachineScreenActionsCallbackInterface != null)
             {
-                @ClickMachine.started -= m_Wrapper.m_MachineScreenActionsCallbackInterface.OnClickMachine;
-                @ClickMachine.performed -= m_Wrapper.m_MachineScreenActionsCallbackInterface.OnClickMachine;
-                @ClickMachine.canceled -= m_Wrapper.m_MachineScreenActionsCallbackInterface.OnClickMachine;
+                @OpenMachineScreen.started -= m_Wrapper.m_MachineScreenActionsCallbackInterface.OnOpenMachineScreen;
+                @OpenMachineScreen.performed -= m_Wrapper.m_MachineScreenActionsCallbackInterface.OnOpenMachineScreen;
+                @OpenMachineScreen.canceled -= m_Wrapper.m_MachineScreenActionsCallbackInterface.OnOpenMachineScreen;
                 @EscapeMachineScreen.started -= m_Wrapper.m_MachineScreenActionsCallbackInterface.OnEscapeMachineScreen;
                 @EscapeMachineScreen.performed -= m_Wrapper.m_MachineScreenActionsCallbackInterface.OnEscapeMachineScreen;
                 @EscapeMachineScreen.canceled -= m_Wrapper.m_MachineScreenActionsCallbackInterface.OnEscapeMachineScreen;
@@ -670,19 +551,17 @@ public class @InputMaster : IInputActionCollection, IDisposable
             m_Wrapper.m_MachineScreenActionsCallbackInterface = instance;
             if (instance != null)
             {
-                @ClickMachine.started += instance.OnClickMachine;
-                @ClickMachine.performed += instance.OnClickMachine;
-                @ClickMachine.canceled += instance.OnClickMachine;
+                @OpenMachineScreen.started += instance.OnOpenMachineScreen;
+                @OpenMachineScreen.performed += instance.OnOpenMachineScreen;
+                @OpenMachineScreen.canceled += instance.OnOpenMachineScreen;
                 @EscapeMachineScreen.started += instance.OnEscapeMachineScreen;
                 @EscapeMachineScreen.performed += instance.OnEscapeMachineScreen;
                 @EscapeMachineScreen.canceled += instance.OnEscapeMachineScreen;
             }
         }
     }
-
     public MachineScreenActions @MachineScreen => new MachineScreenActions(this);
     private int m_KeyboardMouseSchemeIndex = -1;
-
     public InputControlScheme KeyboardMouseScheme
     {
         get
@@ -691,37 +570,28 @@ public class @InputMaster : IInputActionCollection, IDisposable
             return asset.controlSchemes[m_KeyboardMouseSchemeIndex];
         }
     }
-
     public interface IMenuActions
     {
         void OnToggleMenuScreen(InputAction.CallbackContext context);
     }
-
     public interface IDeveloperActions
     {
         void OnToggleConsole(InputAction.CallbackContext context);
     }
-
     public interface IPlayerActions
     {
         void OnMovement(InputAction.CallbackContext context);
-
         void OnInventory(InputAction.CallbackContext context);
     }
-
     public interface IBuildModeActions
     {
         void OnToggleBuildMenu(InputAction.CallbackContext context);
-
         void OnEscapeBuildMenu(InputAction.CallbackContext context);
-
         void OnClickToContruct(InputAction.CallbackContext context);
     }
-
     public interface IMachineScreenActions
     {
-        void OnClickMachine(InputAction.CallbackContext context);
-
+        void OnOpenMachineScreen(InputAction.CallbackContext context);
         void OnEscapeMachineScreen(InputAction.CallbackContext context);
     }
 }
