@@ -49,7 +49,7 @@ namespace Assets.Data
             MainScreen.Toast = mainScreen.Find($"{MainScreenEnum.Toast}");
 
             // Windows Machines
-            MainScreen.WindowsMachine = mainScreen.Find($"{MainScreenEnum.WindowsMachine}").gameObject
+            MainScreen.WindowsMachine = transform.Find($"{MainScreenEnum.WindowsMachine}").gameObject
                 .AddComponent<WindowsMachineModel>();
 
             MainScreen.WindowsMachine.Title = MainScreen.WindowsMachine.transform.Find("Screen").Find($"{WindowsMachineEnum.Title}");

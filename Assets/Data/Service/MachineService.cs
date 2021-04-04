@@ -4,6 +4,7 @@ using Assets.Data.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 using Material = Assets.Data.Enum.Material;
 
@@ -30,8 +31,9 @@ namespace Assets.Data.Service
         private bool _windowsMachineIsOpen;
         private ViewHandler _viewHandler;
         private InputMaster _input;
+        private WindowsMachineItemModel _windowsMachineItemModel;
 
-        private void Awake()
+        public void Awake()
         {
             _viewHandler = GameObject.Find("VIEW HANDLER")
                 .GetComponent<ViewHandler>();
@@ -41,21 +43,16 @@ namespace Assets.Data.Service
             _input.MachineScreen.EscapeMachineScreen.performed += _ => _viewHandler.WindowsMachineService.CloseInterfaceMachine();
         }
 
-        private void Enable()
-        {
-            _input.MachineScreen.Enable();
-        }
-
-        private void Disable()
-        {
-            _input.MachineScreen.Disable();
-        }
-
         public void Start()
         {
+            _input = new InputMaster();
+            _input.MachineScreen.OpenMachineScreen.performed += _ => Debug.Log("Teste click OpenMachineScreen");
+            _input.MachineScreen.EscapeMachineScreen.performed += _ => _viewHandler.WindowsMachineService.CloseInterfaceMachine();
+
             _sprite = GetComponentInChildren<SpriteRenderer>();
 
             name = Type.Title;
+            transform.Find("default").name = Type.Title;
             Buffer = 0;
             _isNecessaryEnergy = Type.Inputs.Any(x => x.Material == Material.Energy);
             _isNecessaryOxygen = Type.Inputs.Any(x => x.Material == Material.Oxygen);
@@ -63,20 +60,20 @@ namespace Assets.Data.Service
 
         public void Update()
         {
-            if (_viewHandler.MainScreen.WindowsMachine.gameObject.activeSelf && _windowsMachineIsOpen)
-                _viewHandler.WindowsMachineService.UpdateInterfaceMachine(new WindowsMachineItemModel
-                {
-                    buffer = Buffer,
-                    maxBuffer = Type.MaxBuffer,
-                    Power = Type.Power,
-                    processTime = (int)ProcessTime,
-                    maxProcessTime = Type.MaxProcessTime,
-                    title = name,
-                    InputAmount = Type.Inputs.Count,
-                    OutputAmount = Type.Outputs.Count
-                });
+            _windowsMachineItemModel = new WindowsMachineItemModel
+            {
+                buffer = Buffer,
+                maxBuffer = Type.MaxBuffer,
+                Power = Type.Power,
+                processTime = (int)ProcessTime,
+                maxProcessTime = Type.MaxProcessTime,
+                title = name,
+                InputAmount = Type.Inputs.Count,
+                OutputAmount = Type.Outputs.Count
+            };
 
-            MachineInterface();
+            if (_viewHandler.MainScreen.WindowsMachine.transform.Find("Screen").gameObject.activeSelf && _windowsMachineIsOpen)
+                _viewHandler.WindowsMachineService.UpdateInterfaceMachine(_windowsMachineItemModel);
 
             _windowsMachineIsOpen = ViewHandler.IsOpen;
         }
@@ -148,19 +145,20 @@ namespace Assets.Data.Service
 
         private void MachineInterface()
         {
-            var machine = Utilities.GetGameObjectFromMousePosition();
-            if (machine != null)
+            try
             {
-                if (machine.name.Contains(Type.Title))
+                var machine = Utilities.GetGameObjectFromMousePosition();
+                if (machine != null)
                 {
-                    Debug.Log($"Machine Name: {machine.name}");
-                    if (!ViewHandler.IsOpen)
+                    if (machine.name.Contains(Type.Title))
                     {
-                        _viewHandler.MainScreen.WindowsMachine.gameObject.SetActive(true);
-                        ViewHandler.IsOpen = true;
-                        _windowsMachineIsOpen = true;
+                        _windowsMachineIsOpen = _viewHandler.WindowsMachineService.OpenMachineScreen(_windowsMachineItemModel);
                     }
                 }
+            }
+            catch (Exception e)
+            {
+                Debug.LogException(e);
             }
         }
 
@@ -300,6 +298,16 @@ namespace Assets.Data.Service
             }
 
             return null;
+        }
+
+        public void OnEnable()
+        {
+            _input.MachineScreen.Enable();
+        }
+
+        public void OnDisable()
+        {
+            _input.MachineScreen.Disable();
         }
     }
 }

@@ -1,8 +1,6 @@
-﻿using System;
-using Assets.Data.Model;
+﻿using Assets.Data.Model;
 using Assets.Data.Util;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 namespace Assets.Data.Service
@@ -15,21 +13,18 @@ namespace Assets.Data.Service
         private GameObject _defaultImageInputOutput;
         private static WindowsMachineItemModel _windowsMachineItemModelStatic;
         private bool _isShowInfo;
-        private const string CloseButton = "Close";
-        private const string InfoButton = "Info";
         private const string ProcessItemEnergy = "Process Item - Energy";
         private const string ProcessItemTimer = "Process Item - Time Process";
-        private const string TitleText = "Text";
 
         public void Setup(WindowsMachineModel windowsMachine)
         {
             _windowsMachine = windowsMachine;
             _defaultImageInputOutput = Resources.Load<GameObject>("Prefabs/UI/MainScreen/WindowsMachine/IO/DefaultImageInputOutput");
-            var closeButton = _windowsMachine.Title.Find(CloseButton).GetComponent<Button>();
-            var infoButton = _windowsMachine.Button.Find(InfoButton).GetComponent<Button>();
+            var closeButton = _windowsMachine.transform.Find("Screen").Find("Title").Find("Close").GetComponent<Button>();
+            var infoButton = _windowsMachine.transform.Find("Screen").Find("Button").Find("Info").GetComponent<Button>();
 
-            closeButton.GetComponent<Button>().onClick.AddListener(CloseInterfaceMachine);
-            infoButton.GetComponent<Button>().onClick.AddListener(ShowInfoMachine);
+            closeButton.onClick.AddListener(CloseInterfaceMachine);
+            infoButton.onClick.AddListener(ShowInfoMachine);
         }
 
         public void Update()
@@ -37,13 +32,13 @@ namespace Assets.Data.Service
             IsOpen = ViewHandler.IsOpen;
         }
 
-        public void OpenMachineScreen()
+        public bool OpenMachineScreen(WindowsMachineItemModel windowsMachineItemModel)
         {
-            Debug.Log("IF IT WORKS, IT'S A MIRACLE!");
+            _windowsMachineItemModelStatic = windowsMachineItemModel;
 
-            if (!_windowsMachine.gameObject.activeSelf && !ViewHandler.IsOpen)
+            if (!_windowsMachine.transform.Find("Screen").gameObject.activeSelf && !ViewHandler.IsOpen)
             {
-                _windowsMachine.gameObject.SetActive(true);
+                _windowsMachine.transform.Find("Screen").gameObject.SetActive(true);
 
                 ChangeTitle();
                 LoadProcess();
@@ -52,15 +47,18 @@ namespace Assets.Data.Service
                 LoadInfo();
 
                 ViewHandler.IsOpen = true;
+
+                return true;
             }
+
+            return false;
         }
 
         public void CloseInterfaceMachine()
         {
-            Debug.Log("CloseInterfaceMachine");
-            if (_windowsMachine.gameObject.activeSelf && ViewHandler.IsOpen)
+            if (_windowsMachine.transform.Find("Screen").gameObject.activeSelf && ViewHandler.IsOpen)
             {
-                _windowsMachine.gameObject.SetActive(false);
+                _windowsMachine.transform.Find("Screen").gameObject.SetActive(false);
                 _windowsMachineItemModelStatic = null;
 
                 ChangeTitleReset();
@@ -73,7 +71,7 @@ namespace Assets.Data.Service
             }
         }
 
-        private void ShowInfoMachine()
+        public void ShowInfoMachine()
         {
             if (_windowsMachineItemModelStatic != null)
                 _isShowInfo = !_isShowInfo;
@@ -94,13 +92,13 @@ namespace Assets.Data.Service
 
         private void ChangeTitle()
         {
-            _windowsMachine.Title.Find(TitleText) // Text
-                .GetComponent<Text>().text = _windowsMachineItemModelStatic.title;
+            _windowsMachine.transform.Find("Screen").Find("Title").Find("Text") // Text
+                .GetComponent<Text>().text = _windowsMachineItemModelStatic?.title;
         }
 
         private void ChangeTitleReset()
         {
-            _windowsMachine.Title.Find(TitleText) // Text
+            _windowsMachine.transform.Find("Screen").Find("Title").Find("Text")
                 .GetComponent<Text>().text = "";
         }
 
