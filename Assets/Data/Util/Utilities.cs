@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using IniParser;
+using IniParser.Model;
 using UnityEngine;
 
 namespace Assets.Data.Util
@@ -182,6 +185,20 @@ namespace Assets.Data.Util
                 .GetValueOrDefault()
                 .collider
                 .gameObject;
+        }
+
+        public static IniData LoadConfiguration()
+        {
+            try
+            {
+                var parser = new FileIniDataParser();
+                return parser.ReadFile($"Assets/Configuration.ini");
+            }
+            catch (Exception ex)
+            {
+                Debug.LogException(ex);
+                throw;
+            }
         }
     }
 }

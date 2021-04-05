@@ -2,6 +2,7 @@
 using Assets.Data.Model;
 using Assets.Data.Service;
 using System;
+using Assets.Data.Util;
 using UnityEngine;
 using UnityEngine.UI;
 using static UnityEngine.InputSystem.InputAction;
@@ -90,7 +91,7 @@ namespace Assets.Data
         private void FixedUpdate()
         {
             if (string.IsNullOrEmpty(MainScreen.BottomBar.GetComponentInChildren<Text>().text))
-                MainScreen.BottomBar.GetComponentInChildren<Text>().text = VersionIncrementor.version;
+                MainScreen.BottomBar.GetComponentInChildren<Text>().text = Utilities.LoadConfiguration()["Game"]["Version"];
         }
 
         private void ToggleMenuScreen(CallbackContext obj)
