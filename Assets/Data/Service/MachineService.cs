@@ -4,7 +4,6 @@ using Assets.Data.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using TMPro;
 using UnityEngine;
 using Material = Assets.Data.Enum.Material;
 
@@ -28,27 +27,9 @@ namespace Assets.Data.Service
 
         private float _oneSecondProcessTimerRunner;
         private float _maxProcessTimeRunner;
-        private bool _windowsMachineIsOpen;
-        private ViewHandler _viewHandler;
-        private InputMaster _input;
-        private WindowsMachineItemModel _windowsMachineItemModel;
-
-        public void Awake()
-        {
-            _viewHandler = GameObject.Find("VIEW HANDLER")
-                .GetComponent<ViewHandler>();
-
-            _input = new InputMaster();
-            _input.MachineScreen.OpenMachineScreen.performed += _ => MachineInterface();
-            _input.MachineScreen.EscapeMachineScreen.performed += _ => _viewHandler.WindowsMachineService.CloseInterfaceMachine();
-        }
 
         public void Start()
         {
-            _input = new InputMaster();
-            _input.MachineScreen.OpenMachineScreen.performed += _ => Debug.Log("Teste click OpenMachineScreen");
-            _input.MachineScreen.EscapeMachineScreen.performed += _ => _viewHandler.WindowsMachineService.CloseInterfaceMachine();
-
             _sprite = GetComponentInChildren<SpriteRenderer>();
 
             name = Type.Title;
@@ -56,26 +37,6 @@ namespace Assets.Data.Service
             Buffer = 0;
             _isNecessaryEnergy = Type.Inputs.Any(x => x.Material == Material.Energy);
             _isNecessaryOxygen = Type.Inputs.Any(x => x.Material == Material.Oxygen);
-        }
-
-        public void Update()
-        {
-            _windowsMachineItemModel = new WindowsMachineItemModel
-            {
-                buffer = Buffer,
-                maxBuffer = Type.MaxBuffer,
-                Power = Type.Power,
-                processTime = (int)ProcessTime,
-                maxProcessTime = Type.MaxProcessTime,
-                title = name,
-                InputAmount = Type.Inputs.Count,
-                OutputAmount = Type.Outputs.Count
-            };
-
-            if (_viewHandler.MainScreen.WindowsMachine.transform.Find("Screen").gameObject.activeSelf && _windowsMachineIsOpen)
-                _viewHandler.WindowsMachineService.UpdateInterfaceMachine(_windowsMachineItemModel);
-
-            _windowsMachineIsOpen = ViewHandler.IsOpen;
         }
 
         private void FixedUpdate()
@@ -140,25 +101,6 @@ namespace Assets.Data.Service
                     Buffer -= Type.Power;
                     ProcessTime = 0;
                 }
-            }
-        }
-
-        private void MachineInterface()
-        {
-            try
-            {
-                var machine = Utilities.GetGameObjectFromMousePosition();
-                if (machine != null)
-                {
-                    if (machine.name.Contains(Type.Title))
-                    {
-                        _windowsMachineIsOpen = _viewHandler.WindowsMachineService.OpenMachineScreen(_windowsMachineItemModel);
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                Debug.LogException(e);
             }
         }
 
@@ -298,16 +240,6 @@ namespace Assets.Data.Service
             }
 
             return null;
-        }
-
-        public void OnEnable()
-        {
-            _input.MachineScreen.Enable();
-        }
-
-        public void OnDisable()
-        {
-            _input.MachineScreen.Disable();
         }
     }
 }

@@ -13,7 +13,6 @@ namespace Assets.Data
         public const string NAME = "VIEW HANDLER";
 
         public static int LimitTextConsoleItem;
-        public WindowsMachineService WindowsMachineService { get; private set; }
         public BuilderScreenService BuilderScreenService { get; private set; }
         public MainScreenModel MainScreen { get; private set; }
 
@@ -48,17 +47,6 @@ namespace Assets.Data
             MainScreen.BottomBar = mainScreen.Find($"{MainScreenEnum.BottomBar}");
             MainScreen.Toast = mainScreen.Find($"{MainScreenEnum.Toast}");
 
-            // Windows Machines
-            MainScreen.WindowsMachine = transform.Find($"{MainScreenEnum.WindowsMachine}").gameObject
-                .AddComponent<WindowsMachineModel>();
-
-            MainScreen.WindowsMachine.Title = MainScreen.WindowsMachine.transform.Find("Screen").Find($"{WindowsMachineEnum.Title}");
-            MainScreen.WindowsMachine.Inventory = MainScreen.WindowsMachine.transform.Find("Screen").Find($"{WindowsMachineEnum.Inventory}");
-            MainScreen.WindowsMachine.IO = MainScreen.WindowsMachine.transform.Find("Screen").Find($"{WindowsMachineEnum.IO}");
-            MainScreen.WindowsMachine.Button = MainScreen.WindowsMachine.transform.Find("Screen").Find($"{WindowsMachineEnum.Button}");
-            MainScreen.WindowsMachine.ProcessMenu = MainScreen.WindowsMachine.transform.Find("Screen").Find($"{WindowsMachineEnum.ProcessMenu}");
-            MainScreen.WindowsMachine.Info = MainScreen.WindowsMachine.transform.Find("Screen").Find($"{WindowsMachineEnum.Info}");
-
             // Build Screen
             MainScreen.BuildScreen = mainScreen.Find($"{MainScreenEnum.BuildScreen}").gameObject
                 .AddComponent<BuildScreenModel>();
@@ -82,11 +70,7 @@ namespace Assets.Data
         {
             BuilderScreenService = MainScreen.BuildScreen.gameObject
                 .GetComponent<BuilderScreenService>();
-            WindowsMachineService = MainScreen.WindowsMachine.gameObject
-                .GetComponent<WindowsMachineService>();
-
             BuilderScreenService.Setup(MainScreen.BuildScreen);
-            WindowsMachineService.Setup(MainScreen.WindowsMachine);
 
             IsOpen = false;
 

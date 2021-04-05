@@ -266,17 +266,6 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""action"": ""Open Machine Screen"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""0f2397bb-0728-413c-b848-1e55320dc215"",
-                    ""path"": ""<Keyboard>/e"",
-                    ""interactions"": ""Press"",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard & Mouse"",
-                    ""action"": ""Open Machine Screen"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
                 }
             ]
         }
