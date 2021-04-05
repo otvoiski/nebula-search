@@ -14,7 +14,6 @@ namespace Assets.Data
         public const string NAME = "VIEW HANDLER";
 
         public static int LimitTextConsoleItem;
-        public BuilderScreenService BuilderScreenService { get; private set; }
         public MainScreenModel MainScreen { get; private set; }
 
         public InputMaster Input;
@@ -69,10 +68,6 @@ namespace Assets.Data
 
         private void Start()
         {
-            BuilderScreenService = MainScreen.BuildScreen.gameObject
-                .GetComponent<BuilderScreenService>();
-            BuilderScreenService.Setup(MainScreen.BuildScreen);
-
             IsOpen = false;
 
             DontDestroyOnLoad(gameObject);
