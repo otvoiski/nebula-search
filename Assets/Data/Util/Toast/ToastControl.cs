@@ -1,9 +1,8 @@
 ﻿using Assets.Data.Enum;
-using Assets.Data.Util;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Assets.Data.Lib
+namespace Assets.Data.Util.Toast
 {
     public class ToastControl : MonoBehaviour
     {
@@ -17,41 +16,41 @@ namespace Assets.Data.Lib
         private const float InfoTime = 2f;
         private const float DefaultTime = 2f;
 
-        private ToastType type;
-        private float warning;
-        private float success;
-        private float error;
-        private float info;
+        private ToastType _type;
+        private float _warning;
+        private float _success;
+        private float _error;
+        private float _info;
 
         private void Start()
         {
-            if (name.Contains($"{ ToastType.Warning }")) type = ToastType.Warning;
-            if (name.Contains($"{ ToastType.Success }")) type = ToastType.Success;
-            if (name.Contains($"{ ToastType.Error }")) type = ToastType.Error;
-            if (name.Contains($"{ ToastType.Info }")) type = ToastType.Info;
+            if (name.Contains($"{ ToastType.Warning }")) _type = ToastType.Warning;
+            if (name.Contains($"{ ToastType.Success }")) _type = ToastType.Success;
+            if (name.Contains($"{ ToastType.Error }")) _type = ToastType.Error;
+            if (name.Contains($"{ ToastType.Info }")) _type = ToastType.Info;
         }
 
         private void Update()
         {
-            switch (type)
+            switch (_type)
             {
                 case ToastType.Warning:
-                    if (WaitForSecond(WarningTime, ref warning))
+                    if (WaitForSecond(WarningTime, ref _warning))
                         Destroy(gameObject);
                     break;
 
                 case ToastType.Success:
-                    if (WaitForSecond(SuccessTime, ref success))
+                    if (WaitForSecond(SuccessTime, ref _success))
                         Destroy(gameObject);
                     break;
 
                 case ToastType.Error:
-                    if (WaitForSecond(ErrorTime, ref error))
+                    if (WaitForSecond(ErrorTime, ref _error))
                         Destroy(gameObject);
                     break;
 
                 case ToastType.Info:
-                    if (WaitForSecond(InfoTime, ref info))
+                    if (WaitForSecond(InfoTime, ref _info))
                         Destroy(gameObject);
                     break;
 

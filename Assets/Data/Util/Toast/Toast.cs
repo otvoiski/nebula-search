@@ -1,18 +1,17 @@
-﻿using Assets.Data.Lib;
-using System;
+﻿using System;
 using Assets.Data.Enum;
 using UnityEngine;
 
-namespace Assets.Data.Util
+namespace Assets.Data.Util.Toast
 {
     public class Toast : MonoBehaviour
     {
         public static void Exception(Exception ex)
         {
-            Message(ToastType.Error, Locale.Translate["General"]["Exception"].ToString(), ex.Message);
+            ShowToast(ToastType.Error, Locale.Translate["General"]["Exception"].ToString(), ex.Message);
         }
 
-        public static void Message(ToastType toastType, string title, string message)
+        public static void ShowToast(ToastType toastType, string title, string message)
         {
             ToastControl toast = GetToast(toastType);
 
@@ -21,11 +20,13 @@ namespace Assets.Data.Util
 
         private static ToastControl GetToast(ToastType toastType)
         {
-            var toastBar = GameObject.FindWithTag("Toast");
+            var transform = GameObject.FindGameObjectWithTag("Toast")
+                .transform;
+
             var toastResource = Resources.Load<GameObject>($"Toast/Toast-{toastType}");
-            var toast = Instantiate(toastResource, toastBar.transform)
+            var toast = Instantiate(toastResource, transform)
                 .GetComponent<ToastControl>();
-            toast.transform.SetParent(toastBar.transform);
+            toast.transform.SetParent(transform);
             return toast;
         }
     }

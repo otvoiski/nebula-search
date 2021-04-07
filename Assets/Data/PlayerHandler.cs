@@ -60,7 +60,7 @@ namespace Assets.Data
 
         private void PlayerRotate()
         {
-            var position = Utilities.GetMousePositionToVector3Grid(-0.5f, LayerMask.GetMask("Grid"), true);
+            var position = Utilities.GetMousePositionToVector3Grid(-0.5f, LayerMask.GetMask(Utilities.GRID_LAYER), true);
             transform.LookAt(position);
         }
 

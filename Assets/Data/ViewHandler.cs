@@ -1,8 +1,7 @@
 ﻿using Assets.Data.Enum;
 using Assets.Data.Model;
-using Assets.Data.Service;
-using System;
 using Assets.Data.Util;
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 using static UnityEngine.InputSystem.InputAction;

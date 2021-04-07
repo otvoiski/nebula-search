@@ -1,13 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using IniParser;
+﻿using IniParser;
 using IniParser.Model;
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Assets.Data.Util
 {
     public class Utilities : MonoBehaviour
     {
+        public const string GRID_LAYER = "Grid";
+
         public static Vector3 GetMousePositionToVector3(LayerMask mask, bool debug = false)
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
