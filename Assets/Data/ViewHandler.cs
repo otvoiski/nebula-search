@@ -1,6 +1,6 @@
 ﻿using Assets.Data.Enum;
 using Assets.Data.Model;
-using Assets.Data.Service;
+using Assets.Data.Util;
 using System;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,7 +13,6 @@ namespace Assets.Data
         public const string NAME = "VIEW HANDLER";
 
         public static int LimitTextConsoleItem;
-        public BuilderScreenService BuilderScreenService { get; private set; }
         public MainScreenModel MainScreen { get; private set; }
 
         public InputMaster Input;
@@ -68,10 +67,6 @@ namespace Assets.Data
 
         private void Start()
         {
-            BuilderScreenService = MainScreen.BuildScreen.gameObject
-                .GetComponent<BuilderScreenService>();
-            BuilderScreenService.Setup(MainScreen.BuildScreen);
-
             IsOpen = false;
 
             DontDestroyOnLoad(gameObject);
@@ -90,7 +85,7 @@ namespace Assets.Data
         private void FixedUpdate()
         {
             if (string.IsNullOrEmpty(MainScreen.BottomBar.GetComponentInChildren<Text>().text))
-                MainScreen.BottomBar.GetComponentInChildren<Text>().text = VersionIncrementor.version;
+                MainScreen.BottomBar.GetComponentInChildren<Text>().text = Utilities.LoadConfiguration()["Game"]["Version"];
         }
 
         private void ToggleMenuScreen(CallbackContext obj)

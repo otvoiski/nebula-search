@@ -146,11 +146,11 @@
             ]
         },
         {
-            "name": "BuildMode",
+            "name": "BuildScreen",
             "id": "b461159a-ff9c-4e6c-9569-52ca5804e2c4",
             "actions": [
                 {
-                    "name": "Toggle Build Menu",
+                    "name": "Toggle Build Screen",
                     "type": "Button",
                     "id": "b8f90ab2-82ad-448a-b206-c4df3221d4f9",
                     "expectedControlType": "Button",
@@ -158,7 +158,7 @@
                     "interactions": ""
                 },
                 {
-                    "name": "Escape Build Menu",
+                    "name": "Escape Build Screen",
                     "type": "Button",
                     "id": "ff660156-aaa5-4d1a-bb04-e6cba812f2b2",
                     "expectedControlType": "Button",
@@ -166,7 +166,7 @@
                     "interactions": ""
                 },
                 {
-                    "name": "Click To Contruct",
+                    "name": "Click To Construct",
                     "type": "Button",
                     "id": "7ff678e0-e732-445e-bf16-4f3df274f5d2",
                     "expectedControlType": "Button",
@@ -182,7 +182,7 @@
                     "interactions": "Press",
                     "processors": "",
                     "groups": "Keyboard & Mouse",
-                    "action": "Toggle Build Menu",
+                    "action": "Toggle Build Screen",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -193,7 +193,7 @@
                     "interactions": "Press",
                     "processors": "",
                     "groups": "Keyboard & Mouse",
-                    "action": "Escape Build Menu",
+                    "action": "Escape Build Screen",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -204,7 +204,7 @@
                     "interactions": "Press",
                     "processors": "",
                     "groups": "Keyboard & Mouse",
-                    "action": "Click To Contruct",
+                    "action": "Click To Construct",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

@@ -64,8 +64,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\$CommonUtils.cs" />
-    <Compile Include="Assets\$VersionIncrementor.cs" />
     <Compile Include="Assets\Data\Enum\BuildListEnum.cs" />
     <Compile Include="Assets\Data\Enum\BuildMenuEnum.cs" />
     <Compile Include="Assets\Data\Enum\CategoryItemEnum.cs" />
@@ -80,7 +78,7 @@
     <Compile Include="Assets\Data\Model\MachineModel.cs" />
     <Compile Include="Assets\Data\Model\MainScreenModel.cs" />
     <Compile Include="Assets\Data\PlayerHandler.cs" />
-    <Compile Include="Assets\Data\Service\BuilderScreenService.cs" />
+    <Compile Include="Assets\Data\Service\BuildScreenService.cs" />
     <Compile Include="Assets\Data\Service\MachineScreenService.cs" />
     <Compile Include="Assets\Data\Service\MachineService.cs" />
     <Compile Include="Assets\Data\Util\DeveloperConsole\Commands\LogCommand.cs" />
@@ -89,8 +87,8 @@
     <Compile Include="Assets\Data\Util\DeveloperConsole\DeveloperConsoleBehaviour.cs" />
     <Compile Include="Assets\Data\Util\Locale.cs" />
     <Compile Include="Assets\Data\Util\TimerRun.cs" />
-    <Compile Include="Assets\Data\Util\Toast.cs" />
-    <Compile Include="Assets\Data\Util\ToastControl.cs" />
+    <Compile Include="Assets\Data\Util\Toast\Toast.cs" />
+    <Compile Include="Assets\Data\Util\Toast\ToastControl.cs" />
     <Compile Include="Assets\Data\Util\Utilities.cs" />
     <Compile Include="Assets\Data\ViewHandler.cs" />
     <Compile Include="Assets\Input\InputMaster.cs" />

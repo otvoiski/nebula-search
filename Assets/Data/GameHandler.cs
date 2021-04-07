@@ -1,12 +1,10 @@
 ﻿using Assets.Data.Enum;
-using Assets.Data.Service;
+using Assets.Data.Model;
 using Assets.Data.Util;
+using Assets.Data.Util.DeveloperConsole;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Assets.Data.Model;
-using Assets.Data.Util.DeveloperConsole;
 using UnityEngine;
 
 namespace Assets.Data
