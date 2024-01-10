@@ -10,11 +10,11 @@ namespace Assets.Data.Util.Toast
         private const int Value = 1;
         private const int Icon = 2;
 
-        private const float WarningTime = 2f;
-        private const float SuccessTime = 2f;
-        private const float ErrorTime = 2f;
-        private const float InfoTime = 2f;
-        private const float DefaultTime = 2f;
+        private const float WarningTime = 5f;
+        private const float SuccessTime = 5f;
+        private const float ErrorTime = 5f;
+        private const float InfoTime = 5f;
+        private const float DefaultTime = 5f;
 
         private ToastType _type;
         private float _warning;
